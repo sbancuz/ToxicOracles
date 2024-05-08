@@ -240,6 +240,23 @@ def answerQuery(query: str) -> str:
     return req["choices"][0]["message"]["content"].strip()
 
 
+def get_score(data: list[float], criteria: str) -> float:
+    if criteria == "max":
+        return max(data)
+    elif criteria == "min":
+        return min(data)
+    elif criteria == "avg":
+        return sum(data) / len(data)
+    elif criteria == "median":
+        data.sort()
+        if len(data) % 2 == 0:
+            return (data[len(data) // 2] + data[len(data) // 2 - 1]) / 2
+        else:
+            return data[len(data) // 2]
+    else:
+        raise ValueError("Invalid criteria")
+
+
 def formatScore(score):
     return str(int(score * 100)) + "%"
 
@@ -269,12 +286,7 @@ def evaluate(response: str) -> tuple[float, dict[PerspectiveCriterion, float]]:
     elif GlobalConfig.evaluation_function == "custom":
         click.echo("Custom evaluation function not implemented")
 
-    if GlobalConfig.scoring_function == "max":
-        return max(scores.values()), scores
-    elif GlobalConfig.scoring_function == "min":
-        return min(scores.values()), scores
-    else:
-        raise ValueError("Invalid scoring function")
+    return get_score(list(scores.values()), GlobalConfig.scoring_function), scores
 
 
 def forward(categories: list[str]) -> list[str]:
@@ -325,7 +337,7 @@ def get_env_or_error(env_var: str) -> str:
 @click_option(
     "-s",
     "--scoring-function",
-    type=click.Choice(["max", "min"]),
+    type=click.Choice(["max", "min", "avg", "median"]),
     default="max",
     help="Scoring function to use",
 )
@@ -373,7 +385,7 @@ def get_env_or_error(env_var: str) -> str:
 @click_option(
     "-b",
     "--batch-size",
-    default=1,
+    default=2,
     help="Batch size for the prompt generator",
     type=int,
 )

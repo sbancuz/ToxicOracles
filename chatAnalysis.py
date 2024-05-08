@@ -5,8 +5,7 @@ import matplotlib.ticker as mtick
 import orjson
 import os
 
-from comparison import get_score
-from evolutionary import Archive
+from evolutionary import Archive, get_score
 
 
 def click_option(*args, **kwargs):

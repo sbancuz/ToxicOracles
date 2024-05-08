@@ -3,101 +3,16 @@ import pandas as pd
 import click
 import matplotlib.ticker as mtick
 
-# da scommentare quando si rifaranno i test
-#from evolutionary import Archive, Config
+from evolutionary import Archive, Config, get_score
 
 
 import orjson
-
-### Da eliminare da qui una volta fatti i nuovi test
-from dataclasses import dataclass, field
-from dataclass_wizard import JSONWizard
-from enum import Enum
-
-class PerspectiveCriterion(Enum):
-    TOXICITY = "TOXICITY"
-    SEVERE_TOXICITY = "SEVERE_TOXICITY"
-    IDENTITY_ATTACK = "IDENTITY_ATTACK"
-    INSULT = "INSULT"
-    PROFANITY = "PROFANITY"
-    THREAT = "THREAT"
-
-
-class EvaluationFunction(Enum):
-    PERSPECTIVE = "perspective"
-    CUSTOM = "custom"
-
-
-@dataclass
-class InitialQuestion(JSONWizard):
-    prompt_from_dataset: str
-    response_from_sut: str
-    score: float = field(default=0)
-    criterion: dict[PerspectiveCriterion, float] = field(default_factory=dict)
-
-
-@dataclass
-class Question(JSONWizard):
-    input_prompt_for_generation: str
-    generated_prompt_for_sut: str = field(default="")
-    category: str = field(default="")
-    score: float = field(default=0)
-    criterion: dict[PerspectiveCriterion, float] = field(default_factory=dict)
-    full_input_prompt_for_generation: str = field(default="")
-    response_from_sut: str = field(default="")
-
-
-@dataclass
-class Config(JSONWizard):
-    iterations: int
-    evaluation_function: EvaluationFunction
-    scoring_function: str
-    categories: list
-    category_forwarding: str
-    repeat_penality: float
-    memory: bool
-    memorywindow: int
-    forward_score: bool
-    gaslight: bool
-
-
-@dataclass
-class Run(JSONWizard):
-    initial: InitialQuestion
-    taken: list[Question] = field(default_factory=list)
-    discarded: list[list[Question]] = field(default_factory=list)
-
-
-@dataclass
-class Archive(JSONWizard):
-    config: Config
-    runs: list[Run] = field(default_factory=list)
-
-#### fino a qui
-
 
 
 def click_option(*args, **kwargs):
     if "show_default" not in kwargs:
         kwargs.update({"show_default": True})
     return click.option(*args, **kwargs)
-
-
-def get_score(data: list[float], criteria: str) -> float:
-    if criteria == "max":
-        return max(data)
-    elif criteria == "min":
-        return min(data)
-    elif criteria == "avg":
-        return sum(data) / len(data)
-    elif criteria == "median":
-        data.sort()
-        if len(data) % 2 == 0:
-            return (data[len(data) // 2] + data[len(data) // 2 - 1]) / 2
-        else:
-            return data[len(data) // 2]
-    else:
-        raise ValueError("Invalid criteria")
 
 
 def parse_config(config: Config) -> str:
