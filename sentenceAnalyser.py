@@ -1,5 +1,4 @@
 from sentence_transformers import SentenceTransformer, util
-
 from evolutionary import Archive
 import orjson
 import click
@@ -9,6 +8,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 from tqdm import tqdm
+from torch.nn import functional as F
 
 
 def click_option(*args, **kwargs):
@@ -17,31 +17,70 @@ def click_option(*args, **kwargs):
     return click.option(*args, **kwargs)
 
 
-def distancebetween(model, sentence1, sentence2):
-    """this function computes the cosine similarity between two sentences
+def similarityBetween(model, sentence1, sentence2):
+    '''this function computes the cosine similarity between two sentences
     model: the model used to compute the embeddings
     sentence1: the first sentence
     sentence2: the second sentence
-    return: the cosine similarity between the two sentences
-    """
+    return: the cosine similarity between the two sentences, using a sigmoid function to normalize the result   
+    '''
 
-    # Compute embedding for both lists
-    embedding_1 = model.encode(sentence1, convert_to_tensor=True)
+
+    #Compute embedding for both lists
+    embedding_1= model.encode(sentence1, convert_to_tensor=True)
     embedding_2 = model.encode(sentence2, convert_to_tensor=True)
-    # Compute cosine-similarits
-    cosine_scores = float((util.pytorch_cos_sim(embedding_1, embedding_2)[0][0]))
+    #Compute cosine-similarits
+    cosine_scores = float(util.pytorch_cos_sim(embedding_1, embedding_2)[0][0])
     return cosine_scores
 
 
-def analyse_similarity(file):
-    """this function analyses the progressive similarity between prompts in the file, starting from the prompt from the dataset
+def createPlot(instances, output, type, filename, mode, x, y):
+    '''this function creates a boxplot or violin plot for a file, showing the cosine similarity between sentences at each iteration
+    instances: the instances to plot
+    output: the path to save the plot
+    type: the type of plot to generate
+    filename: the file to analyse, used for the title
+    mode: the mode of the analysis
+    x: the x label of the plot
+    y: the y label of the plot
+    '''
+
+    # file name without path and extension and removing progressive from the name
+    filename = os.path.basename(filename)
+    # remove the extension
+    filename = os.path.splitext(filename)[0]
+    # remove the mode from the name
+    filename = filename.replace(mode, "")
+
+
+
+    df = pd.DataFrame(instances)
+    #violin plot, divided by file name
+    plt.figure(figsize=(20, 10))
+    if type == "boxplot":
+        ax = sns.boxplot(x=x, y=y, data=df)
+    else:
+        ax = sns.violinplot(x=x, y=y, data=df)
+    
+    ax.set_title(f"{y} of {filename} ({mode}), by {x}")
+    ax.set_xlabel(x)
+    ax.set_ylabel(y)
+    # save figure in file folder, with the type of plot
+    plt.savefig(f"{output}/{filename}_{mode}_{type}.png", dpi=300)
+    plt.close()
+
+#### PROGRESSIVE SIMILARITY ####
+
+def analyseProgressiveSimilarity(file):
+    '''this function analyses the progressive similarity between prompts in the file, starting from the prompt from the dataset
+    Note: the similarity is computed if and only if the prompt is different from the previous one
+
     file: the file containing the archive
-    return: a list of dictionaries, each dictionary contains the starting prompt, the generated prompt, the final cosine similarity between the two prompts, the configuration of the archive, the file name and the iteration
-    it also saves the result in a file filename+progressivesimilarity.json inside the folder progressiveSimilarity in the folder of the file
-    """
+    return: a list of dictionaries, each dictionary contains the starting prompt, the generated prompt, the cosine similarity between the two prompts, the configuration of the archive, the file name and the iteration
+
+    '''
     archive: Archive
-    instances = []
-    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    instances=[]
     with open(file) as f:
         archive = Archive.from_dict(orjson.loads(f.read()))
 
@@ -55,97 +94,73 @@ def analyse_similarity(file):
                     run.initial.prompt_from_dataset.lower().strip()
                     != run.taken[i].generated_prompt_for_sut.lower().strip()
                 ):
-                    instances.append(
-                        {
-                            "starting": run.initial.prompt_from_dataset,
-                            "generated": run.taken[i].generated_prompt_for_sut,
-                            "final cosine similarity": distancebetween(
-                                model,
-                                run.initial.prompt_from_dataset,
-                                run.taken[i].generated_prompt_for_sut,
-                            ),
-                            "config": archive.config,
-                            "fileName": filename,
-                            "iteration": i,
-                        }
-                    )
+                    instances.append({
+                        "starting": run.initial.prompt_from_dataset, 
+                        "generated": run.taken[i].generated_prompt_for_sut, 
+                        "cosine similarity": similarityBetween(model, 
+                                                                   run.initial.prompt_from_dataset, 
+                                                                   run.taken[i].generated_prompt_for_sut), 
+                        "config": archive.config, 
+                        "file name": filename, 
+                        "iteration": i
+                        })
             else:
-                if (
-                    run.taken[i - 1].generated_prompt_for_sut.lower().strip()
-                    != run.taken[i].generated_prompt_for_sut.lower().strip()
-                ):
-                    # instances.append({"starting": run.taken[i - 1].generated_prompt_for_sut, "generated": run.taken[i].generated_prompt_for_sut, "cosine similarity": float(util.pytorch_cos_sim(embedding_1, embedding_2)[0][0]), "config": archive.config, "fileName": filename})
-                    instances.append(
-                        {
-                            "starting": run.taken[i - 1].generated_prompt_for_sut,
-                            "generated": run.taken[i].generated_prompt_for_sut,
-                            "final cosine similarity": distancebetween(
-                                model,
-                                run.taken[i - 1].generated_prompt_for_sut,
-                                run.taken[i].generated_prompt_for_sut,
-                            ),
-                            "config": archive.config,
-                            "fileName": filename,
-                            "iteration": i,
-                        }
-                    )
-    # save the similarity in the file filename+progressivesimilarity.json
-    # filename without path and extension
-    filename = os.path.splitext(os.path.basename(file))[0]
-    # save in the path of the file + progressive similarity in file filename+progressivesimilarity.json
-    if not os.path.exists(f"{os.path.dirname(file)}/progressiveSimilarity"):
-        os.makedirs(f"{os.path.dirname(file)}/progressiveSimilarity")
-    with open(
-        f"{os.path.dirname(file)}/progressiveSimilarity/{filename}progressiveSimilarity.json",
-        "w",
-    ) as f:
-        f.write(orjson.dumps(instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
-
+                if run.taken[i - 1].generated_prompt_for_sut.lower().strip() != run.taken[i].generated_prompt_for_sut.lower().strip():
+                    #instances.append({"starting": run.taken[i - 1].generated_prompt_for_sut, "generated": run.taken[i].generated_prompt_for_sut, "cosine similarity": float(util.pytorch_cos_sim(embedding_1, embedding_2)[0][0]), "config": archive.config, "fileName": filename})
+                    instances.append({
+                                    "starting": run.taken[i - 1].generated_prompt_for_sut, 
+                                    "generated": run.taken[i].generated_prompt_for_sut, 
+                                    "cosine similarity": similarityBetween(model, 
+                                                                        run.taken[i - 1].generated_prompt_for_sut, 
+                                                                        run.taken[i].generated_prompt_for_sut), 
+                                    "config": archive.config, 
+                                    "file name": filename,
+                                    "iteration": i                                    
+                                    })
     return instances
 
 
-def progressive(files, input):
-    """this function computes the progressive similarity between the prompts inside a list of files
-    files: the list of files containing the archives
-    input: the input folder
-    return: a list of dictionaries, each dictionary contains the starting prompt, the generated prompt, the final cosine similarity between the two prompts, the configuration of the archive, the file name and the iteration of all the files
-    it also saves the result in a file progressiveSimilarity.json inside the folder progressiveSimilarity in the input folder"""
-    instances = []
+def progressive(input, type):
+    ''' the progressive analysis is aimed at analysing the similarity between consecutive prompts, starting from the prompt from the dataset
+    it saves the results in a file named as the file analysed, with the suffix _progressive.json and creates a plot for each file, saved in the same folder as well.
+    input: the path to the folder containing the files to analyse
+    type: the type of plot to generate
+    '''
+    instances=[]
+
+    # get all files in the folder
+    files = glob.glob(input+"/*.json")
+
+    # create the folder progressive in the input folder, if it does not exist
+    path=os.path.dirname(input)
+    if not os.path.exists(f"{input}/progressive"):
+        os.makedirs(f"{input}/progressive")
+
     # iterate over files
     for file in files:
-        if os.path.isdir(file):
-            continue
         print(f"analysing {file}")
-        instances.extend(analyse_similarity(file))
+        progressive_instances = analyseProgressiveSimilarity(file)
+        # save the instances in a file
+        with open(f"{input}/progressive/{os.path.basename(file).replace('.json', '')}_progressive.json", "w") as f:
+            f.write(orjson.dumps(progressive_instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
 
-    # sort instances by similarity
-    # instances.sort(key=lambda x: x["final cosine similarity"], reverse=True)
-    # create file for similarity, inside the folder plots, in the input folder, if it does not exist create it
-    if not os.path.exists(f"{input}/progressiveSimilarity"):
-        os.makedirs(f"{input}/progressiveSimilarity")
-    # save the similarity in the file similarity.json
-    with open(f"{input}/progressiveSimilarity/progressiveSimilarity.json", "w") as f:
-        f.write(orjson.dumps(instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
-    createBP(
-        instances,
-        input + "/" + "progressiveSimilarity",
-        "violin",
-        "progressive",
-        "Distance between consecutive generated prompts",
-    )
-
+        # extend the list of instances
+        instances.extend(progressive_instances)
+        createPlot(instances=progressive_instances, output=f"{input}/progressive", type=type, filename=file, mode="progressive", x="iteration", y="cosine similarity")
     return instances
 
-
-def betweenFinalsVariety(path):
-    """this function computes the similarity between each pair of final prompts, along with the similarity between the respective initial prompts
+#### BETWEEN FINALS VARIETY ####
+def betweenFinalsVariety(input, type):
+    '''this function computes the similarity between each pair of final prompts, along with the similarity between the respective initial prompts
     path: the path containing the json files
-    return: a list of dictionaries, each dictionary contains the final prompt 1, the final prompt 2, the final cosine similarity between the two prompts, the initial prompt 1, the initial prompt 2, the initial cosine similarity between the two prompts, the configuration of the archive, the file name
-    it also saves the result in a file finalVarietySimilarity.json inside the folder betweenFinalsVariety in the input folder"""
+    return: a list of dictionaries, each dictionary contains the final prompt 1, the final prompt 2, the cosine similarity between the two prompts, the initial prompt 1, the initial prompt 2, the initial cosine similarity between the two prompts, the configuration of the archive, the file name
+    it also saves the result in a file betweenFinalsVarietySimilarity.json inside the folder betweenFinalsVariety in the input folder'''
     # select json files in the path
-    files = glob.glob(f"{path}/*.json")
+    files = glob.glob(input+"/*.json")
+    if not os.path.exists(f"{input}/betweenFinalsVariety"):
+        os.makedirs(f"{input}/betweenFinalsVariety")
+
     instances = []
-    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
     for file in tqdm(files):
         print(f"analysing {file}")
         with open(file) as f:
@@ -153,75 +168,44 @@ def betweenFinalsVariety(path):
             filename = os.path.basename(file)
             # remove the extension
             filename = os.path.splitext(filename)[0]
-            for i in tqdm(range(0, len(archive.runs) - 1)):
-                for j in tqdm(range(i + 1, len(archive.runs))):
-                    instances.append(
-                        {
-                            "final prompt 1": archive.runs[i]
-                            .taken[-1]
-                            .generated_prompt_for_sut,
-                            "final prompt 2": archive.runs[j]
-                            .taken[-1]
-                            .generated_prompt_for_sut,
-                            "final cosine similarity": distancebetween(
-                                model,
-                                archive.runs[i]
-                                .taken[-1]
-                                .generated_prompt_for_sut.lower()
-                                .strip(),
-                                archive.runs[j]
-                                .taken[-1]
-                                .generated_prompt_for_sut.lower()
-                                .strip(),
-                            ),
-                            "prompt from dataset 1": archive.runs[
-                                i
-                            ].initial.prompt_from_dataset,
-                            "prompt from dataset 2": archive.runs[
-                                j
-                            ].initial.prompt_from_dataset,
-                            "initial cosing distance": distancebetween(
-                                model,
-                                archive.runs[i]
-                                .initial.prompt_from_dataset.lower()
-                                .strip(),
-                                archive.runs[j]
-                                .initial.prompt_from_dataset.lower()
-                                .strip(),
-                            ),
-                            "config": archive.config,
-                            "fileName": filename,
-                        }
-                    )
-    # sort instances by similarity
-    instances.sort(key=lambda x: x["final cosine similarity"], reverse=True)
-
-    # create file for similarity, inside the folder plots, in the input folder, if it does not exist create it
-    if not os.path.exists(f"{path}/betweenFinalsVariety"):
-        os.makedirs(f"{path}/betweenFinalsVariety")
-    # save the similarity in the file similarity.json
-    with open(f"{path}/betweenFinalsVariety/finalVarietySimilarity.json", "w") as f:
-        f.write(orjson.dumps(instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
-    createBP(
-        instances,
-        path + "/" + "betweenFinalsVariety",
-        "violin",
-        "finalVariety",
-        "Distance between final generated prompts",
-    )
+            for iteration in tqdm(range(archive.config.iterations)):
+                for i in tqdm(range(0, len(archive.runs)-1)):
+                    for j in tqdm(range(i+1, len(archive.runs))):
+                        instances.append({  "final prompt 1": archive.runs[i].taken[iteration].generated_prompt_for_sut,
+                                            "final prompt 2": archive.runs[j].taken[iteration].generated_prompt_for_sut,
+                                            "final cosine similarity": similarityBetween(model, 
+                                                                                archive.runs[i].taken[iteration].generated_prompt_for_sut.lower().strip(), 
+                                                                                archive.runs[j].taken[iteration].generated_prompt_for_sut.lower().strip()),
+                                            "prompt from dataset 1": archive.runs[i].initial.prompt_from_dataset,
+                                            "prompt from dataset 2": archive.runs[j].initial.prompt_from_dataset,
+                                            "initial cosine similarity": similarityBetween(model, 
+                                                                                archive.runs[i].initial.prompt_from_dataset.lower().strip(), 
+                                                                                archive.runs[j].initial.prompt_from_dataset.lower().strip()),
+                                            "config": archive.config, 
+                                            "file name": filename, 
+                                            "iteration": iteration})
+            with open(f"{input}/betweenFinalsVariety/{filename}_betweenFinalsVariety.json", "w") as f:
+                f.write(orjson.dumps(instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
+            createPlot(instances=instances, output=f"{input}/betweenFinalsVariety", type=type, filename=file, mode="betweenFinalsVariety", x="iteration", y="final cosine similarity")
     return instances
 
+### SCORE CORRELATION ###
 
-def scoreCorrelation(path):
-    """this function computes the correlation between the delta cosine similarity and the score
+def scoreCorrelation(input):
+    '''this function computes the correlation between the delta cosine similarity and the score
     path: the path containing the json files
-    return: a list of dictionaries, each dictionary contains the initial cosine similarity, the final cosine similarity, the delta cosine similarity, the score, the configuration of the archive, the file name
-    it also saves the result in a file scoreCorrelation.json inside the folder scoreCorrelation in the input folder"""
+    return: a list of dictionaries, each dictionary contains the initial cosine similarity, the cosine similarity, the delta cosine similarity, the score, the configuration of the archive, the file name
+    it also saves the result in a file scoreCorrelation.json inside the folder scoreCorrelation in the input folder'''
     # select json files in the path
-    files = glob.glob(f"{path}/*.json")
+    files = glob.glob(f"{input}/*.json")
     instances = []
-    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+
+    # create the folder scoreCorrelation in the input folder, if it does not exist
+    if not os.path.exists(f"{input}/scoreCorrelation"):
+        os.makedirs(f"{input}/scoreCorrelation")
+
     for file in tqdm(files):
+        singleInstance = []
         print(f"analysing {file}")
         with open(file) as f:
             archive = Archive.from_dict(orjson.loads(f.read()))
@@ -229,148 +213,77 @@ def scoreCorrelation(path):
             # remove the extension
             filename = os.path.splitext(filename)[0]
             for run in tqdm(archive.runs):
-                instances.append(
-                    {
-                        "initial prompt": run.initial.prompt_from_dataset,
-                        "final prompt": run.taken[-1].generated_prompt_for_sut,
-                        "delta cosine similarity": distancebetween(
-                            model,
-                            run.initial.prompt_from_dataset.lower().strip(),
-                            run.taken[-1].generated_prompt_for_sut.lower().strip(),
-                        ),
-                        "initial score": max(run.initial.criterion.values()),
-                        "final score": max(run.taken[-1].criterion.values()),
-                        "delta score": max(run.taken[-1].criterion.values())
-                        - max(run.initial.criterion.values()),
-                        "config": archive.config,
-                        "fileName": filename,
-                    }
-                )
-    # sort instances by similarity
-    instances.sort(key=lambda x: x["delta cosine similarity"], reverse=True)
-
-    # create file for similarity, inside the folder plots, in the input folder, if it does not exist create it
-    if not os.path.exists(f"{path}/scoreCorrelation"):
-        os.makedirs(f"{path}/scoreCorrelation")
-    # save the similarity in the file similarity.json
-    with open(f"{path}/scoreCorrelation/scoreCorrelation.json", "w") as f:
-        f.write(orjson.dumps(instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
-    plotCorrelation(
-        instances,
-        path,
-        "Correlation between delta cosine similarity and delta score",
-        "delta cosine similarity",
-        "delta score",
-        "scoreCorrelation",
-        "correlation_deltaSim_deltaScore.png",
-    )
-    plotCorrelation(
-        instances,
-        path,
-        "Correlation between delta cosine similarity and final score",
-        "delta cosine similarity",
-        "final score",
-        "scoreCorrelation",
-        "correlation_deltaSim_finalScore.png",
-    )
-    plotCorrelation(
-        instances,
-        path,
-        "Correlation between initial and final score",
-        "initial score",
-        "final score",
-        "scoreCorrelation",
-        "correlation_Score.png",
-    )
-
-
-def instanceSimilarity(model, prompt1, prompt2):
-    """this function computes the cosine similarity between two prompts
-    model: the model used to compute the embeddings
-    prompt1: the first prompt
-    prompt2: the second prompt
-    return: the cosine similarity between the two prompts"""
-    instance = {
-        "prompt 1": prompt1,
-        "prompt 2": prompt2,
-        "cosine similarity": distancebetween(
-            model, prompt1.lower().strip(), prompt2.lower().strip()
-        ),
-    }
-    return instance
-
-
-def datasetVariety(dataset):
-    """this function computes the similarity between each pair of prompts in the dataset
-    dataset: the dataset containing the prompts
-    return: a list of dictionaries, each dictionary contains the prompt 1, the prompt 2, the cosine similarity between the two prompts
-    it also saves the result in a file datasetVarietySimilarity.json inside the folder datasetVariety in the input folder"""
-    instances = []
-    # model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
-
-    file = open(dataset)
-    questions = []
-    for line in file.readlines():
-        questions.append(line)
-
-    # make it multi threaded to speed up the process
-    from concurrent.futures import ThreadPoolExecutor, as_completed
-
-    LENGTH = int(
-        (len(questions)) * (len(questions) - 1) / 2
-    )  # Number of iterations required to fill pbar
-    pbar = tqdm(total=LENGTH, desc="remaining")  # Init pbar
-    instances = []
-    with ThreadPoolExecutor() as executor:
-        for i in range(0, len(questions) - 1):
-            instances.extend(
-                executor.submit(instanceSimilarity, model, questions[i], questions[j])
-                for j in range(i + 1, len(questions))
-            )
-        for _ in as_completed(instances):
-            pbar.update(n=1)  # Increments counter
-    instances = [i.result() for i in instances]
-
-    """'
-    for i in tqdm(range(0, len(questions)-1)):
-        for j in tqdm(range(i+1, len(questions))):
-            instances.append({  "prompt 1": questions[i],
-                                "prompt 2": questions[j],
-                                "cosine similarity": distancebetween(model, 
-                                                                     questions[i].lower().strip(), 
-                                                                     questions[j].lower().strip())})
-    #sort instances by similarity 
-    instances.sort(key=lambda x: x["cosine similarity"], reverse=True)
-    """
-
-    path = os.path.dirname(dataset)
-    dataset = os.path.basename(dataset)
-    # create file for similarity, inside the folder plots, in the input folder, if it does not exist create it
-    if not os.path.exists(f"{path}/datasetVariety"):
-        os.makedirs(f"{path}/datasetVariety")
-    # save the similarity in the file similarity.json
-    with open(f"{path}/datasetVariety/datasetVarietySimilarity.json", "w") as f:
-        f.write(orjson.dumps(instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
-        # create an histogram for the similarity
-        df = pd.DataFrame(instances)
-        plt.figure(figsize=(20, 10))
-        ax = sns.histplot(df["cosine similarity"])
-        ax.set_title("Cosine similarity between prompts in the dataset " + dataset)
-        ax.set_xlabel("Cosine similarity")
-        ax.set_ylabel("Frequency")
-        plt.savefig(
-            f"{path}/datasetVariety/{dataset}_datasetVarietySimilarity.png", dpi=300
-        )
-
+                singleInstance.append({  "initial prompt": run.initial.prompt_from_dataset,
+                                        "final prompt": run.taken[-1].generated_prompt_for_sut,
+                                        "delta cosine similarity": similarityBetween(model, 
+                                                                                run.initial.prompt_from_dataset.lower().strip(), 
+                                                                                run.taken[-1].generated_prompt_for_sut.lower().strip()),
+                                        "initial score": max(run.initial.criterion.values()),
+                                        "final score": max(run.taken[-1].criterion.values()),
+                                        "delta score": max(run.taken[-1].criterion.values()) - max(run.initial.criterion.values()),
+                                        "config": archive.config, 
+                                        "fileName": filename})
+            plotCorrelation(instances=singleInstance, title="Correlation between delta cosine similarity and delta score", x="delta cosine similarity", y="delta score", name=f"{filename}_correlation_deltaSim_deltaScore.png", output=f"{input}/scoreCorrelation")
+            plotCorrelation(instances=singleInstance, title="Correlation between delta cosine similarity and final score", x="delta cosine similarity", y="final score", name=f"{filename}_correlation_deltaSim_finalScore.png", output=f"{input}/scoreCorrelation")
+            plotCorrelation(instances=singleInstance, title="Correlation between initial and final score",                 x="initial score",           y="final score", name=f"{filename}_correlation_Score.png", output=f"{input}/scoreCorrelation")
+            with open(f"{input}/scoreCorrelation/{filename}_scoreCorrelation.json", "w") as f:
+                f.write(orjson.dumps(instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
+            instances.extend(singleInstance)
+    
     return instances
+    
+def plotCorrelation(instances, output, title, x, y, name="correlation.png"):
+    # correlation between initial and cosine similarity, group by file name
+    df = pd.DataFrame(instances)
+    plt.figure(figsize=(20, 10))
+    ax = sns.scatterplot(x=x, y=y, data=df, hue="fileName")
+    ax.set_title(title)
+    ax.set_xlabel(x)
+    ax.set_ylabel(y)
+    # save figure in file folder, with the type of plot, if it does not exist create it
+    plt.savefig(f"{output}/{name}", dpi=300)
+    plt.close()
 
+### DISTANCE FROM INITIAL PROMPT ###
+def distanceFromInitialPrompt(input, type):
+    files = glob.glob(input + "/*.json")
+    print(files)
+    data = []
+    for file in tqdm(files):
+        # filename without path and extension
+        filename = os.path.splitext(os.path.basename(file))[0]
+        with open(file, "r") as f:
+            archive = Archive.from_dict(orjson.loads(f.read()))
+            for run in tqdm(archive.runs):
+                for iteration in tqdm(range(0, len(run.taken))):
+                    data.append({
+                        "prompt_from_dataset": run.initial.prompt_from_dataset,
+                        "generated_prompt": run.taken[iteration].generated_prompt_for_sut,
+                        "cosine similarity": similarityBetween(model, run.initial.prompt_from_dataset, run.taken[iteration].generated_prompt_for_sut),
+                        "config": archive.config,
+                        "file name": filename,
+                        "iteration": iteration
+                    })
+        path=os.path.dirname(input)
+        # create file for similarity, inside the folder plots, in the input folder, if it does not exist create it
+        if not os.path.exists(f"{input}/distanceFromInitialPrompt/"):
+            os.makedirs(f"{input}/distanceFromInitialPrompt/")
+        # save data to json
+        with open(f"{input}/distanceFromInitialPrompt/"+filename + "_sentenceDistance.json", "w") as f: 
+            f.write(orjson.dumps(data, option=orjson.OPT_INDENT_2).decode("utf-8"))
+        createPlot(instances=data, output=f"{input}/distanceFromInitialPrompt", type=type, filename=filename, mode="distanceFromInitialPrompt", x="iteration", y="cosine similarity")
+    return data
+
+# global variable for the model
+model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
 @click.command()
 @click_option(
     "-i",
     "--input",
-    type=click.Path(exists=True, resolve_path=True, dir_okay=True, file_okay=True),
-    help="Path to source file, the output of evolutionary.py (output.json)",
+    type=click.Path(exists=True, resolve_path=True, dir_okay=True, file_okay=False),
+    help="Path to source file, the folder containing the output of evolutionary.py",
+    required=True,
 )
 @click_option(
     "-dnc",
@@ -384,160 +297,80 @@ def datasetVariety(dataset):
     "--type",
     type=click.Choice(["violin", "boxplot"]),
     help="Type of plot to create: violin or boxplot. Default is boxplot",
-    default="boxplot",
+    default="violin",
 )
 @click_option(
     "-m",
     "--mode",
-    type=click.Choice(
-        ["progressive", "finalVariety", "scoreCorrelation", "datasetVariety"]
-    ),
-    help="Mode of analysis: progressive or finalVariety. Default is progressive",
+    type=click.Choice(["progressive", "betweenFinalsVariety", "scoreCorrelation", "distanceFromInitialPrompt"]),
+    help="""Mode of analysis: 'progressive': similarity between consecutive prompts, starting from the prompt from the dataset (saved in the folder progressive),  
+            betweenFinalsVariety: similarity between final prompts, organised by iteration (saved in the folder betweenFinalsVariety),
+            scoreCorrelation: correlation between cosine similarity and score
+            distanceFromInitialPrompt: distance between the initial prompt and the generated prompt, organised by iteration (saved in the folder distanceFromInitialPrompt)
+            """,
     default="progressive",
 )
+
 def main(input, donotcompute, type, mode):
-    files = glob.glob(input + "/*.json")
-    print(files)
-    if donotcompute:
-        # read file
-        if mode == "progressive":
-            # plot each file
-            for file in files:
-                with open(file) as f:
-                    instances = orjson.loads(f.read())
-                    createSingleBP(instances, input, type, mode, file)
-            with open(f"{input}/progressiveSimilarity/progressiveSimilarity.json") as f:
-                instances = orjson.loads(f.read())
-        elif mode == "finalVariety":
-            with open(f"{input}/betweenFinalsVariety/finalVarietySimilarity.json") as f:
-                instances = orjson.loads(f.read())
-        elif mode == "scoreCorrelation":
-            with open(f"{input}/scoreCorrelation/scoreCorrelation.json") as f:
-                instances = orjson.loads(f.read())
-            plotCorrelation(
-                instances,
-                input,
-                "Correlation between delta cosine similarity and delta score",
-                "delta cosine similarity",
-                "delta score",
-                "scoreCorrelation",
-                "correlation_deltaSim_deltaScore.png",
-            )
-            plotCorrelation(
-                instances,
-                input,
-                "Correlation between delta cosine similarity and final score",
-                "delta cosine similarity",
-                "final score",
-                "scoreCorrelation",
-                "correlation_deltaSim_finalScore.png",
-            )
-            plotCorrelation(
-                instances,
-                input,
-                "Correlation between initial and final score",
-                "initial score",
-                "final score",
-                "scoreCorrelation",
-                "correlation_Score.png",
-            )
-        elif mode == "datasetVariety":
-            with open(f"{input}/datasetVariety/datasetVarietySimilarity.json") as f:
-                instances = orjson.loads(f.read())
-
-    else:
-        if mode == "progressive":
-            instances = progressive(files, input)
-            createBP(
-                instances,
-                input,
-                type,
-                mode,
-                "Distance between consecutive generated prompts",
-            )
-        elif mode == "finalVariety":
-            instances = betweenFinalsVariety(input)
-            createBP(
-                instances, input, type, mode, "Distance between final generated prompts"
-            )
-        elif mode == "scoreCorrelation":
+    '''this function is the main function of the script
+    input: the path to the folder containing the files to analyse
+    donotcompute: a boolean indicating if the analysis has already been done
+    type: the type of plot to generate
+    mode: the mode of the analysis
+    '''
+    computedFiles = glob.glob(input+"/"+mode+ "/*.json")
+    outputFolder = input+"/"+mode+"/"
+    if not os.path.exists(outputFolder):
+        os.makedirs(outputFolder)
+    if mode=="progressive":
+        if donotcompute:
+            instances=[]
+            for computedFile in computedFiles :
+                singleInstance = orjson.loads(open(computedFile).read())
+                createPlot(instances=singleInstance, output=outputFolder, type=type, mode=mode, filename=computedFile, x="iteration", y="cosine similarity")
+                instances.extend(singleInstance)
+        else:
+            instances = progressive(input, type)
+        
+        # create the general plot, showing the progressive cosine similarity between files, not by iteration
+        createPlot(instances=instances,output=outputFolder, type=type,  mode=mode, filename="General Progressive Similarity", x="file name", y="cosine similarity")    
+    elif mode=="betweenFinalsVariety":
+        if donotcompute:
+            instances=[]
+            for computedFile in computedFiles :
+                singleInstance = orjson.loads(open(computedFile).read())
+                instances.extend(singleInstance)
+        else:
+            instances = betweenFinalsVariety(input, type)
+        
+        createPlot(instances=instances,output=outputFolder, type=type,  mode=mode, filename="general Between Finals Variety", x="file name", y="final cosine similarity")
+    elif mode=="scoreCorrelation":
+        if donotcompute:
+            instances=[]
+            for computedFile in computedFiles :
+                singleInstance = orjson.loads(open(computedFile).read())
+                instances.extend(singleInstance)
+                filename = os.path.basename(computedFile)
+                filename = filename.replace("_scoreCorrelation.json", "")
+                plotCorrelation(instances=singleInstance, title="Correlation between delta cosine similarity and delta score", x="delta cosine similarity", y="delta score", name=f"{filename}_correlation_deltaSim_deltaScore.png", output=f"{input}/scoreCorrelation")
+                plotCorrelation(instances=singleInstance, title="Correlation between delta cosine similarity and final score", x="delta cosine similarity", y="final score", name=f"{filename}_correlation_deltaSim_finalScore.png", output=f"{input}/scoreCorrelation")
+                plotCorrelation(instances=singleInstance, title="Correlation between initial and final score",                 x="initial score",           y="final score", name=f"{filename}_correlation_Score.png", output=f"{input}/scoreCorrelation")
+        else:
             instances = scoreCorrelation(input)
-        elif mode == "datasetVariety":
-            instances = datasetVariety(input)
-    if mode == "finalVariety":
-        plotCorrelation(
-            instances,
-            input,
-            "Correlation between initial and final cosine similarity",
-            "initial cosine similarity",
-            "final cosine similarity",
-            mode,
-        )
-
-
-def plotCorrelation(instances, input, title, x, y, mode, name="correlation.png"):
-    # correlation between initial and final cosine similarity, group by file name
-    df = pd.DataFrame(instances)
-    plt.figure(figsize=(20, 10))
-    ax = sns.scatterplot(x=x, y=y, data=df, hue="fileName")
-    ax.set_title(title)
-    ax.set_xlabel(x)
-    ax.set_ylabel(y)
-    plt.savefig(f"{input}/{mode}/{name}", dpi=300)
-    plt.show()
-
-
-def createBP(instances, input, type, mode, title):
-    df = pd.DataFrame(instances)
-    # violin plot, divided by file name
-    plt.figure(figsize=(20, 10))
-    if type == "boxplot":
-        ax = sns.boxplot(x="fileName", y="final cosine similarity", data=df)
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
-        ax.set_title(title)
-        ax.set_xlabel("File name")
-        ax.set_ylabel("Cosine similarity")
-    else:
-        ax = sns.violinplot(x="fileName", y="final cosine similarity", data=df)
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
-        ax.set_title(title)
-        ax.set_xlabel("File name")
-        ax.set_ylabel("Cosine similarity")
-    # save figure in file folder, with the type of plot
-    plt.savefig(f"{input}/{mode}_similarity_{type}.png", dpi=300)
-    plt.close()
-
-
-def createSingleBP(instances, input, type, mode, file):
-    # file name without path and extension and removing progressiveSimilarity from the name
-    filename = os.path.basename(file)
-    # remove the extension
-    filename = os.path.splitext(filename)[0]
-    # remove progressiveSimilarity from the name
-    filename = filename.replace("progressiveSimilarity", "")
-
-    df = pd.DataFrame(instances)
-    # violin plot, divided by file name
-    plt.figure(figsize=(20, 10))
-    if type == "boxplot":
-        ax = sns.boxplot(x="iteration", y="final cosine similarity", data=df)
-        ax.set_title("Cosine similarity between sentences of " + filename)
-        ax.set_xlabel("Iteration")
-        ax.set_ylabel("Cosine similarity")
-    else:
-        ax = sns.violinplot(x="iteration", y="final cosine similarity", data=df)
-        ax.set_title("Cosine similarity between sentences of " + filename)
-        ax.set_xlabel("Iteration")
-        ax.set_ylabel("Cosine similarity")
-    # save figure in file folder, with the type of plot
-    plt.savefig(f"{input}/{filename}_similarity_{type}.png", dpi=300)
-    plt.close()
-
-
-# global variable for the model
-model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-
-
+        
+        plotCorrelation(instances=instances, title="Correlation between delta cosine similarity and delta score", x="delta cosine similarity", y="delta score", name="General_correlation_deltaSim_deltaScore.png", output=f"{input}/scoreCorrelation")
+        plotCorrelation(instances=instances, title="Correlation between delta cosine similarity and final score", x="delta cosine similarity", y="final score", name="General_correlation_deltaSim_finalScore.png", output=f"{input}/scoreCorrelation")
+        plotCorrelation(instances=instances, title="Correlation between initial and final score",                 x="initial score",           y="final score", name="General_correlation_Score.png", output=f"{input}/scoreCorrelation")
+    elif mode=="distanceFromInitialPrompt":
+        if donotcompute:
+            instances=[]
+            for computedFile in computedFiles :
+                singleInstance = orjson.loads(open(computedFile).read())
+                instances.extend(singleInstance)
+                filename = os.path.basename(computedFile).replace("_sentenceDistance.json", "")
+                createPlot(instances=singleInstance, output=outputFolder, type=type, mode=mode, filename=filename, x="iteration", y="cosine similarity")
+        else:
+            instances = distanceFromInitialPrompt(input, type)
+        createPlot(instances=instances,output=outputFolder, type=type,  mode=mode, filename="general", x="file name", y="cosine similarity")
 if __name__ == "__main__":
     main()
-

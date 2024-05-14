@@ -128,7 +128,7 @@ def plot(criteria: str, input: str, silent: bool, output: str):
                 iterationscores.append(
                     get_score(list(taken.criterion.values()), criteria)
                 )
-                iterationcategories.append(taken.category)
+                iterationcategories.append(taken.category if taken.category != "" else "initial")
 
             scores.append(iterationscores)
             categories.append(iterationcategories)
@@ -169,7 +169,7 @@ def plot(criteria: str, input: str, silent: bool, output: str):
     # plot the categories in a histogram for categories_series, labels are tilted for better readability
     categories_df = pd.DataFrame(categories_series)
     categories_df = categories_df.fillna(0)
-    categories_df = categories_df[possible_categories]
+    #categories_df = categories_df[possible_categories]
 
     categories_df.transpose().plot(
         kind="bar", stacked=False, ax=ax[2, 1], alpha=0.5, edgecolor="black"

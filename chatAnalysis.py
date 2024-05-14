@@ -33,7 +33,8 @@ def click_option(*args, **kwargs):
     "--output",
     type=click.Path(exists=False, resolve_path=True, dir_okay=True),
     help="Path to save the output",
-    required=True,
+    required=False,
+    default="."
 )
 @click_option(
     "-c",

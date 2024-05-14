@@ -12,6 +12,7 @@ import requests
 from dotenv import load_dotenv
 from perspective import PerspectiveAPI
 from tqdm import tqdm
+import orjson
 
 
 class PerspectiveCriterion(Enum):
@@ -59,7 +60,7 @@ class Config(JSONWizard):
     memorywindow: int
     forward_score: bool
     gaslight: bool
-    system_under_test: str = field(default="minstral")
+    system_under_test: str = field(default="mistral")
 
 
 @dataclass
@@ -195,13 +196,16 @@ def createNewPrompt(
     response = "<new_prompt></new_prompt>"
     match = None
     while match is None:
-        actualResponse = (
-            requests.request("POST", url, headers=headers, data=payload)
-            .json()["choices"][0]["text"]
-            .strip()
-        )
-        match = re.search(r"<new_prompt>(.+)</", actualResponse, re.DOTALL)
-        response = match.group(1).strip() if match else ""
+        try:
+            actualResponse = (
+                requests.request("POST", url, headers=headers, data=payload)
+                .json()
+            )
+            actualResponse=actualResponse["choices"][0]["text"].strip()
+            match = re.search(r"<new_prompt>(.+)</", actualResponse, re.DOTALL)
+            response = match.group(1).strip() if match else ""
+        except KeyError as e:
+            print ("Error in response: ", actualResponse)
     return response, message["prompt"]
 
 
@@ -419,8 +423,8 @@ def get_env_or_error(env_var: str) -> str:
 @click_option(
     "-sut",
     "--system-under-test",
-    type=click.Choice(["minstral", "gpt4", "gemma", "llama3"]),
-    default="minstral",
+    type=click.Choice(["mistral", "gpt4", "gemma", "llama3"]),
+    default="mistral",
     help="The model to use as System under test",
 )
 async def run(
@@ -444,12 +448,12 @@ async def run(
     global GlobalConfig
     global API_KEY_PROMPT_GENERATOR, URL_PROMPT_GENERATOR, API_KEY_SUT, URL_SUT
 
-    API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_MINSTRAL")
-    URL_PROMPT_GENERATOR = get_env_or_error("URL_MINSTRAL") + "/v1/completions"
+    API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_MISTRAL")
+    URL_PROMPT_GENERATOR = get_env_or_error("URL_MISTRAL") + "/v1/completions"
 
-    if system_under_test == "minstral":
-        API_KEY_SUT = get_env_or_error("API_KEY_MINSTRAL")
-        URL_SUT = get_env_or_error("URL_MINSTRAL") + "/v1/chat/completions"
+    if system_under_test == "mistral":
+        API_KEY_SUT = get_env_or_error("API_KEY_MISTRAL")
+        URL_SUT = get_env_or_error("URL_MISTRAL") + "/v1/chat/completions"
     elif system_under_test == "gpt4":
         API_KEY_SUT = get_env_or_error("API_KEY_GPT4")
         URL_SUT = get_env_or_error("URL_GPT4") + "/v1/chat/completions"
@@ -587,13 +591,17 @@ async def run(
 
         archive.runs.append(copy.deepcopy(run))
         with open(output_path + ".par", "w") as f:
-            f.write(archive.to_json())
+            #f.write(archive.to_json())
+            f.write(orjson.dumps(archive, option=orjson.OPT_INDENT_2).decode("utf-8"))
+
 
     if verbose:
         print(best_convo)
 
     with open(output_path, "w") as f:
-        f.write(archive.to_json())
+        #f.write(archive.to_json())
+        f.write(orjson.dumps(archive, option=orjson.OPT_INDENT_2).decode("utf-8"))
+
 
     os.remove(output_path + ".par")
 

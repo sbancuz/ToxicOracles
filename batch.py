@@ -71,8 +71,15 @@ def run_command(command):
     "-o",
     "--output",
     type=click.Path(exists=False, resolve_path=True, dir_okay=True, file_okay=False),
-    required=True,
+    required=False,
     help="The path to the results folder",
+)
+@click_option(
+    "--donotcompute",
+    "-dnc",
+    is_flag=True,
+    help="Do not compute the results, just plot them",
+    default=False,
 )
 def main(
     all,
@@ -84,6 +91,7 @@ def main(
     general_sentence_analysis: bool,
     input: str,
     output: str,
+    donotcompute: bool,
 ):
     if all:
         chat_analysis = True
@@ -94,13 +102,18 @@ def main(
         general_sentence_analysis = True
 
     criteria = ["max", "min", "avg", "median"]
+    if output is None:
+        output = input
+    
     if not os.path.exists(output):
         os.makedirs(output)
+
+    donotcompute = "-dnc" if donotcompute else ""
 
     if chat_analysis:
         print("Running chatAnalysis")
         # for each file in the folder results, run the analysis plot with the file path as argument
-        files = glob.glob(input + "/*")
+        files = glob.glob(input + "/*.json")
         if not os.path.exists(output + "/chatAnalysis"):
             os.makedirs(output + "/chatAnalysis")
         for file in tqdm(files, desc="Files", position=0, leave=True, file=sys.stdout):
@@ -131,37 +144,29 @@ def main(
             criteria, desc="Criteria", position=0, leave=True, file=sys.stdout
         ):
             run_command(
-                f"python comparison.py --silent --input {input} --output {output}/comparisons --criteria {c}"
+                f"python comparison.py --silent --input {input} --output {output}/comparisons --criteria {c} {donotcompute}"
             )
 
-    if distance:
-        print("Running distanceSentenceAnalyser")
-        if not os.path.exists(output + "/distance"):
-            os.makedirs(output + "/distance")
-            run_command(
-                f"python distanceSentenceAnalyser.py --input {input} --output {output}/distance --type violin"
-            )
-
-    ## NON FUNZIONANO
-    # if general_sentence_analysis:
-    #     print("Running generalSentenceAnalysis")
-    #     # ["progressive", "finalVariety", "scoreCorrelation", "datasetVariety"],
-    #     for m in tqdm(
-    #         ["progressive"],
-    #         desc="Modes",
-    #         position=0,
-    #         leave=True,
-    #         file=sys.stdout,
-    #     ):
-    #         # run_command(
-    #         #     f"python sentenceAnalyser.py --input {input} --mode {m} --type violin"
-    #         # )
-    #
+    # if distance:
+    #     print("Running distanceSentenceAnalyser")
+    #     if not os.path.exists(output + "/distance"):
+    #         os.makedirs(output + "/distance")
     #         run_command(
-    #             f"python sentenceAnalyser.py --donotcompute --input {input} --mode {m} --type boxplot"
+    #             f"python distanceSentenceAnalyser.py --input {input} --output {output}/distance --type violin"
     #         )
 
-    # if similarity_aggregate:
+    if general_sentence_analysis:
+        print("Running generalSentenceAnalysis")
+        for m in tqdm(
+            ["progressive", "betweenFinalsVariety", "scoreCorrelation", "distanceFromInitialPrompt"],
+            desc="Modes",
+            position=0,
+            leave=True,
+            file=sys.stdout,
+        ):
+            run_command(
+                f"python sentenceAnalyser.py --input {input} --mode {m} --type violin {donotcompute}"
+            )
 
 
 if __name__ == "__main__":
