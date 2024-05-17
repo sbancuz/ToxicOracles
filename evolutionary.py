@@ -423,9 +423,23 @@ def get_env_or_error(env_var: str) -> str:
 @click_option(
     "-sut",
     "--system-under-test",
-    type=click.Choice(["mistral", "gpt4", "gemma", "llama3"]),
+    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna"]),
     default="mistral",
     help="The model to use as System under test",
+)
+@click_option(
+    "-sut",
+    "--system-under-test",
+    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna"]),
+    default="mistral",
+    help="The model to use as System under test",
+)
+@click_option(
+    "-sg",
+    "--system-generator",
+    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna"]),
+    default="mistral",
+    help="The model to use as System generator",
 )
 async def run(
     iterations,
@@ -444,12 +458,23 @@ async def run(
     memory_window,
     gaslight,
     system_under_test,
+    system_generator,
 ):
     global GlobalConfig
     global API_KEY_PROMPT_GENERATOR, URL_PROMPT_GENERATOR, API_KEY_SUT, URL_SUT
-
-    API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_MISTRAL")
-    URL_PROMPT_GENERATOR = get_env_or_error("URL_MISTRAL") + "/v1/completions"
+    if system_generator == "mistral":
+        API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_MISTRAL")
+        URL_PROMPT_GENERATOR = get_env_or_error("URL_MISTRAL") + "/v1/completions"
+    elif system_generator == "gpt4":
+        API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_GPT4")
+        URL_PROMPT_GENERATOR = get_env_or_error("URL_GPT4") + "/v1/completions"
+    elif system_generator == "gemma":
+        API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_GEMMA")
+        URL_PROMPT_GENERATOR = get_env_or_error("URL_GEMMA") + "/v1/completions"
+    elif system_generator == "vicuna":
+        API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_VICUNA")
+        URL_PROMPT_GENERATOR = get_env_or_error("URL_VICUNA") + "/v1/completions"
+    
 
     if system_under_test == "mistral":
         API_KEY_SUT = get_env_or_error("API_KEY_MISTRAL")
@@ -460,9 +485,9 @@ async def run(
     elif system_under_test == "gemma":
         API_KEY_SUT = get_env_or_error("API_KEY_GEMMA")
         URL_SUT = get_env_or_error("URL_GEMMA") + "/v1/chat/completions"
-    elif system_under_test == "llama3":
-        API_KEY_SUT = get_env_or_error("API_KEY_LLAMA3")
-        URL_SUT = get_env_or_error("URL_LLAMA3") + "/v1/chat/completions"
+    elif system_under_test == "vicuna":
+        API_KEY_SUT = get_env_or_error("API_KEY_VICUNA")
+        URL_SUT = get_env_or_error("URL_VICUNA") + "/v1/chat/completions"
 
     if repeat_penality < 0:
         raise ValueError("Repeat penality should be a positive number")
