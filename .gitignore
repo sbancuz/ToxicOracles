@@ -13,5 +13,10 @@ results/100/distanceFromInitialPrompt/*.json
 results/100/progressive/*.json
 results/100/scoreCorrelation/*.json
 
+results/100/avg/betweenFinalsVariety/*.json
+results/100/avg/distanceFromInitialPrompt/*.json
+results/100/avg/progressive/*.json
+results/100/avg/scoreCorrelation/*.json
+
 dataset/datasetVariety/*.json
 dataset/reduced/datasetVariety/*.json
