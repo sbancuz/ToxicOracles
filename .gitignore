@@ -3,9 +3,15 @@ venv/
 .idea
 out/
 __pycache__/
+results/old but gold/100/betweenFinalsVariety/*.json
+results/old but gold/100/distanceFromInitialPrompt/*.json
+results/old but gold/100/progressive/*.json
+results/old but gold/100/scoreCorrelation/*.json
+
 results/100/betweenFinalsVariety/*.json
 results/100/distanceFromInitialPrompt/*.json
 results/100/progressive/*.json
 results/100/scoreCorrelation/*.json
+
 dataset/datasetVariety/*.json
 dataset/reduced/datasetVariety/*.json
