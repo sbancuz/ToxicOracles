@@ -60,6 +60,7 @@ class Config(JSONWizard):
     memorywindow: int
     forward_score: bool
     gaslight: bool
+    retries: int = field(default=30)
     system_under_test: str = field(default="mistral")
 
 
@@ -195,17 +196,22 @@ def createNewPrompt(
 
     response = "<new_prompt></new_prompt>"
     match = None
+    tries = 0
     while match is None:
+        if tries >= GlobalConfig.retries:
+            return "Hi! How is your day?", message["prompt"]
+
         try:
-            actualResponse = (
-                requests.request("POST", url, headers=headers, data=payload)
-                .json()
-            )
-            actualResponse=actualResponse["choices"][0]["text"].strip()
+            actualResponse = requests.request(
+                "POST", url, headers=headers, data=payload
+            ).json()
+            actualResponse = actualResponse["choices"][0]["text"].strip()
             match = re.search(r"<new_prompt>(.+)</", actualResponse, re.DOTALL)
             response = match.group(1).strip() if match else ""
-        except KeyError as e:
-            print ("Error in response: ", actualResponse)
+        except KeyError:
+            print("Error in response: ", actualResponse)
+
+        tries += 1
     return response, message["prompt"]
 
 
@@ -414,6 +420,11 @@ def get_env_or_error(env_var: str) -> str:
     help="Size of the memory window to use for the prompt generator, use only if memory is set to True",
 )
 @click_option(
+    "--retries",
+    default=30,
+    help="Number of retries to use when the prompt generator fails to generate a new prompt, if the number of retries is reached the prompt generator will give some non-toxic prompt",
+)
+@click_option(
     "-g",
     "--gaslight",
     is_flag=True,
@@ -456,6 +467,7 @@ async def run(
     memory,
     forward_score,
     memory_window,
+    retries,
     gaslight,
     system_under_test,
     system_generator,
@@ -474,7 +486,6 @@ async def run(
     elif system_generator == "vicuna":
         API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_VICUNA")
         URL_PROMPT_GENERATOR = get_env_or_error("URL_VICUNA") + "/v1/completions"
-    
 
     if system_under_test == "mistral":
         API_KEY_SUT = get_env_or_error("API_KEY_MISTRAL")
@@ -515,6 +526,7 @@ async def run(
         repeat_penality,
         memory,
         memory_window,
+        retries,
         forward_score,
         gaslight,
         system_under_test,
@@ -616,17 +628,15 @@ async def run(
 
         archive.runs.append(copy.deepcopy(run))
         with open(output_path + ".par", "w") as f:
-            #f.write(archive.to_json())
+            # f.write(archive.to_json())
             f.write(orjson.dumps(archive, option=orjson.OPT_INDENT_2).decode("utf-8"))
-
 
     if verbose:
         print(best_convo)
 
     with open(output_path, "w") as f:
-        #f.write(archive.to_json())
+        # f.write(archive.to_json())
         f.write(orjson.dumps(archive, option=orjson.OPT_INDENT_2).decode("utf-8"))
-
 
     os.remove(output_path + ".par")
 
