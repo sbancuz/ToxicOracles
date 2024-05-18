@@ -1,5 +1,4 @@
-from evolutionary import loadQuestions
-import json
+from evolutionary import load_questions
 import click
 
 
@@ -34,15 +33,17 @@ def click_option(*args, **kwargs):
     help="Path to save the reduced dataset to",
 )
 def main(source, questions, output):
-    reduced = loadQuestions(source, questions)
-    #create document with the reduced questions
-    with open(output+"/questions_reduced"+str(questions), 'w') as f:
+    reduced = load_questions(source, questions)
+    # create document with the reduced questions
+    with open(output + "/questions_reduced" + str(questions), "w") as f:
         for q in reduced:
             f.write(q)
 
     # write a json file with the questions
-    #with open(output+"/questions_reduced"+str(questions)+".json", 'w') as f:
+    # with open(output+"/questions_reduced"+str(questions)+".json", 'w') as f:
     #    json.dump(reduced, f)
-    
+
+
 if __name__ == "__main__":
     main()
+
