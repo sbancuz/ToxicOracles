@@ -46,4 +46,3 @@ def main(source, questions, output):
 
 if __name__ == "__main__":
     main()
-
