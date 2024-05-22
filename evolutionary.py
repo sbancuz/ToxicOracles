@@ -536,6 +536,10 @@ async def run(
         ):
             i += 1
         output_path = f"out/output_{i}.json"
+    # create the output path if it doesn't exist
+    if not os.path.exists(os.path.dirname(output_path)):
+        os.makedirs(os.path.dirname(output_path))
+         
 
     GlobalConfig = Config(
         iterations=iterations,
