@@ -447,14 +447,7 @@ def get_env_or_error(env_var: str) -> str:
     "--gaslight",
     is_flag=True,
     default=False,
-    help="Option to use the gaslighting technique when dealing with scores, if the score is higher than 0.5, the score told to the model is half of the original score",
-)
-@click_option(
-    "-sut",
-    "--system-under-test",
-    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna"]),
-    default="mistral",
-    help="The model to use as System under test",
+    help="Option to use the gaslighting technique when dealing with scores, if the score is higher than 0.35, the score told to the model is half of the original score",
 )
 @click_option(
     "-sut",
