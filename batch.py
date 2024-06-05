@@ -133,7 +133,7 @@ def main(
                     criteria, desc="Criteria", position=0, leave=True, file=sys.stdout
                 ):
                     run_command(
-                        f"python chatAnalysis.py --silent --input {file} --output {output}/chatAnalysis --criteria {c}"
+                        f"python3 chatAnalysis.py --silent --input {file} --output {output}/chatAnalysis --criteria {c}"
                     )
     if comparison:
         print("Running comparison")
@@ -144,7 +144,7 @@ def main(
             criteria, desc="Criteria", position=0, leave=True, file=sys.stdout
         ):
             run_command(
-                f"python comparison.py --silent --input {input} --output {output}/comparisons --criteria {c} {donotcompute}"
+                f"python3 comparison.py --silent --input {input} --output {output}/comparisons --criteria {c} {donotcompute}"
             )
 
     # if distance:
@@ -165,7 +165,7 @@ def main(
             file=sys.stdout,
         ):
             run_command(
-                f"python sentenceAnalyser.py --input {input} --mode {m} --type violin {donotcompute}"
+                f"python3 sentenceAnalyser.py --input {input} --mode {m} --type violin {donotcompute}"
             )
 
 

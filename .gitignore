@@ -8,15 +8,13 @@ results/old but gold/100/distanceFromInitialPrompt/*.json
 results/old but gold/100/progressive/*.json
 results/old but gold/100/scoreCorrelation/*.json
 
-results/100/betweenFinalsVariety/*.json
-results/100/distanceFromInitialPrompt/*.json
-results/100/progressive/*.json
-results/100/scoreCorrelation/*.json
-
-results/100/avg/betweenFinalsVariety/*.json
-results/100/avg/distanceFromInitialPrompt/*.json
-results/100/avg/progressive/*.json
-results/100/avg/scoreCorrelation/*.json
+results/100/analysis/**/*.json
+results/finalResults/**/analysis/**/*.json
 
 dataset/datasetVariety/*.json
 dataset/reduced/datasetVariety/*.json
+dataset/datasetVarietySimilarity.json
+dataset/HarmfulQA_datasetVarietySimilarity.json
+
+results/finalResults/**/analysis/**/*.json
+results/finalResults/**/**/*.json
