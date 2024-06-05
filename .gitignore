@@ -2,6 +2,7 @@
 venv/
 .idea
 out/
+.venv/
 __pycache__/
 results/old but gold/100/betweenFinalsVariety/*.json
 results/old but gold/100/distanceFromInitialPrompt/*.json
@@ -9,12 +10,12 @@ results/old but gold/100/progressive/*.json
 results/old but gold/100/scoreCorrelation/*.json
 
 results/100/analysis/**/*.json
-results/finalResults/**/analysis/**/*.json
+results/finalTests/**/analysis/**/*.json
 
 dataset/datasetVariety/*.json
 dataset/reduced/datasetVariety/*.json
 dataset/datasetVarietySimilarity.json
 dataset/HarmfulQA_datasetVarietySimilarity.json
 
-results/finalResults/**/analysis/**/*.json
-results/finalResults/**/**/*.json
+results/finalTests/**/analysis/**/*.json
+results/finalTests/**/**/*.json
