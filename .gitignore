@@ -4,10 +4,14 @@ venv/
 out/
 .venv/
 __pycache__/
-results/old but gold/100/betweenFinalsVariety/*.json
-results/old but gold/100/distanceFromInitialPrompt/*.json
-results/old but gold/100/progressive/*.json
-results/old but gold/100/scoreCorrelation/*.json
+results/oldBut gold/100/betweenFinalsVariety/*.json
+results/oldBut gold/100/distanceFromInitialPrompt/*.json
+results/oldBut gold/100/progressive/*.json
+results/oldButGold/100/scoreCorrelation/*.json
+
+results/oldButGold/100_svg/**/*.json
+results/oldButGold/100_svg/**/*/*.json
+results/oldButGold/100_svg/**/*.json
 
 results/100/analysis/**/*.json
 results/finalTests/**/analysis/**/*.json
