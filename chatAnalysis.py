@@ -43,7 +43,14 @@ def click_option(*args, **kwargs):
     type=click.Choice(["max", "min", "avg", "median"]),
     help="The criteria to use for the score comparison",
 )
-def plot(input, silent, output, criteria):
+@click_option(
+    "-e",
+    "--extension",
+    default="png",
+    type=click.Choice(["png", "pdf", "svg"]),
+    help="The extension of the output file",
+)
+def plot(input, silent, output, criteria, extension):
     archive: Archive
     filename: str
     with open(input) as f:
@@ -156,7 +163,7 @@ def plot(input, silent, output, criteria):
     fig.set_size_inches(13.5, 7.5)
 
     # save the plot
-    plt.savefig(output + "/" + filename + "-" + criteria + ".png", dpi=300)
+    plt.savefig(output + "/" + filename + "-" + criteria+"."+extension, dpi=300, format=extension)
     if not silent:
         plt.show()
 

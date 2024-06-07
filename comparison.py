@@ -84,7 +84,14 @@ def get_legends(files: list[Archive]) -> list[str]:
     default="results/100/plots/",
     help="The path to the results folder",
 )
-def plot(criteria: str, input: str, silent: bool, output: str):
+@click_option(
+    "-e",
+    "--extension",
+    default="png",
+    type=click.Choice(["png", "pdf", "svg"]),
+    help="The extension of the output file",
+)
+def plot(criteria: str, input: str, silent: bool, output: str, extension: str) -> None:
     sources = get_files(input)
     data = get_data(sources)
     legend = get_legends(data)
@@ -183,7 +190,7 @@ def plot(criteria: str, input: str, silent: bool, output: str):
     # make the legend to be seen in the window
     plt.subplots_adjust(right=0.74, bottom=0.16, left=0.04, top=0.84)
 
-    plt.savefig(output + f"/comparison-{criteria}.png", dpi=300)
+    plt.savefig(output + f"/comparison-{criteria}.{extension}", dpi=300, format=extension)
 
     if not silent:
         plt.show()

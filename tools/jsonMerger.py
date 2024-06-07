@@ -1,6 +1,7 @@
 import json
 import os
 import click
+import orjson
 
 import sys
 
@@ -70,7 +71,8 @@ def run(output_path, file1, file2):
 
     long_runs.runs.extend(short_runs.runs)
     with open(output_path, "w") as f:
-        f.write(long_runs.to_json())
+        #f.write(long_runs.to_json())
+        f.write(orjson.dumps(long_runs.to_dict(), option=orjson.OPT_INDENT_2).decode())
 
 
 if __name__ == "__main__":

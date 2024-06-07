@@ -81,6 +81,13 @@ def run_command(command):
     help="Do not compute the results, just plot them",
     default=False,
 )
+@click_option(
+    "-e",
+    "--extension",
+    default="png",
+    type=click.Choice(["png", "pdf", "svg"]),
+    help="The extension of the output file",
+)
 def main(
     all,
     chat_analysis: bool,
@@ -92,6 +99,7 @@ def main(
     input: str,
     output: str,
     donotcompute: bool,
+    extension: str,
 ):
     if all:
         chat_analysis = True
@@ -133,7 +141,7 @@ def main(
                     criteria, desc="Criteria", position=0, leave=True, file=sys.stdout
                 ):
                     run_command(
-                        f"python3 chatAnalysis.py --silent --input {file} --output {output}/chatAnalysis --criteria {c}"
+                        f"python3 chatAnalysis.py --silent --input {file} --output {output}/chatAnalysis --criteria {c} --extension {extension}"
                     )
     if comparison:
         print("Running comparison")
@@ -144,7 +152,7 @@ def main(
             criteria, desc="Criteria", position=0, leave=True, file=sys.stdout
         ):
             run_command(
-                f"python3 comparison.py --silent --input {input} --output {output}/comparisons --criteria {c} {donotcompute}"
+                f"python3 comparison.py --silent --input {input} --output {output}/comparisons --criteria {c} {donotcompute} --extension {extension}"
             )
 
     # if distance:
@@ -165,7 +173,7 @@ def main(
             file=sys.stdout,
         ):
             run_command(
-                f"python3 sentenceAnalyser.py --input {input} --mode {m} --type violin {donotcompute}"
+                f"python3 sentenceAnalyser.py --input {input} --mode {m} --type violin {donotcompute} -e {extension}"
             )
 
 

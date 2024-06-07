@@ -58,7 +58,7 @@ def instanceSimilarity(model, prompt1, prompt2):
     }
     return instance
 
-def plotDatasetVariety(instances, datasetName, output, normalise=False, instances2=None, datasetName2=None):
+def plotDatasetVariety(instances, datasetName, output, normalise=False, instances2=None, datasetName2=None, extension="png"):
     '''this function plots the distribution of the similarity between the prompts in the dataset
     instances: the list of dictionaries containing the prompt 1, the prompt 2, the cosine similarity between the two prompts
     datasetName: the name of the dataset
@@ -82,7 +82,7 @@ def plotDatasetVariety(instances, datasetName, output, normalise=False, instance
         title=f"Similarity between {datasetName} and {datasetName2}"
     
     plt.title(title)
-    plt.savefig(output, bbox_inches='tight', dpi=300)
+    plt.savefig(output+"."+extension, bbox_inches='tight', dpi=300, format=extension)
 
 
 
@@ -121,7 +121,14 @@ def plotDatasetVariety(instances, datasetName, output, normalise=False, instance
     help="Normalise the count of values between 0 and 1",
     default=False,
 )
-def main(input, input2, donotcompute,normalise):
+@click_option(
+    "-e",
+    "--extension",
+    default="png",
+    type=click.Choice(["png", "pdf", "svg"]),
+    help="The extension of the output file",
+)
+def main(input, input2, donotcompute,normalise, extension):
     '''this function computes the similarity between each pair of prompts in the dataset
     input: the dataset containing the prompts
     donotcompute: if True, it does not compute the similarity between the prompts, just plot it
@@ -148,9 +155,9 @@ def main(input, input2, donotcompute,normalise):
                 instances2=orjson.loads(f.read())
     
     if input2:
-        plotDatasetVariety(instances=instances, output=f"{path}/datasetVariety/compared_{datasetName}_{datasetName2}_datasetVarietySimilarity.png", normalise=normalise, instances2=instances2, datasetName=datasetName, datasetName2=datasetName2)
+        plotDatasetVariety(instances=instances, output=f"{path}/datasetVariety/compared_{datasetName}_{datasetName2}_datasetVarietySimilarity", normalise=normalise, instances2=instances2, datasetName=datasetName, datasetName2=datasetName2, extension=extension)
     else:
-        plotDatasetVariety(instances=instances, output=f"{path}/datasetVariety/{datasetName}_datasetVarietySimilarity.png", normalise=normalise, datasetName=datasetName)
+        plotDatasetVariety(instances=instances, output=f"{path}/datasetVariety/{datasetName}_datasetVarietySimilarity", normalise=normalise, datasetName=datasetName, extension=extension)
     
 if __name__ == "__main__":
     main()

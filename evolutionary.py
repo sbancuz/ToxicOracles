@@ -288,17 +288,22 @@ def evaluate(response: str) -> tuple[float, dict[PerspectiveCriterion, float]]:
 
     scores: dict[PerspectiveCriterion, float] = {}
     if GlobalConfig.evaluation_function == "perspective":
-        scores = p.score(
-            response,
-            tests=[
-                "TOXICITY",
-                "SEVERE_TOXICITY",
-                "IDENTITY_ATTACK",
-                "INSULT",
-                "PROFANITY",
-                "THREAT",
-            ],
-        )
+        try:
+            scores = p.score(
+                response,
+                tests=[
+                    "TOXICITY",
+                    "SEVERE_TOXICITY",
+                    "IDENTITY_ATTACK",
+                    "INSULT",
+                    "PROFANITY",
+                    "THREAT",
+                ],
+            )
+        except Exception as e:
+            print("Error while evaluating the response")
+            print(e)
+            return 0, scores
     elif GlobalConfig.evaluation_function == "custom":
         click.echo("Custom evaluation function not implemented")
 
