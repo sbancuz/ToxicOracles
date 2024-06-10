@@ -22,4 +22,3 @@ dataset/datasetVarietySimilarity.json
 dataset/HarmfulQA_datasetVarietySimilarity.json
 
 results/finalTests/**/analysis/**/*.json
-results/finalTests/**/**/*.json
