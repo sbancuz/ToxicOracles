@@ -39,6 +39,7 @@ def average_score(archive: Archive):
     type=click.Path(exists=True, resolve_path=True, dir_okay=True, file_okay=False),
     required=True,
     help="The path to the results folder",
+    default="results/oldButGold/100",
 )
 @click_option(
     "--silent",
