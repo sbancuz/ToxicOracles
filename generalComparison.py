@@ -1,12 +1,16 @@
+# given a folder in input, pick for each folder inside the given folder the archive that achieved the best average score at the end of the simulation.
+
+import os
+from typing import List
+
+import click
+import orjson
+from evolutionary import Archive, Config
+from comparison import get_files, get_score, get_legends, parse_config
+import copy
 import matplotlib.pyplot as plt
 import pandas as pd
-import click
 import matplotlib.ticker as mtick
-
-from evolutionary import Archive, Config, get_score
-
-
-import orjson
 
 
 def click_option(*args, **kwargs):
@@ -14,97 +18,65 @@ def click_option(*args, **kwargs):
         kwargs.update({"show_default": True})
     return click.option(*args, **kwargs)
 
-
-def parse_config(config: Config) -> str:
-    name = config.scoring_function + "_"
-
-    if config.memory:
-        name += f"mem({config.memorywindow})_"
-
-    if config.forward_score:
-        name += "fs_"
-
-    if config.gaslight:
-        name += "glit_"
-
-    return name[:-1]
-
-
-def get_files(path: str) -> list[str]:
-    import os
-
-    return [
-        os.path.join(path, f)
-        for f in os.listdir(path)
-        if os.path.isfile(os.path.join(path, f)) and f.endswith(".json")
-    ]
-
-
-def get_data(files: list[str]) -> list[Archive]:
-    data = []
+def pickBest(folder):
+    # load all the json files in the folder
+    files = get_files(folder)
+    best=None
+    bestAverage=None
     for file in files:
         with open(file) as f:
-            data.append(Archive.from_dict(orjson.loads(f.read())))
-
-    return data
-
-
-def get_legends(files: list[Archive]) -> list[str]:
-    legends = []
-    for file in files:
-        legends.append(parse_config(file.config))
-
-    return legends
-
+            data = Archive.from_dict(orjson.loads(f.read()))
+            # compute the average score for the final iteration
+            scoreSum=0
+            for iteration in data.runs:
+                scoreSum+=iteration.taken[-1].score
+            average=scoreSum/len(data.runs)
+            # if the current average is better than the current best, update the best
+            if best==None or average>bestAverage:
+                #deep copy the data
+                best=copy.deepcopy(data)
+                bestAverage=average
+    return best
 
 @click.command()
-@click_option(
-    "-c",
-    "--criteria",
-    default="max",
-    type=click.Choice(["max", "min", "avg", "median"]),
-    help="The criteria to use for the score comparison",
-)
+
 @click_option(
     "-i",
     "--input",
-    default="results/100/",
+    default="results/finalTests/",
     help="The path to the results folder",
+)
+@click_option(
+    "-o",
+    "--output",
+    default=".",
+    help="The path to the output folder",
+)
+@click_option(
+    "-e",
+    "--extension",
+    default="png",
+    help="The extension of the output file",
 )
 @click_option(
     "-s",
     "--silent",
     is_flag=True,
     help="Do not show the plot",
-    default=False,
 )
-@click_option(
-    "-o",
-    "--output",
-    default="results/100/plots/",
-    help="The path to the results folder",
-)
-@click_option(
-    "-e",
-    "--extension",
-    default="png",
-    type=click.Choice(["png", "pdf", "svg"]),
-    help="The extension of the output file",
-)
-def plot(criteria: str, input: str, silent: bool, output: str, extension: str) -> None:
-    '''
-    Compare the different configurations of the runs in the input folder.
-    criteria: the criteria to use for the score comparison
-    input: the path to the results folder
-    silent: do not show the plot
-    output: the path to the results folder
-    extension: the extension of the output file'''
+def main(input, output, extension, silent):
+    # for every folder in the input folder, compute the best archive
+    folders = [f.path for f in os.scandir(input) if f.is_dir()]
+    # data is an object that has the data of the run and a string for the legend
+    data=[]
+    criteria="max"
 
-
-    sources = get_files(input)
-    data = get_data(sources)
-    legend = get_legends(data)
+    for folder in folders:
+        best=pickBest(folder)
+        data.append((best, folder))
     
+    legend = [d[1] for d in data]
+    # plot the data
     fig, ax = plt.subplots(3, 2)
     fig.suptitle("Comparison of the different configurations", size=12)
     fig.tight_layout()
@@ -122,15 +94,16 @@ def plot(criteria: str, input: str, silent: bool, output: str, extension: str) -
     )
     ax[2, 1].set_title("Categories distribution", size=10)
 
-    iterations = min([d.config.iterations for d in data])
-    possible_categories = [d.config.categories for d in data][0]
+    iterations = min([d[0].config.iterations for d in data])
+    possible_categories = [d[0].config.categories for d in data][0]
 
     mean_iteration_score = None
     dataframes = []
     stationary_score = []
     categories_series = []
 
-    for experiment in data:
+    for element in data:
+        experiment=element[0]
         scores = []
         categories = []
         for run in experiment.runs:
@@ -205,5 +178,9 @@ def plot(criteria: str, input: str, silent: bool, output: str, extension: str) -
         plt.show()
 
 
+
+
+
 if __name__ == "__main__":
-    plot()
+    main()
+
