@@ -13,6 +13,7 @@ import requests
 from dotenv import load_dotenv
 from perspective import PerspectiveAPI
 import orjson
+import time
 
 Goffset = 0
 
@@ -36,17 +37,33 @@ class InitialQuestion(JSONWizard):
     response_from_sut: str
     score: float = field(default=0)
     criterion: dict[PerspectiveCriterion, float] = field(default_factory=dict)
+    start_time_response: float = field(default=0)
+    end_time_response: float = field(default=0)
+    delta_time_response: float = field(default=0)
+    start_time_evaluation: float = field(default=0)
+    end_time_evaluation: float = field(default=0)
+    delta_time_evaluation: float = field(default=0)
+
 
 
 @dataclass
 class Question(JSONWizard):
     input_prompt_for_generation: str
     generated_prompt_for_sut: str = field(default="")
+    response_from_sut: str = field(default="")
     category: str = field(default="")
     score: float = field(default=0)
     criterion: dict[PerspectiveCriterion, float] = field(default_factory=dict)
     full_input_prompt_for_generation: str = field(default="")
-    response_from_sut: str = field(default="")
+    start_time_generation: float = field(default=0)
+    end_time_generation: float = field(default=0)
+    delta_time_generation: float = field(default=0)
+    start_time_response: float = field(default=0)
+    end_time_response: float = field(default=0)
+    delta_time_response: float = field(default=0)
+    start_time_evaluation: float = field(default=0)
+    end_time_evaluation: float = field(default=0)
+    delta_time_evaluation: float = field(default=0)
 
 
 @dataclass
@@ -70,11 +87,17 @@ class Run(JSONWizard):
     initial: InitialQuestion
     taken: list[Question] = field(default_factory=list)
     discarded: list[list[Question]] = field(default_factory=list)
+    start_time_timestamp: float = field(default=0)
+    end_time_timestamp: float = field(default=0)
+    delta_time_timestamp: float = field(default=0)
 
 
 @dataclass
 class Archive(JSONWizard):
     config: Config
+    start_time_timestamp: float = field(default=0)
+    end_time_timestamp: float = field(default=0)
+    delta_time_timestamp: float = field(default=0)
     runs: list[Run] = field(default_factory=list)
 
 
@@ -239,19 +262,25 @@ def answer_query(query: str) -> str:
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": query},
             ],
-            "repeat_penalty": GlobalConfig.repeat_penality,
+            #"repeat_penalty": GlobalConfig.repeat_penality,
         }
     )
     headers = {
-        "accept": "application/json",
+        #"accept": "application/json",
         "Content-Type": "application/json",
         "Authorization": "Bearer " + API_KEY_SUT,
     }
-
     req = requests.request("POST", url, headers=headers, data=payload).json()
+    
 
-    while len(req["choices"][0]["message"]["content"].strip()) <= 10:
-        req = requests.request("POST", url, headers=headers, data=payload).json()
+    try:
+        while len(req["choices"][0]["message"]["content"].strip()) <= 10:
+            req = requests.request("POST", url, headers=headers, data=payload).json()
+    except Exception as e:
+        print("Error while answering the query")
+        print(e)
+        print("Query: ", query)
+        print("Response: ", req)
 
     return req["choices"][0]["message"]["content"].strip()
 
@@ -452,14 +481,14 @@ def get_env_or_error(env_var: str) -> str:
 @click_option(
     "-sut",
     "--system-under-test",
-    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna"]),
+    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna", "llama3"]),
     default="mistral",
     help="The model to use as System under test",
 )
 @click_option(
     "-sg",
     "--system-generator",
-    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna"]),
+    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna", "llama3"]),
     default="mistral",
     help="The model to use as System generator",
 )
@@ -505,6 +534,9 @@ async def run(
     elif system_generator == "vicuna":
         API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_VICUNA")
         URL_PROMPT_GENERATOR = get_env_or_error("URL_VICUNA") + "/v1/completions"
+    elif system_generator == "llama3":
+        API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_LLAMA3")
+        URL_PROMPT_GENERATOR = get_env_or_error("URL_LLAMA3") + "/v1/completions"
 
     if system_under_test == "mistral":
         API_KEY_SUT = get_env_or_error("API_KEY_MISTRAL")
@@ -518,6 +550,9 @@ async def run(
     elif system_under_test == "vicuna":
         API_KEY_SUT = get_env_or_error("API_KEY_VICUNA")
         URL_SUT = get_env_or_error("URL_VICUNA") + "/v1/chat/completions"
+    elif system_under_test == "llama3":
+        API_KEY_SUT = get_env_or_error("API_KEY_LLAMA3")
+        URL_SUT = get_env_or_error("URL_LLAMA3") + "/v1/chat/completions"
 
     global Goffset
     Goffset = offset
@@ -562,6 +597,9 @@ async def run(
 
     archive = Archive(GlobalConfig)
 
+    #set the start time timestamp as the current time
+    archive.start_time_timestamp = time.time()
+
     # Questions are loaded
     initialPrompts: list[str] = load_questions(file, questions)
 
@@ -571,11 +609,27 @@ async def run(
     # for initialPrompt in tqdm(initialPrompts, position=0):
     ___question = 0 + offset
     for initialPrompt in initialPrompts:
+
+
         print(f"Prompt {___question}", file=sys.stderr)
         ___question += 1
-        # Starting by evaluating the initial prompt
+
+        # set the start time of the response
+        start_time_respons_initial = time.time()
+        print("Initial prompt: ", initialPrompt)
         initialResponse = answer_query(initialPrompt)
+
+        # set the end time of the response
+        end_time_respons_initial = time.time()
+
+        # set the start time of the evaluation
+        start_time_evaluation_initial = time.time()
         initialScore, initialCriterion = evaluate(initialResponse)
+        # set the end time of the evaluation
+        end_time_evaluation_initial = time.time()
+
+        delta_time_evaluation_initial = end_time_evaluation_initial - start_time_evaluation_initial
+
 
         message = make_message(initialPrompt, "initial", -1, [])
         initial = Question(
@@ -588,11 +642,18 @@ async def run(
             response_from_sut=initialResponse,
         )
 
+        # create the initial question
         initial_to_save_to_archive = InitialQuestion(
             prompt_from_dataset=initialPrompt,
             response_from_sut=initialResponse,
             score=initialScore,
             criterion=initialCriterion,
+            start_time_response=start_time_respons_initial,
+            end_time_response=end_time_respons_initial,
+            delta_time_response=end_time_respons_initial - start_time_respons_initial,
+            start_time_evaluation=start_time_evaluation_initial,
+            end_time_evaluation=end_time_evaluation_initial,
+            delta_time_evaluation=end_time_evaluation_initial - start_time_evaluation_initial,
         )
 
         best: Question = Question(
@@ -606,9 +667,10 @@ async def run(
                 initial.full_input_prompt_for_generation
             ),
         )
+        # create the run and set the initial timestamp
+        run = Run(initial=initial_to_save_to_archive, start_time_timestamp = time.time())
 
-        run = Run(initial=initial_to_save_to_archive)
-
+        # Starting by evaluating the initial prompt
         semaphore = asyncio.Semaphore(batch_size)
         # for _ in tqdm(range(iterations), position=1):
         for _ in range(iterations):
@@ -619,6 +681,8 @@ async def run(
                     current = Question(copy.deepcopy(nextPrompt))
                     current.category = category
 
+                    # set the start time of the generation
+                    current.start_time_generation = time.time()
                     (
                         current.generated_prompt_for_sut,
                         current.full_input_prompt_for_generation,
@@ -628,15 +692,34 @@ async def run(
                         messages=copy.deepcopy(run.taken) if memory else [],
                         window=memory_window,
                     )
+                    # set the end time of the generation
+                    current.end_time_generation = time.time()
+                    current.delta_time_generation = (
+                        current.end_time_generation - current.start_time_generation
+                    )
+
+
+                    # set the start time of the response
+                    current.start_time_response = time.time()
 
                     current.response_from_sut = answer_query(
                         current.generated_prompt_for_sut
                     )
 
+                    # set the end time of the response
+                    current.end_time_response = time.time()
+                    current.delta_time_response = (
+                        current.end_time_response - current.start_time_response
+                    )
+
                     try:
+                        # set the start time of the evaluation
+                        current.start_time_evaluation = time.time()
                         current.score, current.criterion = evaluate(
                             current.response_from_sut
                         )
+                        # set the end time of the evaluation
+                        current.end_time_evaluation = time.time()
                     except Exception as e:
                         print("Error: ", e)
                         print("Current generated prompt: ", current.generated_prompt_for_sut)
@@ -663,6 +746,10 @@ async def run(
 
             run.discarded.append(disc)
             run.taken.append(copy.deepcopy(best))
+        
+        # set the end time of the run
+        run.end_time_timestamp = time.time()
+        run.delta_time_timestamp = run.end_time_timestamp - run.start_time_timestamp
 
         if verbose:
             print("\n### BEST PROMPT ###")
@@ -671,12 +758,21 @@ async def run(
             print(run.taken)
 
         archive.runs.append(copy.deepcopy(run))
+
+        #update the end time timestamp, as to keep valid even partial results
+        archive.end_time_timestamp = time.time()
+        archive.delta_time_timestamp = archive.end_time_timestamp - archive.start_time_timestamp
+
         with open(output_path + ".par", "w") as f:
             # f.write(archive.to_json())
             f.write(orjson.dumps(archive, option=orjson.OPT_INDENT_2).decode("utf-8"))
 
     if verbose:
         print(best_convo)
+
+    # update the end time timestamp, to overwrite the previous value set by partial results
+    archive.end_time_timestamp = time.time()
+    archive.delta_time_timestamp = archive.end_time_timestamp - archive.start_time_timestamp
 
     with open(output_path, "w") as f:
         # f.write(archive.to_json())
