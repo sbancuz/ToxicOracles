@@ -481,14 +481,14 @@ def get_env_or_error(env_var: str) -> str:
 @click_option(
     "-sut",
     "--system-under-test",
-    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna", "llama3"]),
+    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC"]),
     default="mistral",
     help="The model to use as System under test",
 )
 @click_option(
     "-sg",
     "--system-generator",
-    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna", "llama3"]),
+    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC"]),
     default="mistral",
     help="The model to use as System generator",
 )
@@ -537,6 +537,9 @@ async def run(
     elif system_generator == "llama3":
         API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_LLAMA3")
         URL_PROMPT_GENERATOR = get_env_or_error("URL_LLAMA3") + "/v1/completions"
+    elif system_generator == "vicunaUC":
+        API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_VICUNAUC")
+        URL_PROMPT_GENERATOR = get_env_or_error("URL_VICUNAUC") + "/v1/completions"
 
     if system_under_test == "mistral":
         API_KEY_SUT = get_env_or_error("API_KEY_MISTRAL")
@@ -553,6 +556,9 @@ async def run(
     elif system_under_test == "llama3":
         API_KEY_SUT = get_env_or_error("API_KEY_LLAMA3")
         URL_SUT = get_env_or_error("URL_LLAMA3") + "/v1/chat/completions"
+    elif system_under_test == "vicunaUC":
+        API_KEY_SUT = get_env_or_error("API_KEY_VICUNAUC")
+        URL_SUT = get_env_or_error("URL_VICUNAUC") + "/v1/chat/completions"
 
     global Goffset
     Goffset = offset
