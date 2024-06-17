@@ -80,6 +80,7 @@ class Config(JSONWizard):
     gaslight: bool
     retries: int = field(default=100)
     system_under_test: str = field(default="mistral")
+    prompt_generator: str = field(default="mistral")
 
 
 @dataclass
@@ -600,6 +601,7 @@ async def run(
         gaslight=gaslight,
         retries=retries,
         system_under_test=system_under_test,
+        prompt_generator=system_generator,
     )
 
     archive = Archive(GlobalConfig)
