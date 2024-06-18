@@ -116,7 +116,7 @@ def main(
         similarity_single = True
         distance = True
         general_sentence_analysis = True
-        generalComparison = True
+        generalcomparison = True
 
     criteria = ["max", "min", "avg", "median"]
     if output is None:
@@ -126,6 +126,12 @@ def main(
         os.makedirs(output)
 
     donotcompute = "-dnc" if donotcompute else ""
+
+    # replace .par files with .json
+    partialFiles = glob.glob(input + "/*.par")
+    for file in partialFiles:
+        os.rename(file, file.replace(".par", ""))
+
 
     if chat_analysis:
         print("Running chatAnalysis")
