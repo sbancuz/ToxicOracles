@@ -73,9 +73,8 @@ def main(input, output, extension, silent):
 
     for folder in folders:
         best=pickBest(folder)
-        lastFolder=folder.split("/")[-1]
-        # split at _ to get sut and sg
-        sut, sg = lastFolder.split("_")
+        sut=best.config.system_under_test
+        sg=best.config.prompt_generator
 
         data.append((best, "SUT: "+sut+" SG: "+sg+", "+parse_config(best.config)))
     
