@@ -203,7 +203,7 @@ def create_new_prompt(
     for m in reversed(messages):
         if len(mem) == window:
             break
-        if m not in mem:
+        if m not in [x.generated_prompt_for_sut for x in mem]:
             mem.append(m)
     mem = list(reversed(mem))
 

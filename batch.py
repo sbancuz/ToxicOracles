@@ -88,6 +88,13 @@ def run_command(command):
     type=click.Choice(["png", "pdf", "svg"]),
     help="The extension of the output file",
 )
+@click_option(
+    "-gc",
+    "--generalcomparison",
+    is_flag=True,
+    help="Run the generalComparison script",
+    default=False,
+)
 def main(
     all,
     chat_analysis: bool,
@@ -100,6 +107,7 @@ def main(
     output: str,
     donotcompute: bool,
     extension: str,
+    generalcomparison: bool
 ):
     if all:
         chat_analysis = True
@@ -108,6 +116,7 @@ def main(
         similarity_single = True
         distance = True
         general_sentence_analysis = True
+        generalComparison = True
 
     criteria = ["max", "min", "avg", "median"]
     if output is None:
@@ -173,8 +182,22 @@ def main(
             file=sys.stdout,
         ):
             run_command(
-                f"python3 sentenceAnalyser.py --input {input} --mode {m} --type violin {donotcompute} -e {extension}"
+                f"python3 sentenceAnalyser.py --input {input} --mode {m} --type violin {donotcompute} -e {extension} -o {output}/sentenceAnalysis"
             )
+        
+    if generalcomparison:
+        print("Running generalComparison")
+        # input folder for the general comparison is the input path without the last folder
+        input = os.path.dirname(input)
+
+        #output folder is the same as the input folder
+        output = input
+
+        run_command(
+            f"python3 generalComparison.py --input {input} --output {output} --extension {extension}"
+        )
+    
+
 
 
 if __name__ == "__main__":

@@ -73,7 +73,11 @@ def main(input, output, extension, silent):
 
     for folder in folders:
         best=pickBest(folder)
-        data.append((best, folder))
+        lastFolder=folder.split("/")[-1]
+        # split at _ to get sut and sg
+        sut, sg = lastFolder.split("_")
+
+        data.append((best, "SUT: "+sut+" SG: "+sg+", "+parse_config(best.config)))
     
     legend = [d[1] for d in data]
     # plot the data
@@ -172,7 +176,7 @@ def main(input, output, extension, silent):
     # make the legend to be seen in the window
     plt.subplots_adjust(right=0.74, bottom=0.16, left=0.04, top=0.84)
 
-    plt.savefig(output + f"/comparison-{criteria}.{extension}", dpi=300, format=extension)
+    plt.savefig(output + f"/generalComparison-{criteria}.{extension}", dpi=300, format=extension)
 
     if not silent:
         plt.show()
