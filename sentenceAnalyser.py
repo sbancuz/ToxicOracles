@@ -191,11 +191,14 @@ def betweenFinalsVariety(input, type, extension, output):
 
 ### SCORE CORRELATION ###
 
-def scoreCorrelation(input, output):
+def scoreCorrelation(input, output, extension="png"):
     '''this function computes the correlation between the delta cosine similarity and the score
-    path: the path containing the json files
-    return: a list of dictionaries, each dictionary contains the initial cosine similarity, the cosine similarity, the delta cosine similarity, the score, the configuration of the archive, the file name
-    it also saves the result in a file scoreCorrelation.json inside the folder scoreCorrelation in the input folder'''
+    input: the path to the folder containing the json files
+    output: the path to save the results
+    extension: the extension of the output file
+    return: a list of dictionaries, each dictionary contains the initial prompt, the final prompt, the delta cosine similarity, the initial score, the final score, the delta score, the configuration of the archive, the file name
+    it also saves the result in a file scoreCorrelation.json inside the folder scoreCorrelation in the output folder and plots the correlation between the delta cosine similarity and the delta score, the delta cosine similarity and the final score, the initial score and the final score
+    '''
     # select json files in the path
     files = glob.glob(f"{input}/*.json")
     instances = []
@@ -223,9 +226,9 @@ def scoreCorrelation(input, output):
                                         "delta score": max(run.taken[-1].criterion.values()) - max(run.initial.criterion.values()),
                                         "config": archive.config, 
                                         "fileName": filename})
-            plotCorrelation(instances=singleInstance, title="Correlation between delta cosine similarity and delta score", x="delta cosine similarity", y="delta score", name=f"{filename}_correlation_deltaSim_deltaScore.png", output=f"{input}/scoreCorrelation")
-            plotCorrelation(instances=singleInstance, title="Correlation between delta cosine similarity and final score", x="delta cosine similarity", y="final score", name=f"{filename}_correlation_deltaSim_finalScore.png", output=f"{input}/scoreCorrelation")
-            plotCorrelation(instances=singleInstance, title="Correlation between initial and final score",                 x="initial score",           y="final score", name=f"{filename}_correlation_Score.png", output=f"{input}/scoreCorrelation")
+            plotCorrelation(instances=singleInstance, title="Correlation between delta cosine similarity and delta score", x="delta cosine similarity", y="delta score", name=f"{filename}_correlation_deltaSim_deltaScore", output=output, extension=extension)
+            plotCorrelation(instances=singleInstance, title="Correlation between delta cosine similarity and final score", x="delta cosine similarity", y="final score", name=f"{filename}_correlation_deltaSim_finalScore", output=output, extension=extension)
+            plotCorrelation(instances=singleInstance, title="Correlation between initial and final score",                 x="initial score",           y="final score", name=f"{filename}_correlation_Score", output=output, extension=extension)
             with open(f"{output}/{filename}_scoreCorrelation.json", "w") as f:
                 f.write(orjson.dumps(instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
             instances.extend(singleInstance)
@@ -373,7 +376,7 @@ def main(input, donotcompute, type, mode, extension, output):
                 plotCorrelation(instances=singleInstance, title="Correlation between delta cosine similarity and final score", x="delta cosine similarity", y="final score", name=f"{filename}_correlation_deltaSim_finalScore", output=outputFolder, extension=extension)
                 plotCorrelation(instances=singleInstance, title="Correlation between initial and final score",                 x="initial score",           y="final score", name=f"{filename}_correlation_Score", output=outputFolder, extension=extension)
         else:
-            instances = scoreCorrelation(input)
+            instances = scoreCorrelation(input, output=outputFolder)
         
         plotCorrelation(instances=instances, title="Correlation between delta cosine similarity and delta score", x="delta cosine similarity", y="delta score", name=f"General_correlation_deltaSim_deltaScore", output=outputFolder, extension=extension)
         plotCorrelation(instances=instances, title="Correlation between delta cosine similarity and final score", x="delta cosine similarity", y="final score", name=f"General_correlation_deltaSim_finalScore", output=outputFolder, extension=extension)
