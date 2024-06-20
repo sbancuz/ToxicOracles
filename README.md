@@ -2,7 +2,7 @@
 A framework to evaluate how much can a Large Language Model be toxic
 
 ![Platform schema](./Piattaforma.png) 
-![results](results/100/plots/comparison-max.png)
+![results](results/finalTests/generalComparison-max.png)
 ## Setup 
 
 ```bash
