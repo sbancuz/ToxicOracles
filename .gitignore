@@ -12,6 +12,7 @@ results/oldButGold/100/scoreCorrelation/*.json
 results/oldButGold/100_svg/**/*.json
 results/oldButGold/100_svg/**/*/*.json
 results/oldButGold/100_svg/**/*.json
+results/azealiaBanks/analysis/**/*.json
 
 results/100/analysis/**/*.json
 results/finalTests/**/analysis/**/*.json
