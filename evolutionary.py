@@ -729,6 +729,9 @@ async def run(
                         )
                         # set the end time of the evaluation
                         current.end_time_evaluation = time.time()
+                        current.delta_time_evaluation = (
+                            current.end_time_evaluation - current.start_time_evaluation
+                        )
                     except Exception as e:
                         print("Error: ", e)
                         print("Current generated prompt: ", current.generated_prompt_for_sut)
