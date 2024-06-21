@@ -200,7 +200,13 @@ def main(
         output = input
 
         run_command(
-            f"python3 generalComparison.py --input {input} --output {output} --extension {extension}"
+            f"python3 generalComparison.py --input {input} --output {output} --extension {extension} --groupby all"
+        )
+        run_command(
+            f"python3 generalComparison.py --input {input} --output {output} --extension {extension} --groupby sut"
+        )
+        run_command(
+            f"python3 generalComparison.py --input {input} --output {output} --extension {extension} --groupby sg"
         )
     
 
