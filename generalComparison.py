@@ -38,40 +38,19 @@ def pickBest(folder):
                 bestAverage=average
     return best
 
-@click.command()
 
-@click_option(
-    "-i",
-    "--input",
-    default="results/finalTests/",
-    help="The path to the results folder",
-)
-@click_option(
-    "-o",
-    "--output",
-    default=".",
-    help="The path to the output folder",
-)
-@click_option(
-    "-e",
-    "--extension",
-    default="png",
-    help="The extension of the output file",
-)
-@click_option(
-    "-s",
-    "--silent",
-    is_flag=True,
-    help="Do not show the plot",
-)
-def main(input, output, extension, silent):
-    # for every folder in the input folder, compute the best archive
-    folders = [f.path for f in os.scandir(input) if f.is_dir()]
-    # data is an object that has the data of the run and a string for the legend
+def all(input, output, extension, silent, criteria):
+    '''
+    This function is used to compare the different configurations of the experiments, considering the best configuration for each experiment. (pair of SUT and SG)
+    input: the path to the folder containing the results of the experiments (each experiment is in a different folder)
+    output: the path to the output folder
+    extension: the extension of the output file
+    silent: if True, the plot is not shown
+
+    '''
+
     data=[]
-    criteria="max"
-
-    for folder in folders:
+    for folder in input:
         best=pickBest(folder)
         sut=best.config.system_under_test
         sg=best.config.prompt_generator
@@ -181,8 +160,101 @@ def main(input, output, extension, silent):
         plt.show()
 
 
+def grouped(input, output, extension, silent, groupby, criteria):
+    data=pd.DataFrame()
+    for folder in input:
+        # compute the mean score in each iteration, for each run considering all the files
+        configurationData=pd.DataFrame()
+        for file in get_files(folder):
+            with open(file) as f:
+                archive=Archive.from_dict(orjson.loads(f.read()))
+                for run in archive.runs:
+                    iterationscores=[get_score(list(run.initial.criterion.values()), criteria)]
+                    for i in range(archive.config.iterations):
+                        taken=run.taken[i]
+                        iterationscores.append(get_score(list(taken.criterion.values()), criteria))
+                    configurationData=pd.concat([configurationData, pd.DataFrame(iterationscores).transpose()])
+        # compute the mean score for each iteration
+       # meanScore=configurationData.mean()
+        # add the sut and sg to the data
+        configurationData["system_under_test"]=archive.config.system_under_test
+        configurationData["prompt_generator"]=archive.config.prompt_generator
+        data=pd.concat([data, pd.DataFrame(configurationData)])
+    if groupby=="system_under_test":
+        data=data.drop("prompt_generator", axis=1)
+    elif groupby=="prompt_generator":
+        data=data.drop("system_under_test", axis=1)
+    # compute the mean score for each group
+    data=data.groupby([groupby]).mean()
+    data=data.transpose()
+    # plot the data on a single figure
+    plt.figure()
+    data.plot()
+    plt.legend(title=groupby)
+    plt.xlabel("Iteration")
+    plt.ylabel("Score")
+    title=f"Comparison of the different {groupby.replace('_', ' ')}"
+    plt.title(title)
+    plt.savefig(output + f"/groupedComparison-{criteria}-{groupby}.{extension}", dpi=300, format=extension)
+    if not silent:
+        plt.show()
+    
 
 
+@click.command()
+
+@click_option(
+    "-i",
+    "--input",
+    default="results/finalTests/",
+    help="The path to the results folder",
+)
+@click_option(
+    "-o",
+    "--output",
+    default=".",
+    help="The path to the output folder",
+)
+@click_option(
+    "-e",
+    "--extension",
+    default="png",
+    help="The extension of the output file",
+)
+@click_option(
+    "-s",
+    "--silent",
+    is_flag=True,
+    help="Do not show the plot",
+)
+@click_option(
+    "-g",
+    "--groupby",
+    default="all",
+    help="The criteria to use for grouping the score (all, sut, sg)",
+    type=click.Choice(["all", "sut", "sg"]),
+)
+
+@click_option(
+    "-c",
+    "--criteria",
+    default="max",
+    help="The criteria to use for selecting the best score (max, min)",
+    type=click.Choice(["max", "min", "avg", "median"]),
+)
+
+def main(input, output, extension, silent, groupby, criteria):
+    # for every folder in the input folder, compute the best archive
+    folders = [f.path for f in os.scandir(input) if f.is_dir()]
+    if groupby == "all":
+        all(folders, output, extension, silent, criteria)
+    elif groupby == "sut":
+        grouped(folders, output, extension, silent, "system_under_test", criteria)
+    elif groupby == "sg":
+        grouped(folders, output, extension, silent, "prompt_generator", criteria)
+    else:
+        raise ValueError("Invalid groupby parameter")
+    
 
 if __name__ == "__main__":
     main()
