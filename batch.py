@@ -95,6 +95,13 @@ def run_command(command):
     help="Run the generalComparison script",
     default=False,
 )
+@click_option(
+    "-wc",
+    "--wordcloud",
+    is_flag=True,
+    help="Run the wordcloud script",
+    default=False,
+)
 def main(
     all,
     chat_analysis: bool,
@@ -107,7 +114,8 @@ def main(
     output: str,
     donotcompute: bool,
     extension: str,
-    generalcomparison: bool
+    generalcomparison: bool,
+    wordcloud: bool
 ):
     if all:
         chat_analysis = True
@@ -117,6 +125,7 @@ def main(
         distance = True
         general_sentence_analysis = True
         generalcomparison = True
+        wordcloud = True
 
     criteria = ["max", "min", "avg", "median"]
     if output is None:
@@ -202,12 +211,13 @@ def main(
         run_command(
             f"python3 generalComparison.py --input {input} --output {output} --extension {extension} --groupby all"
         )
+    
+    if wordcloud:
+        print("Running wordcloud")
         run_command(
-            f"python3 generalComparison.py --input {input} --output {output} --extension {extension} --groupby sut"
+            f"python3 clouds.py --input {input} --output {output} --extension {extension}"
         )
-        run_command(
-            f"python3 generalComparison.py --input {input} --output {output} --extension {extension} --groupby sg"
-        )
+        
     
 
 

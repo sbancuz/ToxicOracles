@@ -158,6 +158,7 @@ def all(input, output, extension, silent, criteria):
 
     if not silent:
         plt.show()
+    plt.close()
 
 
 def grouped(input, output, extension, silent, groupby, criteria):
@@ -206,13 +207,13 @@ def grouped(input, output, extension, silent, groupby, criteria):
 @click_option(
     "-i",
     "--input",
-    default="results/finalTests/",
+    default="results/finalTests",
     help="The path to the results folder",
 )
 @click_option(
     "-o",
     "--output",
-    default=".",
+    default="results/finalTests",
     help="The path to the output folder",
 )
 @click_option(
@@ -231,8 +232,8 @@ def grouped(input, output, extension, silent, groupby, criteria):
     "-g",
     "--groupby",
     default="all",
-    help="The criteria to use for grouping the score (all, sut, sg)",
-    type=click.Choice(["all", "sut", "sg"]),
+    help="The criteria to use for grouping the score (no, sut, sg, all)",
+    type=click.Choice(["no", "sut", "sg", "all"]),
 )
 
 @click_option(
@@ -245,12 +246,14 @@ def grouped(input, output, extension, silent, groupby, criteria):
 
 def main(input, output, extension, silent, groupby, criteria):
     # for every folder in the input folder, compute the best archive
-    folders = [f.path for f in os.scandir(input) if f.is_dir()]
-    if groupby == "all":
+    folders = [f.path for f in os.scandir(input) if f.is_dir()] #and f.name != "vicunaUC_vicunaUC"]
+
+
+    if groupby == "no" or groupby == "all":
         all(folders, output, extension, silent, criteria)
-    elif groupby == "sut":
+    if groupby == "sut" or groupby == "all":
         grouped(folders, output, extension, silent, "system_under_test", criteria)
-    elif groupby == "sg":
+    if groupby == "sg" or groupby == "all":
         grouped(folders, output, extension, silent, "prompt_generator", criteria)
     else:
         raise ValueError("Invalid groupby parameter")
