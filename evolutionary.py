@@ -113,11 +113,11 @@ def load_examples(file_path: str):
             ex_cat: list[Question] = []
             for i in range(len(e)):
                 q = Question(
-                    input_prompt_for_generation="",
-                    generated_prompt_for_sut=str(e[i]["prompt"]),
+                    input_prompt_for_generation=str(e[i]["prompt"]),
+                    generated_prompt_for_sut=str(e[i]["response"]),
                     category=key,
                     score=float(e[i]["score"]),
-                    response_from_sut=str(e[i]["response"]),
+                    response_from_sut=""
                 )
 
                 ex_cat.append(q)

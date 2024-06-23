@@ -11,6 +11,8 @@ import copy
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib.ticker as mtick
+import seaborn as sns
+import math
 
 
 def click_option(*args, **kwargs):
@@ -39,14 +41,13 @@ def pickBest(folder):
     return best
 
 
-def all(input, output, extension, silent, criteria):
+def all(input, output, extension, verbose, criteria, type):
     '''
     This function is used to compare the different configurations of the experiments, considering the best configuration for each experiment. (pair of SUT and SG)
     input: the path to the folder containing the results of the experiments (each experiment is in a different folder)
     output: the path to the output folder
     extension: the extension of the output file
-    silent: if True, the plot is not shown
-
+    verbose: whether to show the plot or not
     '''
 
     data=[]
@@ -156,12 +157,12 @@ def all(input, output, extension, silent, criteria):
 
     plt.savefig(output + f"/generalComparison-{criteria}.{extension}", dpi=300, format=extension)
 
-    if not silent:
+    if verbose:
         plt.show()
     plt.close()
 
 
-def grouped(input, output, extension, silent, groupby, criteria):
+def grouped(input, output, extension, verbose, groupby, criteria, type):
     data=pd.DataFrame()
     for folder in input:
         # compute the mean score in each iteration, for each run considering all the files
@@ -181,24 +182,77 @@ def grouped(input, output, extension, silent, groupby, criteria):
         configurationData["system_under_test"]=archive.config.system_under_test
         configurationData["prompt_generator"]=archive.config.prompt_generator
         data=pd.concat([data, pd.DataFrame(configurationData)])
+
+    
     if groupby=="system_under_test":
         data=data.drop("prompt_generator", axis=1)
     elif groupby=="prompt_generator":
         data=data.drop("system_under_test", axis=1)
-    # compute the mean score for each group
-    data=data.groupby([groupby]).mean()
-    data=data.transpose()
-    # plot the data on a single figure
-    plt.figure()
-    data.plot()
-    plt.legend(title=groupby)
-    plt.xlabel("Iteration")
-    plt.ylabel("Score")
-    title=f"Comparison of the different {groupby.replace('_', ' ')}"
-    plt.title(title)
-    plt.savefig(output + f"/groupedComparison-{criteria}-{groupby}.{extension}", dpi=300, format=extension)
-    if not silent:
+    
+    
+
+    if type=="line":
+        plt.figure()
+        # compute the mean score for each group
+        data=data.groupby([groupby]).mean()
+        data=data.transpose()
+        # plot the data on a single figure
+        
+        data.plot()
+        plt.legend(title=groupby)
+        
+        plt.xlabel("Iteration")
+        plt.ylabel("Score")
+        title=f"Comparison of the different {groupby.replace('_', ' ')}"
+        plt.title(title)
+    elif type=="violin" or type=="boxplot":
+
+        columns = data.columns[:-1]
+    
+        # Calculate the number of columns for 3 rows layout
+        n_cols = math.ceil(len(columns) / 3)
+        
+        # Set up the matplotlib figure
+        fig, axes = plt.subplots(3, n_cols, figsize=(20, 12), sharey=True)
+
+        title=f"Comparison of the different {groupby.replace('_', ' ')}"
+        fig.suptitle(title)
+        
+        # Flatten the axes array for easy indexing
+        axes = axes.flatten()
+        
+        # Generate a violin plot for each column
+        for i, column in enumerate(columns):
+            if type == "boxplot":
+                sns.boxplot(x=groupby, y=column, data=data, ax=axes[i])
+            else:
+                sns.violinplot(x=groupby, y=column, data=data, ax=axes[i])
+            axes[i].set_title(f'Iteration {column}')
+            axes[i].set_ylabel('Score')
+            # Remove the x-axis label
+            axes[i].set_xlabel('')
+            # Rotate the x-axis labels for better readability
+            axes[i].set_xticklabels(axes[i].get_xticklabels(), rotation=45, ha='right')
+        
+        # Hide any unused subplots
+        for j in range(i+1, len(axes)):
+            fig.delaxes(axes[j])
+        
+        # Adjust layout
+        plt.tight_layout()
+        
+        # Save the figure
+        plt.savefig(f"{output}/groupedComparison-{type}-{criteria}-{groupby}.{extension}", dpi=300, format=extension)
+        #plt.show()
+
+    else:
+        raise ValueError("Invalid type parameter")
+
+    
+    plt.savefig(output + f"/groupedComparison-{type}-{criteria}-{groupby}.{extension}", dpi=300, format=extension)
+    if verbose:
         plt.show()
+    plt.close()
     
 
 
@@ -223,8 +277,8 @@ def grouped(input, output, extension, silent, groupby, criteria):
     help="The extension of the output file",
 )
 @click_option(
-    "-s",
-    "--silent",
+    "-v",
+    "--verbose",
     is_flag=True,
     help="Do not show the plot",
 )
@@ -244,17 +298,24 @@ def grouped(input, output, extension, silent, groupby, criteria):
     type=click.Choice(["max", "min", "avg", "median"]),
 )
 
-def main(input, output, extension, silent, groupby, criteria):
+@click_option(
+    "-t",
+    "--type",
+    default="line",
+    help="The type of plot (line, boxplot, violinplot)",
+    type=click.Choice(["line", "boxplot", "violin"]),
+)
+def main(input, output, extension, verbose, groupby, criteria, type):
     # for every folder in the input folder, compute the best archive
     folders = [f.path for f in os.scandir(input) if f.is_dir()] #and f.name != "vicunaUC_vicunaUC"]
 
 
     if groupby == "no" or groupby == "all":
-        all(folders, output, extension, silent, criteria)
+        all(folders, output, extension, verbose, criteria, type)
     if groupby == "sut" or groupby == "all":
-        grouped(folders, output, extension, silent, "system_under_test", criteria)
+        grouped(folders, output, extension, verbose, "system_under_test", criteria, type)
     if groupby == "sg" or groupby == "all":
-        grouped(folders, output, extension, silent, "prompt_generator", criteria)
+        grouped(folders, output, extension, verbose, "prompt_generator", criteria, type)
     else:
         raise ValueError("Invalid groupby parameter")
     

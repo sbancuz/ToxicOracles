@@ -203,13 +203,13 @@ def main(
     if generalcomparison:
         print("Running generalComparison")
         # input folder for the general comparison is the input path without the last folder
-        input = os.path.dirname(input)
+        inputGC = os.path.dirname(input)
 
         #output folder is the same as the input folder
-        output = input
+        outputGC = input
 
         run_command(
-            f"python3 generalComparison.py --input {input} --output {output} --extension {extension} --groupby all"
+            f"python3 generalComparison.py --input {inputGC} --output {outputGC} --extension {extension} --groupby all"
         )
     
     if wordcloud:
