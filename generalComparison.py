@@ -52,11 +52,16 @@ def all(input, output, extension, verbose, criteria, type):
 
     data=[]
     for folder in input:
+        print("Processing folder: "+folder)
         best=pickBest(folder)
-        sut=best.config.system_under_test
-        sg=best.config.prompt_generator
+        if best==None:
+            print("No files found in folder: "+folder)
+            continue
+        else:
+            sut=best.config.system_under_test
+            sg=best.config.prompt_generator
 
-        data.append((best, "SUT: "+sut+" SG: "+sg+", "+parse_config(best.config)))
+            data.append((best, "SUT: "+sut+" SG: "+sg+", "+parse_config(best.config)))
     
     legend = [d[1] for d in data]
     # plot the data
