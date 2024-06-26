@@ -94,7 +94,7 @@ def plot(input, silent, output, criteria, extension):
     ax[0, 1].plot(df.diff(), alpha=0.2)
     ax[0, 1].plot(df.diff().mean(axis=1), color="red")
 
-    ax[0, 2].set_title("Score percentual change over generations", size=10)
+    ax[0, 2].set_title("Score percent change over generations", size=10)
     ax[0, 2].yaxis.set_major_formatter(mtick.PercentFormatter())
     ax[0, 2].plot(df.pct_change(), alpha=0.2)
     ax[0, 2].plot(df.pct_change().mean(axis=1), color="red")
