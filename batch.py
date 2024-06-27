@@ -206,14 +206,17 @@ def main(
         inputGC = os.path.dirname(input)
 
         #output folder is the same as the input folder
-        outputGC = input
+        outputGC = inputGC
 
-        run_command(
-            f"python3 generalComparison.py --input {inputGC} --output {outputGC} --extension {extension} --groupby all"
-        )
-        run_command(
-            f"python3 generalComparison.py --input {inputGC} --output {outputGC} --extension {extension} --groupby all -m"
-        )
+        for type in ["boxplot", "violin", "line"]:
+            run_command(
+                f"python3 generalComparison.py --input {inputGC} --output {outputGC} --type {type} -e {extension}"
+            )
+            run_command(
+                f"python3 generalComparison.py --input {inputGC} --output {outputGC} --type {type} -e {extension} -m"
+            )
+            
+
     
     if wordcloud:
         print("Running wordcloud")

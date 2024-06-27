@@ -229,14 +229,15 @@ def grouped(input, output, extension, verbose, groupby, criteria, type):
         # Generate a violin plot for each column
         for i, column in enumerate(columns):
             if type == "boxplot":
-                sns.boxplot(x=groupby, y=column, data=data, ax=axes[i])
+                sns.boxplot(x=groupby, y=column, data=data, ax=axes[i], palette='Set2', hue=groupby)
             else:
-                sns.violinplot(x=groupby, y=column, data=data, ax=axes[i])
+                sns.violinplot(x=groupby, y=column, data=data, ax=axes[i], palette='Set2', hue=groupby)
             axes[i].set_title(f'Iteration {column}')
             axes[i].set_ylabel('Score')
             # Remove the x-axis label
             axes[i].set_xlabel('')
             # Rotate the x-axis labels for better readability
+            axes[i].set_xticks(axes[i].get_xticks())
             axes[i].set_xticklabels(axes[i].get_xticklabels(), rotation=45, ha='right')
         
         # Hide any unused subplots

@@ -85,7 +85,7 @@ def analyseProgressiveSimilarity(file):
         archive = Archive.from_dict(orjson.loads(f.read()))
 
     for run in tqdm(archive.runs):
-        for i in tqdm(range(0, len(run.taken))):
+        for i in range(0, len(run.taken)):
             filename = os.path.basename(file)
             # remove the extension
             filename = os.path.splitext(filename)[0]
@@ -169,8 +169,8 @@ def betweenFinalsVariety(input, type, extension, output):
             # remove the extension
             filename = os.path.splitext(filename)[0]
             for iteration in tqdm(range(archive.config.iterations)):
-                for i in tqdm(range(0, len(archive.runs)-1)):
-                    for j in tqdm(range(i+1, len(archive.runs))):
+                for i in range(0, len(archive.runs)-1):
+                    for j in range(i+1, len(archive.runs)):
                         instances.append({  "final prompt 1": archive.runs[i].taken[iteration].generated_prompt_for_sut,
                                             "final prompt 2": archive.runs[j].taken[iteration].generated_prompt_for_sut,
                                             "final cosine similarity": similarityBetween(model, 
@@ -258,7 +258,7 @@ def distanceFromInitialPrompt(input, type, extension, output):
         with open(file, "r") as f:
             archive = Archive.from_dict(orjson.loads(f.read()))
             for run in tqdm(archive.runs):
-                for iteration in tqdm(range(0, len(run.taken))):
+                for iteration in range(0, len(run.taken)):
                     data.append({
                         "prompt_from_dataset": run.initial.prompt_from_dataset,
                         "generated_prompt": run.taken[iteration].generated_prompt_for_sut,

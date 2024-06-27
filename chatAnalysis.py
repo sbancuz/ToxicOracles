@@ -185,6 +185,8 @@ def plot(input, silent, output, criteria, extension):
     )
 
     ax[3, 2].legend(loc="center left", bbox_to_anchor=(1, 0.5))
+    # set the label of 3,2 to be straight
+    ax[3, 2].tick_params(axis="x", rotation=0)
 
     plt.subplots_adjust(right=0.9, wspace=0.175, bottom=0.11)
     fig.set_size_inches(13.5, 7.5)
