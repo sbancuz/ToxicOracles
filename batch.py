@@ -211,6 +211,9 @@ def main(
         run_command(
             f"python3 generalComparison.py --input {inputGC} --output {outputGC} --extension {extension} --groupby all"
         )
+        run_command(
+            f"python3 generalComparison.py --input {inputGC} --output {outputGC} --extension {extension} --groupby all -m"
+        )
     
     if wordcloud:
         print("Running wordcloud")
