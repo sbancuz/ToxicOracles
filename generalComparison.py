@@ -52,10 +52,10 @@ def all(input, output, extension, verbose, criteria, type):
 
     data=[]
     for folder in input:
-        print("Processing folder: "+folder)
+        #print("Processing folder: "+folder)
         best=pickBest(folder)
         if best==None:
-            print("No files found in folder: "+folder)
+            #print("No files found in folder: "+folder)
             continue
         else:
             sut=best.config.system_under_test
@@ -260,6 +260,38 @@ def grouped(input, output, extension, verbose, groupby, criteria, type):
     plt.close()
     
 
+def groupedMerged(input, output, extension, verbose, groupby, criteria, type):
+    fileData=[]
+
+    for folder in input:
+        for file in get_files(folder):
+            with open(file) as f:
+                archive=Archive.from_dict(orjson.loads(f.read()))
+                for run in archive.runs:
+                    for i in range(archive.config.iterations):
+                        fileData.append([i, get_score(list(run.taken[i].criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator])
+    data=pd.DataFrame(fileData, columns=["iteration", "score", "system_under_test", "prompt_generator"])
+    # Initialize the figure
+    plt.figure(figsize=(12, 6))
+
+    if type=="boxplot":
+        # Create the boxplot
+        sns.boxplot(x='iteration', y='score', hue=groupby, data=data, palette='Set2')
+    else:
+        sns.violinplot(x='iteration', y='score', hue=groupby, data=data, palette='Set2')
+
+    # Set plot title and labels
+    plt.title("Score by "+groupby.replace("_", " ")+" and Iteration")
+    plt.xlabel('Iteration')
+    plt.ylabel('Score')
+    plt.legend(title='System Under Test')
+
+    # Save the plot
+    plt.savefig(output + f"/groupedMergedComparison-{type}-{criteria}-{groupby}.{extension}", dpi=300, format=extension)
+    if verbose:
+        # Display the plot
+        plt.show()
+                        
 
 @click.command()
 
@@ -310,17 +342,31 @@ def grouped(input, output, extension, verbose, groupby, criteria, type):
     help="The type of plot (line, boxplot, violinplot)",
     type=click.Choice(["line", "boxplot", "violin"]),
 )
-def main(input, output, extension, verbose, groupby, criteria, type):
+
+@click.option(
+    "-m",
+    "--merged",
+    is_flag=True,
+    help="When plotting the grouped results (by sut or sg), merge the results in a single plot",
+)
+def main(input, output, extension, verbose, groupby, criteria, type, merged):
     # for every folder in the input folder, compute the best archive
     folders = [f.path for f in os.scandir(input) if f.is_dir()] #and f.name != "vicunaUC_vicunaUC"]
 
 
     if groupby == "no" or groupby == "all":
         all(folders, output, extension, verbose, criteria, type)
-    if groupby == "sut" or groupby == "all":
-        grouped(folders, output, extension, verbose, "system_under_test", criteria, type)
-    if groupby == "sg" or groupby == "all":
-        grouped(folders, output, extension, verbose, "prompt_generator", criteria, type)
+    if groupby == "sut" or groupby == "all" or groupby == "sg":
+        if not merged:
+            if groupby == "sut" or groupby == "all":
+                grouped(folders, output, extension, verbose, "system_under_test", criteria, type)
+            if groupby == "sg" or groupby == "all":
+                grouped(folders, output, extension, verbose, "prompt_generator", criteria, type)
+        else:
+            if groupby == "sut" or groupby == "all":
+                groupedMerged(folders, output, extension, verbose, "system_under_test", criteria, type)
+            if groupby == "sg" or groupby == "all":
+                groupedMerged(folders, output, extension, verbose, "prompt_generator", criteria, type)
     else:
         raise ValueError("Invalid groupby parameter")
     
