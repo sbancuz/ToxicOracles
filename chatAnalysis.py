@@ -21,6 +21,7 @@ def click_option(*args, **kwargs):
     type=click.Path(exists=False, resolve_path=True, dir_okay=False),
     help="Path to source file, the output of evolutionary.py (output.json)",
     required=True,
+    default="results/finalTests/vicuna_vicuna/max.json",
 )
 @click_option(
     "--silent",
@@ -59,6 +60,12 @@ def plot(input, silent, output, criteria, extension):
 
     scores = []
     categories = []
+    timestamps = []
+
+    # boolean parameter to check if there is the log (newer version of the output.json)
+
+    logUpdate = archive.start_time_timestamp!=-1
+    #logUpdate=True
     for run in archive.runs:
         iterationscores = []
         iterationcategories = []
@@ -68,11 +75,14 @@ def plot(input, silent, output, criteria, extension):
         for taken in run.taken:
             iterationscores.append(get_score(list(taken.criterion.values()), criteria))
             iterationcategories.append(taken.category)
+            if logUpdate:
+                timestamps.append([taken.delta_time_generation, taken.delta_time_response, taken.delta_time_evaluation])
         scores.append(iterationscores)
         categories.append(iterationcategories)
 
     df = pd.DataFrame(scores).transpose()
     df_cat = pd.DataFrame(categories).transpose()
+    df_timestamps = pd.DataFrame(timestamps)
 
     fig, ax = plt.subplots(4, 3)
     # remove from source the path and the extension
@@ -142,24 +152,41 @@ def plot(input, silent, output, criteria, extension):
     ax[3, 0].boxplot(category_diff.values(), labels=category_diff.keys())
     ax[3, 0].set_xticklabels(ax[3, 0].get_xticklabels(), rotation=45, ha="right")
 
-    ax[3, 1].set_title("Category distribution per iteration", size=10)
+    if logUpdate:
+        # pie chart of the time spent in each phase
+        #ax[3, 1].set_title("Time spent in each phase", size=10)
+        #print(df_timestamps.describe())
+        #ax[3, 1].pie(df_timestamps.sum(), labels=["Generation", "Response", "Evaluation"], autopct="%1.1f%%")
+        # boxplt of the time spent in each phase
+        ax[3, 1].set_title("Time spent in each phase (s)", size=10)
+        #ax[3, 1].boxplot(df_timestamps)
+        # violin plot of the time spent in each phase
+        ax[3, 1].violinplot(df_timestamps, showmeans=True)
+        # set the labels of the x axis, set_ticks()
+        ax[3, 1].set_xticks([1, 2, 3])
+        ax[3, 1].set_xticklabels(["Generation", "Response", "Evaluation"])
+
+    else:
+        ax[3, 1].set_title("Category distribution per prompt", size=10)
+        # do not show the legend
+        df_cat.apply(pd.Series.value_counts).T.plot(
+            kind="bar", stacked=True, ax=ax[3, 1], alpha=0.5, edgecolor="black", legend=False
+        )
+
+    
+    ax[3, 2].set_title("Category distribution per iteration", size=10)
     df_cat.transpose().apply(pd.Series.value_counts).transpose().plot(
         kind="bar",
         stacked=True,
-        ax=ax[3, 1],
+        ax=ax[3, 2],
         legend=False,
         alpha=0.5,
         edgecolor="black",
     )
 
-    ax[3, 2].set_title("Category distribution per prompt", size=10)
-    df_cat.apply(pd.Series.value_counts).T.plot(
-        kind="bar", stacked=True, ax=ax[3, 2], alpha=0.5, edgecolor="black"
-    )
-    # make the legend outside the plot
     ax[3, 2].legend(loc="center left", bbox_to_anchor=(1, 0.5))
 
-    plt.subplots_adjust(right=0.9, wspace=0.175, bottom=0.1)
+    plt.subplots_adjust(right=0.9, wspace=0.175, bottom=0.11)
     fig.set_size_inches(13.5, 7.5)
 
     # save the plot

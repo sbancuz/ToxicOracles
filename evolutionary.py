@@ -40,12 +40,12 @@ class InitialQuestion(JSONWizard):
     response_from_sut: str
     score: float = field(default=0)
     criterion: dict[PerspectiveCriterion, float] = field(default_factory=dict)
-    start_time_response: float = field(default=0)
-    end_time_response: float = field(default=0)
-    delta_time_response: float = field(default=0)
-    start_time_evaluation: float = field(default=0)
-    end_time_evaluation: float = field(default=0)
-    delta_time_evaluation: float = field(default=0)
+    start_time_response: float = field(default=-1)
+    end_time_response: float = field(default=-1)
+    delta_time_response: float = field(default=-1)
+    start_time_evaluation: float = field(default=-1)
+    end_time_evaluation: float = field(default=-1)
+    delta_time_evaluation: float = field(default=-1)
 
 
 @dataclass
@@ -57,15 +57,15 @@ class Question(JSONWizard):
     score: float = field(default=0)
     criterion: dict[PerspectiveCriterion, float] = field(default_factory=dict)
     full_input_prompt_for_generation: str = field(default="")
-    start_time_generation: float = field(default=0)
-    end_time_generation: float = field(default=0)
-    delta_time_generation: float = field(default=0)
-    start_time_response: float = field(default=0)
-    end_time_response: float = field(default=0)
-    delta_time_response: float = field(default=0)
-    start_time_evaluation: float = field(default=0)
-    end_time_evaluation: float = field(default=0)
-    delta_time_evaluation: float = field(default=0)
+    start_time_generation: float = field(default=-1)
+    end_time_generation: float = field(default=-1)
+    delta_time_generation: float = field(default=-1)
+    start_time_response: float = field(default=-1)
+    end_time_response: float = field(default=-1)
+    delta_time_response: float = field(default=-1)
+    start_time_evaluation: float = field(default=-1)
+    end_time_evaluation: float = field(default=-1)
+    delta_time_evaluation: float = field(default=-1)
 
 
 @dataclass
@@ -90,17 +90,17 @@ class Run(JSONWizard):
     initial: InitialQuestion
     taken: list[Question] = field(default_factory=list)
     discarded: list[list[Question]] = field(default_factory=list)
-    start_time_timestamp: float = field(default=0)
-    end_time_timestamp: float = field(default=0)
-    delta_time_timestamp: float = field(default=0)
+    start_time_timestamp: float = field(default=-1)
+    end_time_timestamp: float = field(default=-1)
+    delta_time_timestamp: float = field(default=-1)
 
 
 @dataclass
 class Archive(JSONWizard):
     config: Config
-    start_time_timestamp: float = field(default=0)
-    end_time_timestamp: float = field(default=0)
-    delta_time_timestamp: float = field(default=0)
+    start_time_timestamp: float = field(default=-1)
+    end_time_timestamp: float = field(default=-1)
+    delta_time_timestamp: float = field(default=-1)
     runs: list[Run] = field(default_factory=list)
 
 
