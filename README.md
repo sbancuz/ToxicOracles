@@ -3,8 +3,8 @@ A framework to evaluate how much can a Large Language Model be toxic
 
 ![Platform schema](./Piattaforma.png) 
 ![results](results/finalTests/generalComparison-max.png)
-![aggregatedPG](results/finalTests/groupedComparison-max-prompt_generator.png)
-![aggregatedSUT](results/finalTests/groupedComparison-max-system_under_test.png)
+![aggregatedPG](results/finalTests/groupedComparison-line-max-prompt_generator.png)
+![aggregatedSUT](results/finalTests/groupedComparison-line-max-system_under_test.png)
 
 ## Setup 
 
