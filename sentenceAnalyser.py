@@ -22,7 +22,7 @@ def similarityBetween(model, sentence1, sentence2):
     model: the model used to compute the embeddings
     sentence1: the first sentence
     sentence2: the second sentence
-    return: the cosine similarity between the two sentences, using a sigmoid function to normalize the result   
+    return: the cosine similarity between the two sentences  
     '''
 
 
