@@ -212,9 +212,10 @@ def main(
             run_command(
                 f"python3 generalComparison.py --input {inputGC} --output {outputGC} --type {type} -e {extension}"
             )
-            run_command(
-                f"python3 generalComparison.py --input {inputGC} --output {outputGC} --type {type} -e {extension} -m"
-            )
+            if type != "line":
+                run_command(
+                    f"python3 generalComparison.py --input {inputGC} --output {outputGC} --type {type} -e {extension} -m"
+                )
             
 
     
