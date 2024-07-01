@@ -120,7 +120,7 @@ def analyseProgressiveSimilarity(file):
     return instances
 
 
-def progressive(input, type, extension, output):
+def progressive(input, type, extension, output, savejson=False):
     ''' the progressive analysis is aimed at analysing the similarity between consecutive prompts, starting from the prompt from the dataset
     it saves the results in a file named as the file analysed, with the suffix _progressive.json and creates a plot for each file, saved in the same folder as well.
     input: the path to the folder containing the files to analyse
@@ -140,9 +140,10 @@ def progressive(input, type, extension, output):
     for file in files:
         print(f"analysing {file}")
         progressive_instances = analyseProgressiveSimilarity(file)
-        # save the instances in a file
-        with open(f"{output}/{os.path.basename(file).replace('.json', '')}_progressive.json", "w") as f:
-            f.write(orjson.dumps(progressive_instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
+        if savejson:
+            # save the instances in a file
+            with open(f"{output}/{os.path.basename(file).replace('.json', '')}_progressive.json", "w") as f:
+                f.write(orjson.dumps(progressive_instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
 
         # extend the list of instances
         instances.extend(progressive_instances)
@@ -150,7 +151,7 @@ def progressive(input, type, extension, output):
     return instances
 
 #### BETWEEN FINALS VARIETY ####
-def betweenFinalsVariety(input, type, extension, output):
+def betweenFinalsVariety(input, type, extension, output, savejson=False):
     '''this function computes the similarity between each pair of final prompts, along with the similarity between the respective initial prompts
     path: the path containing the json files
     return: a list of dictionaries, each dictionary contains the final prompt 1, the final prompt 2, the cosine similarity between the two prompts, the initial prompt 1, the initial prompt 2, the initial cosine similarity between the two prompts, the configuration of the archive, the file name
@@ -184,14 +185,15 @@ def betweenFinalsVariety(input, type, extension, output):
                                             "config": archive.config, 
                                             "file name": filename, 
                                             "iteration": iteration})
-            with open(f"{output}/{filename}_betweenFinalsVariety.json", "w") as f:
-                f.write(orjson.dumps(instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
+            if savejson:
+                with open(f"{output}/{filename}_betweenFinalsVariety.json", "w") as f:
+                    f.write(orjson.dumps(instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
             createPlot(instances=instances, output=output, type=type, filename=file, mode="betweenFinalsVariety", x="iteration", y="final cosine similarity", extension=extension)
     return instances
 
 ### SCORE CORRELATION ###
 
-def scoreCorrelation(input, output, extension="png"):
+def scoreCorrelation(input, output, extension="png", savejson=False):
     '''this function computes the correlation between the delta cosine similarity and the score
     input: the path to the folder containing the json files
     output: the path to save the results
@@ -229,8 +231,9 @@ def scoreCorrelation(input, output, extension="png"):
             plotCorrelation(instances=singleInstance, title="Correlation between delta cosine similarity and delta score", x="delta cosine similarity", y="delta score", name=f"{filename}_correlation_deltaSim_deltaScore", output=output, extension=extension)
             plotCorrelation(instances=singleInstance, title="Correlation between delta cosine similarity and final score", x="delta cosine similarity", y="final score", name=f"{filename}_correlation_deltaSim_finalScore", output=output, extension=extension)
             plotCorrelation(instances=singleInstance, title="Correlation between initial and final score",                 x="initial score",           y="final score", name=f"{filename}_correlation_Score", output=output, extension=extension)
-            with open(f"{output}/{filename}_scoreCorrelation.json", "w") as f:
-                f.write(orjson.dumps(instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
+            if savejson:
+                with open(f"{output}/{filename}_scoreCorrelation.json", "w") as f:
+                    f.write(orjson.dumps(instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
             instances.extend(singleInstance)
     
     return instances
@@ -248,7 +251,7 @@ def plotCorrelation(instances, output, title, x, y, name="correlation", extensio
     plt.close()
 
 ### DISTANCE FROM INITIAL PROMPT ###
-def distanceFromInitialPrompt(input, type, extension, output):
+def distanceFromInitialPrompt(input, type, extension, output, savejson=False):
     files = glob.glob(input + "/*.json")
     print(files)
     data = []
@@ -271,9 +274,10 @@ def distanceFromInitialPrompt(input, type, extension, output):
         # create file for similarity, inside the folder plots, in the input folder, if it does not exist create it
         if not os.path.exists(output):
             os.makedirs(output)
-        # save data to json
-        with open(f"{output}/{filename}_sentenceDistance.json", "w") as f: 
-            f.write(orjson.dumps(data, option=orjson.OPT_INDENT_2).decode("utf-8"))
+        if savejson:
+            # save data to json
+            with open(f"{output}/{filename}_sentenceDistance.json", "w") as f: 
+                f.write(orjson.dumps(data, option=orjson.OPT_INDENT_2).decode("utf-8"))
         createPlot(instances=data, output=output, type=type, filename=filename, mode="distanceFromInitialPrompt", x="iteration", y="cosine similarity", extension=extension)
     return data
 
@@ -327,7 +331,14 @@ model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
     help="Path to the output folder, where the plots will be saved",
     required=True,
 )
-def main(input, donotcompute, type, mode, extension, output):
+@click_option(
+    "-sj",
+    "--savejson",
+    is_flag=True,
+    help="Save the results in a json file",
+    default=False,
+)
+def main(input, donotcompute, type, mode, extension, output, savejson):
     '''this function is the main function of the script
     input: the path to the folder containing the files to analyse
     donotcompute: a boolean indicating if the analysis has already been done
@@ -350,7 +361,7 @@ def main(input, donotcompute, type, mode, extension, output):
                 createPlot(instances=singleInstance, output=outputFolder, type=type, mode=mode, filename=computedFile, x="iteration", y="cosine similarity", extension=extension)
                 instances.extend(singleInstance)
         else:
-            instances = progressive(input, type, extension=extension, output=outputFolder)
+            instances = progressive(input, type, extension=extension, output=outputFolder, savejson=savejson)
         
         # create the general plot, showing the progressive cosine similarity between files, not by iteration
         createPlot(instances=instances,output=outputFolder, type=type,  mode=mode, filename="General Progressive Similarity", x="file name", y="cosine similarity", extension=extension)    
@@ -361,7 +372,7 @@ def main(input, donotcompute, type, mode, extension, output):
                 singleInstance = orjson.loads(open(computedFile).read())
                 instances.extend(singleInstance)
         else:
-            instances = betweenFinalsVariety(input, type, extension=extension, output=outputFolder)
+            instances = betweenFinalsVariety(input, type, extension=extension, output=outputFolder, savejson=savejson)
         
         createPlot(instances=instances,output=outputFolder, type=type,  mode=mode, filename="general Between Finals Variety", x="file name", y="final cosine similarity", extension=extension)
     elif mode=="scoreCorrelation":
@@ -376,7 +387,7 @@ def main(input, donotcompute, type, mode, extension, output):
                 plotCorrelation(instances=singleInstance, title="Correlation between delta cosine similarity and final score", x="delta cosine similarity", y="final score", name=f"{filename}_correlation_deltaSim_finalScore", output=outputFolder, extension=extension)
                 plotCorrelation(instances=singleInstance, title="Correlation between initial and final score",                 x="initial score",           y="final score", name=f"{filename}_correlation_Score", output=outputFolder, extension=extension)
         else:
-            instances = scoreCorrelation(input, output=outputFolder)
+            instances = scoreCorrelation(input, output=outputFolder, savejson=savejson, extension=extension)
         
         plotCorrelation(instances=instances, title="Correlation between delta cosine similarity and delta score", x="delta cosine similarity", y="delta score", name=f"General_correlation_deltaSim_deltaScore", output=outputFolder, extension=extension)
         plotCorrelation(instances=instances, title="Correlation between delta cosine similarity and final score", x="delta cosine similarity", y="final score", name=f"General_correlation_deltaSim_finalScore", output=outputFolder, extension=extension)
@@ -390,7 +401,7 @@ def main(input, donotcompute, type, mode, extension, output):
                 filename = os.path.basename(computedFile).replace("_sentenceDistance.json", "")
                 createPlot(instances=singleInstance, output=outputFolder, type=type, mode=mode, filename=filename, x="iteration", y="cosine similarity", extension=extension)
         else:
-            instances = distanceFromInitialPrompt(input, type, extension=extension, output=outputFolder)
+            instances = distanceFromInitialPrompt(input, type, extension=extension, output=outputFolder, savejson=savejson)
         createPlot(instances=instances,output=outputFolder, type=type,  mode=mode, filename="general", x="file name", y="cosine similarity", extension=extension)
 
 

@@ -102,6 +102,13 @@ def run_command(command):
     help="Run the wordcloud script",
     default=False,
 )
+@click_option(
+    "-sj",
+    "--savejson",
+    is_flag=True,
+    help="Save the json files",
+    default=False,
+)
 def main(
     all,
     chat_analysis: bool,
@@ -115,7 +122,8 @@ def main(
     donotcompute: bool,
     extension: str,
     generalcomparison: bool,
-    wordcloud: bool
+    wordcloud: bool,
+    savejson: bool
 ):
     if all:
         chat_analysis = True
@@ -135,6 +143,7 @@ def main(
         os.makedirs(output)
 
     donotcompute = "-dnc" if donotcompute else ""
+    savejson = "-sj" if savejson else ""
 
     # replace .par files with .json
     partialFiles = glob.glob(input + "/*.par")
@@ -197,7 +206,7 @@ def main(
             file=sys.stdout,
         ):
             run_command(
-                f"python3 sentenceAnalyser.py --input {input} --mode {m} --type violin {donotcompute} -e {extension} -o {output}/sentenceAnalysis"
+                f"python3 sentenceAnalyser.py --input {input} --mode {m} --type violin {donotcompute} -e {extension} -o {output}/sentenceAnalysis {savejson}"
             )
         
     if generalcomparison:
