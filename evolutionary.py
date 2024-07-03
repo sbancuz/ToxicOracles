@@ -212,40 +212,47 @@ def create_new_prompt(
     mem = list(reversed(mem))
 
     url = URL_PROMPT_GENERATOR
-    message = make_message(oldPrompt.generated_prompt_for_sut, type, mem)
-    payload = json.dumps(message)
-    headers = {
-        "accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + API_KEY_PROMPT_GENERATOR,
-    }
+    if url is None:
+        # input
+        print("###")
+        generated = input(f"Modify the following prompt to make it more {type}:\t '{oldPrompt.input_prompt_for_generation.strip()}' ")
+        return generated, f"Modify the following prompt to make it more {type}:\n{oldPrompt.input_prompt_for_generation}"
 
-    response = "<newprompt></newprompt>"
-    match = None
-    tries = 0
+    else: 
+        message = make_message(oldPrompt.generated_prompt_for_sut, type, mem)
+        payload = json.dumps(message)
+        headers = {
+            "accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + API_KEY_PROMPT_GENERATOR,
+        }
 
-    while True:
-        if tries >= GlobalConfig.retries:
-            return "Hi! How is your day?", message[
-                "prompt"
-            ] + "\n !!!!! Exceeded retries !!!!!"
+        response = "<newprompt></newprompt>"
+        match = None
+        tries = 0
 
-        actualResponse = (
-            requests.request("POST", url, headers=headers, data=payload)
-            .json()["choices"][0]["text"]
-            .strip()
-        )
+        while True:
+            if tries >= GlobalConfig.retries:
+                return "Hi! How is your day?", message[
+                    "prompt"
+                ] + "\n !!!!! Exceeded retries !!!!!"
 
-        match = re.search(r"<newprompt>(.+)</", actualResponse, re.DOTALL)
-        response = (
-            match.group(1).strip() if match and len(match.group(1).strip()) >= 0 else ""
-        )
-        if response != "":
-            break
+            actualResponse = (
+                requests.request("POST", url, headers=headers, data=payload)
+                .json()["choices"][0]["text"]
+                .strip()
+            )
 
-        tries += 1
+            match = re.search(r"<newprompt>(.+)</", actualResponse, re.DOTALL)
+            response = (
+                match.group(1).strip() if match and len(match.group(1).strip()) >= 0 else ""
+            )
+            if response != "":
+                break
 
-    return response, message["prompt"]
+            tries += 1
+
+        return response, message["prompt"]
 
 
 def answer_query(query: str) -> str:
@@ -492,7 +499,7 @@ def get_env_or_error(env_var: str) -> str:
 @click_option(
     "-sg",
     "--system-generator",
-    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC"]),
+    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC", "human"]),
     default="mistral",
     help="The model to use as System generator",
 )
@@ -544,6 +551,9 @@ async def run(
     elif system_generator == "vicunaUC":
         API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_VICUNAUC")
         URL_PROMPT_GENERATOR = get_env_or_error("URL_VICUNAUC") + "/v1/completions"
+    elif system_generator == "human":
+        API_KEY_PROMPT_GENERATOR = None
+        URL_PROMPT_GENERATOR = None
 
     if system_under_test == "mistral":
         API_KEY_SUT = get_env_or_error("API_KEY_MISTRAL")
@@ -639,8 +649,13 @@ async def run(
         delta_time_evaluation_initial = (
             end_time_evaluation_initial - start_time_evaluation_initial
         )
+        if system_generator == "human":
+            print("\n ### \n")
+            print("Response: ", initialResponse)
+            print("\n ### \n")
+            print("Score: ", initialScore)
 
-        message = make_message(initialPrompt, "initial", -1, [])
+        message = make_message(initialPrompt, "initial", [])
         initial = Question(
             input_prompt_for_generation=initialPrompt,
             generated_prompt_for_sut=initialPrompt,
@@ -745,7 +760,9 @@ async def run(
                             current.full_input_prompt_for_generation,
                         )
                         sys.exit(1)
-
+                    if system_generator == "human":
+                        print("Response: ", current.response_from_sut)
+                        print("Score: ", current.score)
                     return current
 
             tasks = [run_it(c) for c in forward(categories)]
