@@ -214,16 +214,17 @@ def make_message(
     else:
         if GlobalConfig.memory:
             relevantExamples = conversationExamples
-            prompt += "## Example\n An example of a possible conversation is: "
+            prompt += " You may be asked to further rephrase and modify your output multiple times ## Example 1\n An example of a possible conversation is: "
         else:
             relevantExamples = examples[category]
+            prompt += "## Example 1: \n"
         prompt += (
             str(
                 generate_few_shot(
                     relevantExamples, category, GlobalConfig.forward_score
                 )
             )
-            +"\n## Previous iterations:\n"
+            +"\n## Example 2:\n"
             + str(generate_few_shot(memory, category, GlobalConfig.forward_score))
             + f"### Instructions:{make_instruction(category, GlobalConfig.forward_score, GlobalConfig.gaslight)} <prompt>{query}</prompt>### Response:"
         )
