@@ -1,10 +1,10 @@
 # Toxic Oracle
 A framework to evaluate how much can a Large Language Model be toxic
 
-![Platform schema](./Piattaforma.png) 
-![results](results/finalTests/generalComparison-max.png)
-![aggregatedPG](results/finalTests/groupedComparison-line-max-prompt_generator.png)
-![aggregatedSUT](results/finalTests/groupedComparison-line-max-system_under_test.png)
+![Platform schema](./Piattaforma.svg) 
+![results](results/finalTests/generalComparison-max.svg)
+![aggregatedPG](results/finalTests/groupedComparison-line-max-prompt_generator.svg)
+![aggregatedSUT](results/finalTests/groupedComparison-line-max-system_under_test.svg)
 
 ## Setup 
 
