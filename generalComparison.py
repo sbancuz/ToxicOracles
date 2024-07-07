@@ -69,7 +69,7 @@ def all(input, output, extension, verbose, criteria, type):
     fig.suptitle("Comparison of the different configurations", size=12)
     fig.tight_layout()
     # big window
-    fig.set_size_inches(13, 7.5)
+    fig.set_size_inches(15, 8)
     # set the title of the plot
 
     ax[0, 0].set_title("Score", size=10)
@@ -158,7 +158,7 @@ def all(input, output, extension, verbose, criteria, type):
     # legend is on the right, outside the plot
     ax[2, 1].legend(legend, loc="center left", bbox_to_anchor=(1, 0.5))
     # make the legend to be seen in the window
-    plt.subplots_adjust(right=0.74, bottom=0.16, left=0.04, top=0.84)
+    plt.subplots_adjust(right=0.75, bottom=0.16, left=0.04, top=0.84)
 
     plt.savefig(output + f"/generalComparison-{criteria}.{extension}", dpi=300, format=extension)
 
@@ -246,10 +246,6 @@ def grouped(input, output, extension, verbose, groupby, criteria, type):
         
         # Adjust layout
         plt.tight_layout()
-        
-        # Save the figure
-        plt.savefig(f"{output}/groupedComparison-{type}-{criteria}-{groupby}.{extension}", dpi=300, format=extension)
-        #plt.show()
 
     else:
         raise ValueError("Invalid type parameter")
@@ -261,7 +257,18 @@ def grouped(input, output, extension, verbose, groupby, criteria, type):
     plt.close()
     
 
-def groupedMerged(input, output, extension, verbose, groupby, criteria, type):
+def groupedMerged(input, output, extension, verbose, groupby, criteria, type, analysis):
+    '''
+    This function is used to plot the results of the experiments grouped by the given criteria (sut or sg) and merged in a single plot.
+    input: the path to the folder containing the results of the experiments (each experiment is in a sub-folder)
+    output: the path to the output folder
+    extension: the extension of the output file
+    verbose: whether to show the plot or not
+    groupby: the criteria to use for grouping the score (sut or sg)
+    criteria: the criteria to use for selecting the best score (max, min, avg, median)
+    type: the type of plot (line, boxplot, violin)
+    analysis: the type of analysis to perform (score, time)
+    '''
     fileData=[]
 
     for folder in input:
@@ -270,25 +277,52 @@ def groupedMerged(input, output, extension, verbose, groupby, criteria, type):
                 archive=Archive.from_dict(orjson.loads(f.read()))
                 for run in archive.runs:
                     for i in range(archive.config.iterations):
-                        fileData.append([i, get_score(list(run.taken[i].criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator])
-    data=pd.DataFrame(fileData, columns=["iteration", "score", "system_under_test", "prompt_generator"])
+                        fileData.append([i, get_score(list(run.taken[i].criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, run.taken[i].delta_time_evaluation, run.taken[i].delta_time_generation, run.taken[i].delta_time_response])
+    data=pd.DataFrame(fileData, columns=["iteration", "score", "system_under_test", "prompt_generator", "delta_time_evaluation", "delta_time_generation", "delta_time_response"])
     # Initialize the figure
-    plt.figure(figsize=(12, 6))
+    data = data.sort_values(by=groupby)
+    plt.figure(figsize=(13, 6))
+    if analysis=="score":
+        if type=="boxplot":
+            # Create the boxplot
+            sns.boxplot(x='iteration', y='score', hue=groupby, data=data, palette='Set2')
+        else:
+            sns.violinplot(x='iteration', y='score', hue=groupby, data=data, palette='Set2')
 
-    if type=="boxplot":
-        # Create the boxplot
-        sns.boxplot(x='iteration', y='score', hue=groupby, data=data, palette='Set2')
+        # Set plot title and labels
+        plt.title("Score by "+groupby.replace("_", " ")+" and Iteration")
+        plt.xlabel('Iteration')
+        plt.ylabel('Score')
+        plt.legend(title='System')
     else:
-        sns.violinplot(x='iteration', y='score', hue=groupby, data=data, palette='Set2')
+        # drop data with time equal to 0 or -1 or NaN
+        data = data[(data["delta_time_evaluation"] > 0) & (data["delta_time_generation"] > 0) & (data["delta_time_response"] > 0)]
+        # drop the iteration and score columns
+        data = data.drop(["iteration", "score"], axis=1)
+        #print(data)
 
-    # Set plot title and labels
-    plt.title("Score by "+groupby.replace("_", " ")+" and Iteration")
-    plt.xlabel('Iteration')
-    plt.ylabel('Score')
-    plt.legend(title='System Under Test')
-
+        # create the columns time and category, being generation, response or evaluation
+        data = pd.melt(data, 
+                    id_vars=['system_under_test', 'prompt_generator'], 
+                    value_vars=['delta_time_evaluation', 'delta_time_generation', 'delta_time_response'],
+                    var_name='type', 
+                    value_name='time')        
+        #print(data)
+        # sort the data by the groupby column
+        data = data.sort_values(by=groupby)
+        
+        if type=="boxplot":
+            sns.boxplot(x="type", y="time", hue=groupby, data=data, palette='Set2')
+        else:
+            sns.violinplot(x="type", y="time", hue=groupby, data=data, palette='Set2')
+        # set the plot title and labels
+        plt.title("Time by "+groupby.replace("_", " ")+" and type")
+        plt.xlabel('Type')
+        plt.ylabel('Time (s)')
+        plt.legend(title='System')
+    
     # Save the plot
-    plt.savefig(output + f"/groupedMergedComparison-{type}-{criteria}-{groupby}.{extension}", dpi=300, format=extension)
+    plt.savefig(output + f"/groupedMergedComparison-{analysis}-{type}-{criteria}-{groupby}.{extension}", dpi=300, format=extension)
     if verbose:
         # Display the plot
         plt.show()
@@ -350,7 +384,15 @@ def groupedMerged(input, output, extension, verbose, groupby, criteria, type):
     is_flag=True,
     help="When plotting the grouped results (by sut or sg), merge the results in a single plot",
 )
-def main(input, output, extension, verbose, groupby, criteria, type, merged):
+
+@click.option(
+    "-a",
+    "--analysis",
+    default="score",
+    help="The type of analysis to perform (score, time) on the data",
+    type=click.Choice(["score", "time"]),
+)
+def main(input, output, extension, verbose, groupby, criteria, type, merged, analysis):
     # for every folder in the input folder, compute the best archive
     folders = [f.path for f in os.scandir(input) if f.is_dir()] #and f.name != "vicunaUC_vicunaUC"]
 
@@ -365,11 +407,9 @@ def main(input, output, extension, verbose, groupby, criteria, type, merged):
                 grouped(folders, output, extension, verbose, "prompt_generator", criteria, type)
         else:
             if groupby == "sut" or groupby == "all":
-                groupedMerged(folders, output, extension, verbose, "system_under_test", criteria, type)
+                groupedMerged(folders, output, extension, verbose, "system_under_test", criteria, type, analysis)
             if groupby == "sg" or groupby == "all":
-                groupedMerged(folders, output, extension, verbose, "prompt_generator", criteria, type)
-    else:
-        raise ValueError("Invalid groupby parameter")
+                groupedMerged(folders, output, extension, verbose, "prompt_generator", criteria, type, analysis)
     
 
 if __name__ == "__main__":
