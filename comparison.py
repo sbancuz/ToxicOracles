@@ -104,6 +104,8 @@ def plot(criteria: str, input: str, silent: bool, output: str, extension: str) -
     sources = get_files(input)
     data = get_data(sources)
     legend = get_legends(data)
+    #legend is the name of the files
+    #legend=[source.split("/")[-1] for source in sources]
     
     fig, ax = plt.subplots(3, 2)
     fig.suptitle("Comparison of the different configurations", size=12)

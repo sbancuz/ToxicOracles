@@ -52,6 +52,7 @@ def printMaximum(input):
                 max_scores[filename] = average_score(archive)
     # print the dictionary, ordered by the maximum score
     for filename, score in sorted(max_scores.items(), key=lambda x: x[1], reverse=True):
+    #for filename, score in max_scores.items():
         print(f"{filename}: {score}")
 
 
