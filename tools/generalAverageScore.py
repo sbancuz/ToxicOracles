@@ -39,7 +39,7 @@ def average_score(archive: Archive):
     type=click.Path(exists=True, resolve_path=True, dir_okay=True, file_okay=False),
     required=True,
     help="The path to the results folder",
-    default="results/oldButGold/100",
+    default="results/finalTests",
 )
 @click_option(
     "--silent",
@@ -73,12 +73,30 @@ def plot(input:str, silent, output, criteria, extension):
     archives = []
     df=pd.DataFrame()
     
+    folders = glob.glob(input + "/*")
+    # remove the folder vicunaUC_vicunaUC from the list
+    folders.remove(input + "/vicunaUC_vicunaUC")
+    # remove everything that is not a folder
+    folders = [folder for folder in folders if os.path.isdir(folder)]
+
+    print(folders)
+
+    for folder in folders:
+        files = glob.glob(folder + "/*.json")
+        for path in files:
+            with open(path) as f:
+                archive=Archive.from_dict(json.loads(f.read()))
+                archives.append(average_score(archive))
+    
+    df=pd.concat(archives)
+    '''
     #load all the json files in input
     files= glob.glob(input + "/*.json")
     for path in files:
         with open(path) as f:
             archives.append(Archive.from_dict(json.loads(f.read())))
             df=pd.concat([df, average_score(archives[-1])])
+    '''
     # create subplots with two plots, one with the average score per iteration, and the other with the diff
     fig, ax = plt.subplots(1, 2)
     # make the figure bigger
@@ -89,12 +107,12 @@ def plot(input:str, silent, output, criteria, extension):
     ax[1].set_title("Average diff per iteration")
 
     # mark the 7th iteration with a vertical line and an horizontal line with the average score, printing the score rounded to 2 decimal places
-    ax[0].axvline(7, color="red", linestyle="--")
-    ax[1].axvline(7, color="red", linestyle="--")
-    ax[0].axhline(df.mean(axis=0)[7], color="red", linestyle="--")
-    ax[1].axhline(df.mean(axis=0).diff()[7], color="red", linestyle="--")
-    ax[0].text(7, df.mean(axis=0)[7], f"{df.mean(axis=0)[7]:.2f}", ha="right")
-    ax[1].text(7, df.mean(axis=0).diff()[7], f"{df.mean(axis=0).diff()[7]:.2f}", ha="right")
+    ax[0].axvline(5, color="red", linestyle="--")
+    ax[1].axvline(5, color="red", linestyle="--")
+    ax[0].axhline(df.mean(axis=0)[5], color="red", linestyle="--")
+    ax[1].axhline(df.mean(axis=0).diff()[5], color="red", linestyle="--")
+    ax[0].text(5, df.mean(axis=0)[5], f"{df.mean(axis=0)[5]:.2f}", ha="right")
+    ax[1].text(5, df.mean(axis=0).diff()[5], f"{df.mean(axis=0).diff()[5]:.2f}", ha="right")
     plt.tight_layout()
 
 
