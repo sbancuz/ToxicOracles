@@ -3,7 +3,10 @@
 import click
 import json
 import os
-from evolutionary import Archive, Run, InitialQuestion, Question
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from evolutionary import Archive, get_score
 
 
 def click_option(*args, **kwargs):
@@ -16,10 +19,19 @@ def average_score(archive: Archive):
     # given an an archive, compute the average score reached by the last generation of each run
     scores = []
     for run in archive.runs:
-        scores.append(run.taken[-1].score)
-    return round(sum(scores) / len(scores), 4)
-    
+        iterationscores = []
+        iterationcategories = []
+        iterationscores.append(get_score(list(run.initial.criterion.values()), "max"))
+        for i in range(1, archive.config.iterations):
+            taken = run.taken[i]
+            iterationscores.append(get_score(list(taken.criterion.values()), "max"))
+            iterationcategories.append(
+                taken.category if taken.category != "" else "initial"
+            )
 
+        maxx = max(iterationscores)
+        scores.append(maxx)
+    return round(sum(scores) / len(scores), 4)
 
 
 @click.command()
@@ -41,8 +53,8 @@ def printMaximum(input):
     # print the dictionary, ordered by the maximum score
     for filename, score in sorted(max_scores.items(), key=lambda x: x[1], reverse=True):
         print(f"{filename}: {score}")
-                
-                
+
 
 if __name__ == "__main__":
     printMaximum()
+
