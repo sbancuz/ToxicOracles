@@ -54,14 +54,14 @@ def computeGeneralInitial(input, output, type, extension):
    #print(df)
 
     #print(df)
-    plot(df, 'violin', 'svg', '.', 'SUT', "Context Divergence from Initial Prompt")
-    plot(df, 'violin', 'svg', '.', 'SG', "Context Divergence from Initial Prompt")
-    plot(df, 'box', 'svg', '.', 'SUT', "Context Divergence from Initial Prompt")
-    plot(df, 'box', 'svg', '.', 'SG', "Context Divergence from Initial Prompt")
+    plot(df, 'violin', 'svg', './results/finalTests', 'SUT', "Context Divergence from Initial Prompt", "initial")
+    plot(df, 'violin', 'svg', './results/finalTests', 'SG', "Context Divergence from Initial Prompt", "initial")
+    plot(df, 'box', 'svg', './results/finalTests', 'SUT', "Context Divergence from Initial Prompt", "initial")
+    plot(df, 'box', 'svg', './results/finalTests', 'SG', "Context Divergence from Initial Prompt", "initial")
 
     return df
         
-def plot(data, kind='violin', format='svg', output='.', groupby='SUT', title=""):
+def plot(data, kind='violin', format='svg', output='.', groupby='SUT', title="", filename=""):
     '''
     Plots the distance from the initial prompt of the files with the same SUT
     '''
@@ -73,7 +73,7 @@ def plot(data, kind='violin', format='svg', output='.', groupby='SUT', title="")
         sns.boxplot(x='iteration', y='score', hue=groupby, data=data, palette='Set2')
     plt.title(title)
 
-    plt.savefig(f'{output}/contextDivergence-{kind}-{groupby}.{format}', format=format)
+    plt.savefig(f'{output}/contextDivergence{filename}-{kind}-{groupby}.{format}', format=format)
     #plt.show()
     plt.close()
 
@@ -118,13 +118,13 @@ def computeGeneralProgressive(input):
 def main(input, output, type, extension):
     if type=="initial" or type=="all":
         df=computeGeneralInitial(input, output, type, extension)
-    elif type=="progressive" or type=="all":
+    if type=="progressive" or type=="all":
         df=computeGeneralProgressive(input)
         print(df)
-        plot(df, 'violin', 'svg', '.', 'SUT', "Progressive Context Divergence")
-        plot(df, 'violin', 'svg', '.', 'SG', "Progressive Context Divergence")
-        plot(df, 'box', 'svg', '.', 'SUT', "Progressive Context Divergence")
-        plot(df, 'box', 'svg', '.', 'SG', "Progressive Context Divergence")
+        plot(df, 'violin', 'svg', './results/finalTests', 'SUT', "Progressive Context Divergence", "progressive")
+        plot(df, 'violin', 'svg', './results/finalTests', 'SG', "Progressive Context Divergence", "progressive")
+        plot(df, 'box', 'svg', './results/finalTests', 'SUT', "Progressive Context Divergence", "progressive")
+        plot(df, 'box', 'svg', './results/finalTests', 'SG', "Progressive Context Divergence", "progressive")
 
 if __name__ == "__main__":
     main()
