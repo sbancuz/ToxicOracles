@@ -69,8 +69,8 @@ def createPlot(instances, output, type, filename, mode, x, y, extension):
     plt.savefig(f"{output}/{filename}_{mode}_{type}.{extension}", dpi=300, format=extension)
     plt.close()
 
-#### PROGRESSIVE SIMILARITY ####
 
+#### PROGRESSIVE SIMILARITY ####
 def analyseProgressiveSimilarity(file):
     '''this function analyses the progressive similarity between prompts in the file, starting from the prompt from the dataset
     Note: the similarity is computed if and only if the prompt is different from the previous one
@@ -102,7 +102,9 @@ def analyseProgressiveSimilarity(file):
                                                                    run.taken[i].generated_prompt_for_sut), 
                         "config": archive.config, 
                         "file name": filename, 
-                        "iteration": i
+                        "iteration": i,
+                        "system_under_test": archive.config.system_under_test,
+                        "prompt_generator": archive.config.prompt_generator
                         })
             else:
                 if run.taken[i - 1].generated_prompt_for_sut.lower().strip() != run.taken[i].generated_prompt_for_sut.lower().strip():
@@ -115,24 +117,26 @@ def analyseProgressiveSimilarity(file):
                                                                         run.taken[i].generated_prompt_for_sut), 
                                     "config": archive.config, 
                                     "file name": filename,
-                                    "iteration": i                                    
+                                    "iteration": i,
+                                    "system_under_test": archive.config.system_under_test,
+                                    "prompt_generator": archive.config.prompt_generator                                    
                                     })
     return instances
 
 
-def progressive(input, type, extension, output, savejson=False):
+def progressive(input, type, extension, output, savejson=False, plot=True):
     ''' the progressive analysis is aimed at analysing the similarity between consecutive prompts, starting from the prompt from the dataset
     it saves the results in a file named as the file analysed, with the suffix _progressive.json and creates a plot for each file, saved in the same folder as well.
     input: the path to the folder containing the files to analyse
     type: the type of plot to generate
     '''
     instances=[]
+    # if input is a string, load the files, otherwise use the list of files as the loaded files
+    if input is str:
+        files = glob.glob(input+"/*.json")
+    else:
+        files = input
 
-    # get all files in the folder
-    files = glob.glob(input+"/*.json")
-
-    # create the folder progressive in the input folder, if it does not exist
-    path=os.path.dirname(input)
     if not os.path.exists(output):
         os.makedirs(output)
 
@@ -147,7 +151,9 @@ def progressive(input, type, extension, output, savejson=False):
 
         # extend the list of instances
         instances.extend(progressive_instances)
-        createPlot(instances=progressive_instances, output=output, type=type, filename=file, mode="progressive", x="iteration", y="cosine similarity", extension=extension)
+        if plot:
+            # create the plot
+            createPlot(instances=progressive_instances, output=output, type=type, filename=file, mode="progressive", x="iteration", y="cosine similarity", extension=extension)
     return instances
 
 #### BETWEEN FINALS VARIETY ####
@@ -251,8 +257,13 @@ def plotCorrelation(instances, output, title, x, y, name="correlation", extensio
     plt.close()
 
 ### DISTANCE FROM INITIAL PROMPT ###
-def distanceFromInitialPrompt(input, type, extension, output, savejson=False):
-    files = glob.glob(input + "/*.json")
+def distanceFromInitialPrompt(input, type, extension, output, savejson=False, plot=True):
+    # if input is a string, load the files
+    if isinstance(input, str):
+        files = glob.glob(input + "/*.json")
+    else:
+        files = input
+    #files = glob.glob(input + "/*.json")
     print(files)
     data = []
     for file in tqdm(files):
@@ -268,9 +279,11 @@ def distanceFromInitialPrompt(input, type, extension, output, savejson=False):
                         "cosine similarity": similarityBetween(model, run.initial.prompt_from_dataset, run.taken[iteration].generated_prompt_for_sut),
                         "config": archive.config,
                         "file name": filename,
-                        "iteration": iteration
+                        "iteration": iteration,
+                        "system_under_test": archive.config.system_under_test,
+                        "prompt_generator": archive.config.prompt_generator
                     })
-        path=os.path.dirname(input)
+        #path=os.path.dirname(input)
         # create file for similarity, inside the folder plots, in the input folder, if it does not exist create it
         if not os.path.exists(output):
             os.makedirs(output)
@@ -278,7 +291,8 @@ def distanceFromInitialPrompt(input, type, extension, output, savejson=False):
             # save data to json
             with open(f"{output}/{filename}_sentenceDistance.json", "w") as f: 
                 f.write(orjson.dumps(data, option=orjson.OPT_INDENT_2).decode("utf-8"))
-        createPlot(instances=data, output=output, type=type, filename=filename, mode="distanceFromInitialPrompt", x="iteration", y="cosine similarity", extension=extension)
+        if plot:
+            createPlot(instances=data, output=output, type=type, filename=filename, mode="distanceFromInitialPrompt", x="iteration", y="cosine similarity", extension=extension)
     return data
 
 # global variable for the model
@@ -320,8 +334,7 @@ model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 @click_option(
     "-e",
     "--extension",
-    default="png",
-    type=click.Choice(["png", "pdf", "svg"]),
+    default="svg",
     help="The extension of the output file",
 )
 @click_option(
