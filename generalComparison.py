@@ -40,6 +40,23 @@ def pickBest(folder):
                 bestAverage=average
     return best
 
+def categories_distribution(categories_df, output, extension, verbose, legend):
+    # plot the categories distribution in a separate plot
+    #plt.figure()
+    # set size
+    plt.figure(figsize=(25, 8))
+
+    plt.title("Categories distribution")
+    categories_df.transpose().plot(kind="bar", stacked=False, alpha=0.5, edgecolor="black")
+    plt.xticks(rotation=25, ha="right")
+    plt.legend(legend, loc="center left", bbox_to_anchor=(1, 0.5))
+    # set the right padding to show the legend
+    plt.subplots_adjust(right=0.7, left=0.04, top=0.84)
+    plt.savefig(output + f"/categoriesDistribution.{extension}", dpi=300, format=extension)
+    if verbose:
+        plt.show()
+    plt.close()
+
 
 def all(input, output, extension, verbose, criteria, type):
     '''
@@ -165,7 +182,7 @@ def all(input, output, extension, verbose, criteria, type):
     if verbose:
         plt.show()
     plt.close()
-
+    categories_distribution(categories_df, output, extension, verbose, legend)
 
 def grouped(input, output, extension, verbose, groupby, criteria, type):
     data=pd.DataFrame()
@@ -256,6 +273,19 @@ def grouped(input, output, extension, verbose, groupby, criteria, type):
         plt.show()
     plt.close()
     
+def load_data(input, criteria):
+    fileData=[]
+
+    for folder in input:
+        for file in get_files(folder):
+            with open(file) as f:
+                archive=Archive.from_dict(orjson.loads(f.read()))
+                for run in archive.runs:
+                    for i in range(archive.config.iterations):
+                        fileData.append([i, get_score(list(run.taken[i].criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, run.taken[i].delta_time_evaluation, run.taken[i].delta_time_generation, run.taken[i].delta_time_response])
+    data=pd.DataFrame(fileData, columns=["iteration", "score", "system_under_test", "prompt_generator", "delta_time_evaluation", "delta_time_generation", "delta_time_response"])
+    return data
+
 
 def groupedMerged(input, output, extension, verbose, groupby, criteria, type, analysis):
     '''
@@ -269,17 +299,7 @@ def groupedMerged(input, output, extension, verbose, groupby, criteria, type, an
     type: the type of plot (line, boxplot, violin)
     analysis: the type of analysis to perform (score, time)
     '''
-    fileData=[]
-
-    for folder in input:
-        for file in get_files(folder):
-            with open(file) as f:
-                archive=Archive.from_dict(orjson.loads(f.read()))
-                for run in archive.runs:
-                    for i in range(archive.config.iterations):
-                        fileData.append([i, get_score(list(run.taken[i].criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, run.taken[i].delta_time_evaluation, run.taken[i].delta_time_generation, run.taken[i].delta_time_response])
-    data=pd.DataFrame(fileData, columns=["iteration", "score", "system_under_test", "prompt_generator", "delta_time_evaluation", "delta_time_generation", "delta_time_response"])
-    # Initialize the figure
+    data = load_data(input, criteria)
     data = data.sort_values(by=groupby)
     plt.figure(figsize=(13, 6))
     if analysis=="score":
@@ -345,7 +365,7 @@ def groupedMerged(input, output, extension, verbose, groupby, criteria, type, an
 @click_option(
     "-e",
     "--extension",
-    default="png",
+    default="svg",
     help="The extension of the output file",
 )
 @click_option(
