@@ -34,7 +34,7 @@ def click_option(*args, **kwargs):
     "--extension",
     "-e",
     help="The extension of the output file",
-    default="png",
+    default="svg",
     type=click.Choice(["png", "jpg", "svg", "pdf"]),
 )
 @click_option(
@@ -67,7 +67,7 @@ def wordcloud(input, output, extension, verbose):
                             promptCategory[iteration.category]+=iteration.generated_prompt_for_sut + " "
             wordcloud = WordCloud(max_font_size=200, max_words=200, background_color="white", width=1920, height=1080).generate(prompt)
             plt.figure(figsize=(20, 10))
-            plt.title("Wordcloud of generated prompts for S(L)UT: "+data.config.system_under_test+" by prompt generator "+data.config.prompt_generator+" ("+parse_config(data.config)+")", fontsize=20)
+            plt.title("Wordcloud of generated prompts for SUT: "+data.config.system_under_test+" by prompt generator "+data.config.prompt_generator+" ("+parse_config(data.config)+")", fontsize=20)
             plt.imshow(wordcloud, interpolation='bilinear')
             plt.axis("off")
             filename = file.split("/")[-1].split(".")[0]
