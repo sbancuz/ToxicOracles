@@ -14,9 +14,10 @@ def click_option(*args, **kwargs):
     return click.option(*args, **kwargs)
 
 ### DATASET VARIETY ###
-def datasetVariety(dataset):
+def datasetVariety(dataset, save=False):
     '''this function computes the similarity between each pair of prompts in the dataset
     dataset: the dataset containing the prompts
+    save: if True, save the result in a file datasetVarietySimilarity.json inside the folder datasetVariety in the input folder
     return: a list of dictionaries, each dictionary contains the prompt 1, the prompt 2, the cosine similarity between the two prompts
     it also saves the result in a file datasetVarietySimilarity.json inside the folder datasetVariety in the input folder'''
     instances = []
@@ -36,12 +37,14 @@ def datasetVariety(dataset):
         for _ in as_completed(instances):
             pbar.update(n=1)  # Increments counter
     instances = [i.result() for i in instances]
+    pbar.close()
     
     path=os.path.dirname(dataset)
     dataset=os.path.basename(dataset)
     # save the similarity in the file similarity.json
-    with open(f"{path}/datasetVariety/{dataset}_datasetVarietySimilarity.json", "w") as f:
-        f.write(orjson.dumps(instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
+    if save:
+        with open(f"{path}/datasetVariety/{dataset}_datasetVarietySimilarity.json", "w") as f:
+            f.write(orjson.dumps(instances, option=orjson.OPT_INDENT_2).decode("utf-8"))
 
     return instances
 
@@ -75,10 +78,11 @@ def plotDatasetVariety(instances, datasetName, output, normalise=False, instance
         df2["dataset"]=datasetName2
         df=pd.concat([df, df2])
     if normalise:
-        sns.displot(data=df, x="cosine similarity", hue="dataset", stat="probability", common_norm=False, multiple="dodge")
+        #plot the bars without the border
+        sns.displot(data=df, x="cosine similarity", hue="dataset", stat="probability", common_norm=False, multiple="dodge", element="step", fill=False)
         title=f"Normalised similarity between {datasetName} and {datasetName2}"
     else:
-        sns.displot(data=df, x="cosine similarity", hue="dataset", multiple="dodge")
+        sns.displot(data=df, x="cosine similarity", hue="dataset", multiple="dodge", element="step", fill=False)
         title=f"Similarity between {datasetName} and {datasetName2}"
     
     plt.title(title)
@@ -128,7 +132,14 @@ def plotDatasetVariety(instances, datasetName, output, normalise=False, instance
     type=click.Choice(["png", "pdf", "svg"]),
     help="The extension of the output file",
 )
-def main(input, input2, donotcompute,normalise, extension):
+@click_option(
+    "-s",
+    "--save",
+    is_flag=True,
+    help="Save the JSON file containing the similarity between the prompts",
+    default=False
+)
+def main(input, input2, donotcompute,normalise, extension, save):
     '''this function computes the similarity between each pair of prompts in the dataset
     input: the dataset containing the prompts
     donotcompute: if True, it does not compute the similarity between the prompts, just plot it
@@ -140,13 +151,17 @@ def main(input, input2, donotcompute,normalise, extension):
         path2=os.path.dirname(input2)
         datasetName2=os.path.basename(input2).replace(".json", "").replace("_datasetVarietySimilarity", "")
 
-    if not os.path.exists(path+"/datasetVariety"):
+    currentFolderName=os.path.basename(path)
+    if currentFolderName=="datasetVariety":
+        path=os.path.dirname(path)
+    elif not os.path.exists(path+"/datasetVariety"):
         os.makedirs(path+"/datasetVariety")
+
     
     if not donotcompute:
-        instances=datasetVariety(input)
+        instances=datasetVariety(input, save)
         if input2:
-            instances2=datasetVariety(input2)
+            instances2=datasetVariety(input2, save)
     else:
         with open(input) as f:
             instances=orjson.loads(f.read())
