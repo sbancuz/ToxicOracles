@@ -9,6 +9,7 @@ import pandas as pd
 import seaborn as sns
 from tqdm import tqdm
 from torch.nn import functional as F
+from comparison import get_files, get_data, parse_config
 
 
 def click_option(*args, **kwargs):
@@ -131,13 +132,18 @@ def progressive(input, type, extension, output, savejson=False, plot=True):
     type: the type of plot to generate
     '''
     instances=[]
+
     # if input is a string, load the files, otherwise use the list of files as the loaded files
-    if input is str:
-        files = glob.glob(input+"/*.json")
+    
+    if isinstance(input, str):
+        files=get_files(input, includeBaseline=False)
+        #files = glob.glob(input+"/*.json")
         # remove baseline.json from the list of files
-        files = [f for f in files if "baseline.json" not in f]
+        #files = [f for f in files if "baseline.json" not in f]
+        print(files)
     else:
         files = input
+        print("prova")
 
     if not os.path.exists(output):
         os.makedirs(output)
@@ -165,9 +171,7 @@ def betweenFinalsVariety(input, type, extension, output, savejson=False):
     return: a list of dictionaries, each dictionary contains the final prompt 1, the final prompt 2, the cosine similarity between the two prompts, the initial prompt 1, the initial prompt 2, the initial cosine similarity between the two prompts, the configuration of the archive, the file name
     it also saves the result in a file betweenFinalsVarietySimilarity.json inside the folder betweenFinalsVariety in the input folder'''
     # select json files in the path
-    files = glob.glob(input+"/*.json")
-    # remove baseline.json from the list of files
-    files = [f for f in files if "baseline.json" not in f]
+    files = get_files(input, includeBaseline=False)
     if not os.path.exists(output):
         os.makedirs(output)
 
@@ -212,9 +216,7 @@ def scoreCorrelation(input, output, extension="png", savejson=False):
     it also saves the result in a file scoreCorrelation.json inside the folder scoreCorrelation in the output folder and plots the correlation between the delta cosine similarity and the delta score, the delta cosine similarity and the final score, the initial score and the final score
     '''
     # select json files in the path
-    files = glob.glob(f"{input}/*.json")
-    # remove baseline.json from the list of files
-    files = [f for f in files if "baseline.json" not in f]
+    files = get_files(input, includeBaseline=False)
     instances = []
 
     # create the folder scoreCorrelation if it does not exist
@@ -266,9 +268,7 @@ def plotCorrelation(instances, output, title, x, y, name="correlation", extensio
 def distanceFromInitialPrompt(input, type, extension, output, savejson=False, plot=True):
     # if input is a string, load the files
     if isinstance(input, str):
-        files = glob.glob(input + "/*.json")
-        # remove baseline.json from the list of files
-        files = [f for f in files if "baseline.json" not in f]
+        files = get_files(input, includeBaseline=False)
     else:
         files = input
     #files = glob.glob(input + "/*.json")

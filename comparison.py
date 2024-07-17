@@ -30,17 +30,19 @@ def parse_config(config: Config) -> str:
     return name[:-1]
 
 
-def get_files(path: str) -> list[str]:
+def get_files(path: str, includeBaseline=False) -> list[str]:
     '''
+    path: the path to the folder containing the files
+    includeBaseline: whether to include the baseline files or not
     Return a list of all the files in the path that have the .json extension and are not directories
-    ATTENTION: the baseline.json IS included in the list
     '''
     import os
 
     return [
         os.path.join(path, f)
         for f in os.listdir(path)
-        if os.path.isfile(os.path.join(path, f)) and f.endswith(".json") #and f != "baseline.json"
+        if os.path.isfile(os.path.join(path, f)) and f.endswith(".json") and (includeBaseline or "baseline" not in f)
+            
     ]
 
 
@@ -72,7 +74,7 @@ def get_legends(files: list[Archive]) -> list[str]:
 @click_option(
     "-i",
     "--input",
-    default="results/100/",
+    default="results/finalTests/llama3_llama3",
     help="The path to the results folder",
 )
 @click_option(
@@ -85,13 +87,13 @@ def get_legends(files: list[Archive]) -> list[str]:
 @click_option(
     "-o",
     "--output",
-    default="results/100/plots/",
+    default="results/finalTests/llama3_llama3/analysis/comparisons",
     help="The path to the results folder",
 )
 @click_option(
     "-e",
     "--extension",
-    default="png",
+    default="svg",
     type=click.Choice(["png", "pdf", "svg"]),
     help="The extension of the output file",
 )
@@ -105,9 +107,8 @@ def plot(criteria: str, input: str, silent: bool, output: str, extension: str) -
     extension: the extension of the output file'''
 
 
-    sources = get_files(input)
-    # remove the baseline.json file
-    sources = [source for source in sources if "baseline" not in source]
+    sources = get_files(input, includeBaseline=False)
+    print(sources)
 
     data = get_data(sources)
     legend = get_legends(data)

@@ -10,6 +10,7 @@ import seaborn as sns
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from evolutionary import Archive, get_score, Config
 from sentenceAnalyser import distanceFromInitialPrompt, progressive
+from comparison import get_files
 
 def click_option(*args, **kwargs):
     if "show_default" not in kwargs:
@@ -24,11 +25,12 @@ def createFolderDf(input):
     - SG, with the name of the SG
     '''
     df = pd.DataFrame(columns=['File', 'SUT', 'SG'])
-    folders= os.listdir(input)
+    # get the folders in the input folder
+    folders = [f for f in os.listdir(input) if os.path.isdir(os.path.join(input, f))]
     data=[]
     for folder in folders:
         # load json files
-        files=glob.glob(input+folder+'/*.json')
+        files=get_files(input+folder, includeBaseline=False)
         for file in files:
             archive=Archive.from_dict(orjson.loads(open(file, 'rb').read()))
             config=archive.config

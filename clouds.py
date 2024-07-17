@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from typing import List
 import click
 from wordcloud import WordCloud
-from comparison import parse_config
+from comparison import parse_config, get_files
 
 def click_option(*args, **kwargs):
     if "show_default" not in kwargs:
@@ -52,7 +52,7 @@ def wordcloud(input, output, extension, verbose):
     outputfolder = output + "/wordclouds/"
     if not os.path.exists(outputfolder):
         os.makedirs(outputfolder)
-    files = [os.path.join(input, f) for f in os.listdir(input) if f.endswith(".json") and f != "baseline.json"]
+    files = get_files(path=input, includeBaseline=False)
     for file in files:
         with open(file) as f:
             data = Archive.from_dict(orjson.loads(f.read()))

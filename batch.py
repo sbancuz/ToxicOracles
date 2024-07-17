@@ -4,6 +4,7 @@ import sys
 
 import click
 from tqdm import tqdm
+from comparison import get_files
 
 
 def click_option(*args, **kwargs):
@@ -154,28 +155,26 @@ def main(
     if chat_analysis:
         print("Running chatAnalysis")
         # for each file in the folder results, run the analysis plot with the file path as argument
-        files = glob.glob(input + "/*.json")
+        files = get_files(input, includeBaseline=False)
         if not os.path.exists(output + "/chatAnalysis"):
             os.makedirs(output + "/chatAnalysis")
         for file in tqdm(files, desc="Files", position=0, leave=True, file=sys.stdout):
-            # exlude file if has baseline in the name or it is a directory
-            if "baseline" not in file and not os.path.isdir(file):
-                # if file is without an extension, or has .par, rename it to .json
-                if file.find(".par") != -1:
-                    os.rename(file, file.replace(".par", ".json"))
-                    file = file.replace(".par", ".json")
-                else:
-                    # if file has no extension, add .json
-                    if file.find(".") == -1:
-                        os.rename(file, file + ".json")
-                        file = file + ".json"
+            # if file is without an extension, or has .par, rename it to .json
+            if file.find(".par") != -1:
+                os.rename(file, file.replace(".par", ".json"))
+                file = file.replace(".par", ".json")
+            else:
+                # if file has no extension, add .json
+                if file.find(".") == -1:
+                    os.rename(file, file + ".json")
+                    file = file + ".json"
 
-                for c in tqdm(
-                    criteria, desc="Criteria", position=0, leave=True, file=sys.stdout
-                ):
-                    run_command(
-                        f"python3 chatAnalysis.py --silent --input {file} --output {output}/chatAnalysis --criteria {c} --extension {extension}"
-                    )
+            for c in tqdm(
+                criteria, desc="Criteria", position=0, leave=True, file=sys.stdout
+            ):
+                run_command(
+                    f"python3 chatAnalysis.py --silent --input {file} --output {output}/chatAnalysis --criteria {c} --extension {extension}"
+                )
     if comparison:
         print("Running comparison")
 

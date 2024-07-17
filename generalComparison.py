@@ -22,9 +22,7 @@ def click_option(*args, **kwargs):
 
 def pickBest(folder):
     # load all the json files in the folder
-    files = get_files(folder)
-    # remove the baseline.json file
-    files = [f for f in files if f != "baseline.json"]
+    files = get_files(folder, includeBaseline=False)
     best=None
     bestAverage=None
     for file in files:
@@ -214,9 +212,7 @@ def grouped(input, output, extension, verbose, groupby, criteria, type):
     for folder in input:
         # compute the mean score in each iteration, for each run considering all the files
         configurationData=pd.DataFrame()
-        files = get_files(folder)
-        # remove the baseline.json file
-        files = [f for f in files if f != "baseline.json"]
+        files = get_files(folder, includeBaseline=False)
         for file in files:
             with open(file) as f:
                 archive=Archive.from_dict(orjson.loads(f.read()))
@@ -301,20 +297,20 @@ def grouped(input, output, extension, verbose, groupby, criteria, type):
         plt.show()
     plt.close()
     
-def load_data(input, criteria):
+def load_data(input, criteria, includeBaseline=False):
     '''
     This function is used to load the data from the input folder and return a pandas dataframe with the data
     input: the path to the folders containing the results of the experiments (as a list of folders)
     criteria: the criteria to use for selecting the best score (max, min, avg, median)
+    includeBaseline: whether to include the baseline.json file in the data or not
 
-    return: a pandas dataframe with the data, with columns: iteration, score, system_under_test, prompt_generator, category, delta_time_evaluation, delta_time_generation, delta_time_response, file
+    return: a pandas dataframe with the data, with columns: iteration, score, system_under_test, prompt_generator, category, delta_time_evaluation, delta_time_generation, delta_time_response, file, numberIterations
     '''
     fileData=[]
 
     for folder in input:
-        files=get_files(folder)
-        # remove the baseline.json file
-        files = [f for f in files if f != "baseline.json"]
+        files=get_files(folder, includeBaseline=includeBaseline)
+        
         for file in files:
             #print(get_files(folder))
             with open(file) as f:
@@ -325,10 +321,10 @@ def load_data(input, criteria):
 
                 archive=Archive.from_dict(orjson.loads(f.read()))
                 for run in archive.runs:
-                    fileData.append([0, get_score(list(run.initial.criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, "initial", run.initial.delta_time_evaluation, 0, run.initial.delta_time_response, fileName ])
+                    fileData.append([0, get_score(list(run.initial.criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, "initial", run.initial.delta_time_evaluation, 0, run.initial.delta_time_response, fileName, archive.config.iterations])
                     for i in range(archive.config.iterations):
-                        fileData.append([i+1, get_score(list(run.taken[i].criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, run.taken[i].category, run.taken[i].delta_time_evaluation, run.taken[i].delta_time_generation, run.taken[i].delta_time_response, fileName ])
-    data=pd.DataFrame(fileData, columns=["iteration", "score", "system_under_test", "prompt_generator", "category","delta_time_evaluation", "delta_time_generation", "delta_time_response", "file"])
+                        fileData.append([i+1, get_score(list(run.taken[i].criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, run.taken[i].category, run.taken[i].delta_time_evaluation, run.taken[i].delta_time_generation, run.taken[i].delta_time_response, fileName, archive.config.iterations ])
+    data=pd.DataFrame(fileData, columns=["iteration", "score", "system_under_test", "prompt_generator", "category","delta_time_evaluation", "delta_time_generation", "delta_time_response", "file", "numberIterations"])
     return data
 
 
@@ -344,7 +340,8 @@ def groupedMerged(input, output, extension, verbose, groupby, criteria, type, an
     type: the type of plot (line, boxplot, violin)
     analysis: the type of analysis to perform (score, time)
     '''
-    data = load_data(input, criteria)
+    data = load_data(input=input, criteria=criteria, includeBaseline=False)
+
     data = data.sort_values(by=groupby)
     plt.figure(figsize=(13, 6))
     if analysis=="score":
