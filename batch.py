@@ -84,7 +84,7 @@ def run_command(command):
 @click_option(
     "-e",
     "--extension",
-    default="png",
+    default="svg",
     type=click.Choice(["png", "pdf", "svg"]),
     help="The extension of the output file",
 )

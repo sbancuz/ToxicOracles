@@ -134,6 +134,8 @@ def progressive(input, type, extension, output, savejson=False, plot=True):
     # if input is a string, load the files, otherwise use the list of files as the loaded files
     if input is str:
         files = glob.glob(input+"/*.json")
+        # remove baseline.json from the list of files
+        files = [f for f in files if "baseline.json" not in f]
     else:
         files = input
 
@@ -164,6 +166,8 @@ def betweenFinalsVariety(input, type, extension, output, savejson=False):
     it also saves the result in a file betweenFinalsVarietySimilarity.json inside the folder betweenFinalsVariety in the input folder'''
     # select json files in the path
     files = glob.glob(input+"/*.json")
+    # remove baseline.json from the list of files
+    files = [f for f in files if "baseline.json" not in f]
     if not os.path.exists(output):
         os.makedirs(output)
 
@@ -209,6 +213,8 @@ def scoreCorrelation(input, output, extension="png", savejson=False):
     '''
     # select json files in the path
     files = glob.glob(f"{input}/*.json")
+    # remove baseline.json from the list of files
+    files = [f for f in files if "baseline.json" not in f]
     instances = []
 
     # create the folder scoreCorrelation if it does not exist
@@ -261,6 +267,8 @@ def distanceFromInitialPrompt(input, type, extension, output, savejson=False, pl
     # if input is a string, load the files
     if isinstance(input, str):
         files = glob.glob(input + "/*.json")
+        # remove baseline.json from the list of files
+        files = [f for f in files if "baseline.json" not in f]
     else:
         files = input
     #files = glob.glob(input + "/*.json")

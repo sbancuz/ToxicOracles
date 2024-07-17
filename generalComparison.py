@@ -40,19 +40,24 @@ def pickBest(folder):
                 bestAverage=average
     return best
 
-def categories_distribution(categories_df, output, extension, verbose, legend):
+def categories_distribution(categories_df, output, extension, verbose, legend, save=True):
     # plot the categories distribution in a separate plot
     #plt.figure()
     # set size
-    plt.figure(figsize=(25, 8))
-
-    plt.title("Categories distribution")
+    
     categories_df.transpose().plot(kind="bar", stacked=False, alpha=0.5, edgecolor="black")
+    plt.title("Categories distribution")
+    # set size of the plot
+    plt.gcf().set_size_inches(12, 7)
+
     plt.xticks(rotation=25, ha="right")
-    plt.legend(legend, loc="center left", bbox_to_anchor=(1, 0.5))
+    # plot the legend inside the plot
+    plt.legend(legend, loc="upper right", bbox_to_anchor=(1, 1))
     # set the right padding to show the legend
-    plt.subplots_adjust(right=0.7, left=0.04, top=0.84)
-    plt.savefig(output + f"/categoriesDistribution.{extension}", dpi=300, format=extension)
+    plt.subplots_adjust(right=0.95, left=0.075, top=0.9)
+    plt.title("Categories distribution")
+    if save:
+        plt.savefig(output + f"/categoriesDistribution.{extension}", dpi=300, format=extension)
     if verbose:
         plt.show()
     plt.close()
@@ -181,7 +186,9 @@ def all(input, output, extension, verbose, criteria, type):
 
     if verbose:
         plt.show()
-    plt.close()
+
+    #plt.close()
+
     categories_distribution(categories_df, output, extension, verbose, legend)
 
 def grouped(input, output, extension, verbose, groupby, criteria, type):
@@ -298,6 +305,7 @@ def load_data(input, criteria):
 
     for folder in input:
         for file in get_files(folder):
+            #print(get_files(folder))
             with open(file) as f:
                 # file name without the extension
                 fileName= os.path.basename(file)
@@ -306,8 +314,9 @@ def load_data(input, criteria):
 
                 archive=Archive.from_dict(orjson.loads(f.read()))
                 for run in archive.runs:
+                    fileData.append([0, get_score(list(run.initial.criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, "initial", run.initial.delta_time_evaluation, 0, run.initial.delta_time_response, fileName ])
                     for i in range(archive.config.iterations):
-                        fileData.append([i, get_score(list(run.taken[i].criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, run.taken[i].category, run.taken[i].delta_time_evaluation, run.taken[i].delta_time_generation, run.taken[i].delta_time_response, fileName ])
+                        fileData.append([i+1, get_score(list(run.taken[i].criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, run.taken[i].category, run.taken[i].delta_time_evaluation, run.taken[i].delta_time_generation, run.taken[i].delta_time_response, fileName ])
     data=pd.DataFrame(fileData, columns=["iteration", "score", "system_under_test", "prompt_generator", "category","delta_time_evaluation", "delta_time_generation", "delta_time_response", "file"])
     return data
 

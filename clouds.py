@@ -52,7 +52,7 @@ def wordcloud(input, output, extension, verbose):
     outputfolder = output + "/wordclouds/"
     if not os.path.exists(outputfolder):
         os.makedirs(outputfolder)
-    files = [os.path.join(input, f) for f in os.listdir(input) if f.endswith(".json")]
+    files = [os.path.join(input, f) for f in os.listdir(input) if f.endswith(".json") and f != "baseline.json"]
     for file in files:
         with open(file) as f:
             data = Archive.from_dict(orjson.loads(f.read()))

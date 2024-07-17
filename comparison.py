@@ -31,12 +31,15 @@ def parse_config(config: Config) -> str:
 
 
 def get_files(path: str) -> list[str]:
+    '''
+    Return a list of all the files in the path that have the .json extension and are not directories or baseline.json
+    '''
     import os
 
     return [
         os.path.join(path, f)
         for f in os.listdir(path)
-        if os.path.isfile(os.path.join(path, f)) and f.endswith(".json")
+        if os.path.isfile(os.path.join(path, f)) and f.endswith(".json") and f != "baseline.json"
     ]
 
 
