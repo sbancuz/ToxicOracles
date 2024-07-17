@@ -185,6 +185,19 @@ def all(input, output, extension, verbose, criteria, type):
     categories_distribution(categories_df, output, extension, verbose, legend)
 
 def grouped(input, output, extension, verbose, groupby, criteria, type):
+    '''
+    This function is used to plot the results of the experiments grouped by the given criteria (sut or sg).
+    It can:
+    - plot a single line plot with the mean score for each iteration, for every combination
+    - plot one boxplot/violin plot for each iteration, for every combination
+    input: the path to the folder containing the results of the experiments (each experiment is in a sub-folder)
+    output: the path to the output folder
+    extension: the extension of the output file
+    verbose: whether to show the plot or not
+    groupby: the criteria to use for grouping the score (sut or sg)
+    criteria: the criteria to use for selecting the best score (max, min, avg, median)
+    type: the type of plot (line, boxplot, violinplot) [line creates a single plot, boxplot/violin create a plot for each iteration]
+    ''' 
     data=pd.DataFrame()
     for folder in input:
         # compute the mean score in each iteration, for each run considering all the files
@@ -274,16 +287,28 @@ def grouped(input, output, extension, verbose, groupby, criteria, type):
     plt.close()
     
 def load_data(input, criteria):
+    '''
+    This function is used to load the data from the input folder and return a pandas dataframe with the data
+    input: the path to the folders containing the results of the experiments (as a list of folders)
+    criteria: the criteria to use for selecting the best score (max, min, avg, median)
+
+    return: a pandas dataframe with the data, with columns: iteration, score, system_under_test, prompt_generator, category, delta_time_evaluation, delta_time_generation, delta_time_response, file
+    '''
     fileData=[]
 
     for folder in input:
         for file in get_files(folder):
             with open(file) as f:
+                # file name without the extension
+                fileName= os.path.basename(file)
+                fileName=fileName[:fileName.rfind(".")]
+
+
                 archive=Archive.from_dict(orjson.loads(f.read()))
                 for run in archive.runs:
                     for i in range(archive.config.iterations):
-                        fileData.append([i, get_score(list(run.taken[i].criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, run.taken[i].delta_time_evaluation, run.taken[i].delta_time_generation, run.taken[i].delta_time_response])
-    data=pd.DataFrame(fileData, columns=["iteration", "score", "system_under_test", "prompt_generator", "delta_time_evaluation", "delta_time_generation", "delta_time_response"])
+                        fileData.append([i, get_score(list(run.taken[i].criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, run.taken[i].category, run.taken[i].delta_time_evaluation, run.taken[i].delta_time_generation, run.taken[i].delta_time_response, fileName ])
+    data=pd.DataFrame(fileData, columns=["iteration", "score", "system_under_test", "prompt_generator", "category","delta_time_evaluation", "delta_time_generation", "delta_time_response", "file"])
     return data
 
 
