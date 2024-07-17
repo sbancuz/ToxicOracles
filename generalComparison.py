@@ -41,11 +41,15 @@ def pickBest(folder):
     return best
 
 def plotCategories(categories_df, output, extension, verbose, legend, save=True):
-    # plot the categories distribution in a separate plot
-    #plt.figure()
-    # set size
+    '''
+    This function is used to plot the categories distribution for the given data
+    categories_df: the dataframe with the data, in which the rows are the categories and the columns are the iterations, the values are the number of times the category has been selected
+    output: the path to the output folder
+    extension: the extension of the output file
+    verbose: whether to show the plot or not
+    '''
     
-    categories_df.transpose().plot(kind="bar", stacked=False, alpha=0.5, edgecolor="black")
+    categories_df.plot(kind="bar", stacked=False, alpha=0.5, edgecolor="black")
     plt.title("Categories distribution")
     # set size of the plot
     plt.gcf().set_size_inches(12, 7)
@@ -170,13 +174,13 @@ def all(input, output, extension, verbose, criteria, type):
 
     # plot the categories in a histogram for categories_series, labels are tilted for better readability
     categories_df = pd.DataFrame(categories_series)
-    categories_df = categories_df.fillna(0)
+    categories_df = categories_df.fillna(0).transpose()
     #categories_df = categories_df[possible_categories]
 
-    categories_df.transpose().plot(
+    categories_df.plot(
         kind="bar", stacked=False, ax=ax[2, 1], alpha=0.5, edgecolor="black"
     )
-    ax[2, 1].set_xticklabels(categories_df.T.index, rotation=25, ha="right")
+    ax[2, 1].set_xticklabels(categories_df.index, rotation=25, ha="right")
 
     ax[0, 1].legend(legend, loc="center left", bbox_to_anchor=(1, 0.5))
     # ax[2, 0].legend(legend)
