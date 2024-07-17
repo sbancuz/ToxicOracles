@@ -40,7 +40,7 @@ def pickBest(folder):
                 bestAverage=average
     return best
 
-def categories_distribution(categories_df, output, extension, verbose, legend, save=True):
+def plotCategories(categories_df, output, extension, verbose, legend, save=True):
     # plot the categories distribution in a separate plot
     #plt.figure()
     # set size
@@ -58,6 +58,9 @@ def categories_distribution(categories_df, output, extension, verbose, legend, s
     plt.title("Categories distribution")
     if save:
         plt.savefig(output + f"/categoriesDistribution.{extension}", dpi=300, format=extension)
+    else:
+        # return the figure
+        return plt.gcf()
     if verbose:
         plt.show()
     plt.close()
@@ -189,7 +192,7 @@ def all(input, output, extension, verbose, criteria, type):
 
     #plt.close()
 
-    categories_distribution(categories_df, output, extension, verbose, legend)
+    plotCategories(categories_df, output, extension, verbose, legend)
 
 def grouped(input, output, extension, verbose, groupby, criteria, type):
     '''
