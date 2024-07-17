@@ -23,6 +23,8 @@ def click_option(*args, **kwargs):
 def pickBest(folder):
     # load all the json files in the folder
     files = get_files(folder)
+    # remove the baseline.json file
+    files = [f for f in files if f != "baseline.json"]
     best=None
     bestAverage=None
     for file in files:
@@ -212,7 +214,10 @@ def grouped(input, output, extension, verbose, groupby, criteria, type):
     for folder in input:
         # compute the mean score in each iteration, for each run considering all the files
         configurationData=pd.DataFrame()
-        for file in get_files(folder):
+        files = get_files(folder)
+        # remove the baseline.json file
+        files = [f for f in files if f != "baseline.json"]
+        for file in files:
             with open(file) as f:
                 archive=Archive.from_dict(orjson.loads(f.read()))
                 for run in archive.runs:
@@ -307,7 +312,10 @@ def load_data(input, criteria):
     fileData=[]
 
     for folder in input:
-        for file in get_files(folder):
+        files=get_files(folder)
+        # remove the baseline.json file
+        files = [f for f in files if f != "baseline.json"]
+        for file in files:
             #print(get_files(folder))
             with open(file) as f:
                 # file name without the extension

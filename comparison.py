@@ -32,14 +32,15 @@ def parse_config(config: Config) -> str:
 
 def get_files(path: str) -> list[str]:
     '''
-    Return a list of all the files in the path that have the .json extension and are not directories or baseline.json
+    Return a list of all the files in the path that have the .json extension and are not directories
+    ATTENTION: the baseline.json IS included in the list
     '''
     import os
 
     return [
         os.path.join(path, f)
         for f in os.listdir(path)
-        if os.path.isfile(os.path.join(path, f)) and f.endswith(".json") and f != "baseline.json"
+        if os.path.isfile(os.path.join(path, f)) and f.endswith(".json") #and f != "baseline.json"
     ]
 
 
@@ -105,6 +106,9 @@ def plot(criteria: str, input: str, silent: bool, output: str, extension: str) -
 
 
     sources = get_files(input)
+    # remove the baseline.json file
+    sources = [source for source in sources if "baseline" not in source]
+
     data = get_data(sources)
     legend = get_legends(data)
     #legend is the name of the files
