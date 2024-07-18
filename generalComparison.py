@@ -40,15 +40,14 @@ def pickBest(folder):
                 bestAverage=average
     return best
 
-def plotCategories(categories_df, output, extension, verbose, legend, save=True):
+def plotCategories(categories_df, output, extension, verbose, legend, save=True, title="Categories distribution"):
     '''
     This function is used to plot the categories distribution for the given data
-    categories_df: the dataframe with the data, in which the rows are the categories and the columns are the iterations, the values are the number of times the category has been selected
+    categories_df: the dataframe with the data, in which the rows are the categories and the columns are the different configurations, the values are the number of times the category has been selected
     output: the path to the output folder
     extension: the extension of the output file
     verbose: whether to show the plot or not
     '''
-    
     categories_df.plot(kind="bar", stacked=False, alpha=0.5, edgecolor="black")
     plt.title("Categories distribution")
     # set size of the plot
@@ -59,12 +58,12 @@ def plotCategories(categories_df, output, extension, verbose, legend, save=True)
     plt.legend(legend, loc="upper right", bbox_to_anchor=(1, 1))
     # set the right padding to show the legend
     plt.subplots_adjust(right=0.95, left=0.075, top=0.9)
-    plt.title("Categories distribution")
+    plt.title(title)
     if save:
         plt.savefig(output + f"/categoriesDistribution.{extension}", dpi=300, format=extension)
-    else:
+    #else:
         # return the figure
-        return plt.gcf()
+        #return plt.gcf()
     if verbose:
         plt.show()
     plt.close()
