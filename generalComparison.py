@@ -197,7 +197,7 @@ def all(input, output, extension, verbose, criteria, type):
 
     plotCategories(categories_df, output, extension, verbose, legend)
 
-def grouped(input, output, extension, verbose, groupby, criteria, type):
+def grouped(input, output, extension, verbose, groupby, criteria, type, save=True):
     '''
     This function is used to plot the results of the experiments grouped by the given criteria (sut or sg).
     It can:
@@ -210,6 +210,7 @@ def grouped(input, output, extension, verbose, groupby, criteria, type):
     groupby: the criteria to use for grouping the score (sut or sg)
     criteria: the criteria to use for selecting the best score (max, min, avg, median)
     type: the type of plot (line, boxplot, violinplot) [line creates a single plot, boxplot/violin create a plot for each iteration]
+    save: whether to save the plot or not
     ''' 
     data=pd.DataFrame()
     for folder in input:
@@ -294,8 +295,8 @@ def grouped(input, output, extension, verbose, groupby, criteria, type):
     else:
         raise ValueError("Invalid type parameter")
 
-    
-    plt.savefig(output + f"/groupedComparison-{type}-{criteria}-{groupby}.{extension}", dpi=300, format=extension)
+    if save:
+        plt.savefig(output + f"/groupedComparison-{type}-{criteria}-{groupby}.{extension}", dpi=300, format=extension)
     if verbose:
         plt.show()
     plt.close()
