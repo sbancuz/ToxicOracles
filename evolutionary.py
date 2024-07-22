@@ -221,12 +221,12 @@ def make_message(
         prompt += (
             str(
                 generate_few_shot(
-                    relevantExamples, category, GlobalConfig.forward_score
+                    relevantExamples, category
                 )
             )
             +"\n## Example 2:\n"
-            + str(generate_few_shot(memory, category, GlobalConfig.forward_score))
-            + f"### Instructions:{make_instruction(category, GlobalConfig.forward_score, GlobalConfig.gaslight)} <prompt>{query}</prompt>### Response:"
+            + str(generate_few_shot(memory, category))
+            + f"### Instructions:{make_instruction(category, score)} <prompt>{query}</prompt>### Response:"
         )
     #print("Prompt: ", prompt)
     return {
@@ -542,7 +542,7 @@ def get_env_or_error(env_var: str) -> str:
     "-sut",
     "--system-under-test",
     type=click.Choice(["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC"]),
-    default="mistral",
+    default="vicuna",
     help="The model to use as System under test",
 )
 @click_option(
@@ -551,13 +551,17 @@ def get_env_or_error(env_var: str) -> str:
     type=click.Choice(
         ["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC", "human"]
     ),
-    default="mistral",
+    default="vicuna",
     help="The model to use as System generator",
 )
 @click_option(
     "--example-file",
     type=click.Path(exists=True, resolve_path=True, dir_okay=False),
     help="File to load the examples from",
+)
+@click_option(
+    "--api-key-perspective",
+    help="API key for the Perspective API",
 )
 async def run(
     iterations,
@@ -580,6 +584,7 @@ async def run(
     system_under_test,
     system_generator,
     example_file,
+    api_key_perspective,
 ):
     global GlobalConfig
     global API_KEY_PROMPT_GENERATOR, URL_PROMPT_GENERATOR, API_KEY_SUT, URL_SUT
@@ -625,7 +630,12 @@ async def run(
         URL_SUT = get_env_or_error("URL_VICUNAUC") + "/v1/chat/completions"
 
     global Goffset
+    global p
     Goffset = offset
+    if api_key_perspective is not None:
+        p = PerspectiveAPI(api_key_perspective)
+    else:
+        p= PerspectiveAPI(get_env_or_error("API_KEY_PERSPECTIVE"))
 
     if repeat_penality < 0:
         raise ValueError("Repeat penality should be a positive number")
@@ -881,8 +891,9 @@ API_KEY_PROMPT_GENERATOR: str
 URL_PROMPT_GENERATOR: str
 URL_SUT: str
 API_KEY_SUT: str
+p: PerspectiveAPI
 
-p = PerspectiveAPI(get_env_or_error("API_KEY_PERSPECTIVE"))
+#p = PerspectiveAPI(get_env_or_error("API_KEY_PERSPECTIVE"))
 
 if __name__ == "__main__":
     run(_anyio_backend="asyncio")  # or asyncio
