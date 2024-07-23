@@ -30,7 +30,7 @@ def createFolderDf(input):
     data=[]
     for folder in folders:
         # load json files
-        files=get_files(input+folder, includeBaseline=False)
+        files=get_files(input+"/"+folder, includeBaseline=False)
         for file in files:
             archive=Archive.from_dict(orjson.loads(open(file, 'rb').read()))
             config=archive.config

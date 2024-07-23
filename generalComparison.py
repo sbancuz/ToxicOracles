@@ -27,7 +27,11 @@ def pickBest(folder):
     bestAverage=None
     for file in files:
         with open(file) as f:
-            data = Archive.from_dict(orjson.loads(f.read()))
+            try:
+                data = Archive.from_dict(orjson.loads(f.read()))
+            except:
+                print("Error in file: "+file)
+                continue
             # compute the average score for the final iteration
             scoreSum=0
             for iteration in data.runs:
@@ -211,29 +215,21 @@ def grouped(input, output, extension, verbose, groupby, criteria, type, save=Tru
     criteria: the criteria to use for selecting the best score (max, min, avg, median)
     type: the type of plot (line, boxplot, violinplot) [line creates a single plot, boxplot/violin create a plot for each iteration]
     save: whether to save the plot or not
-    ''' 
-    data=pd.DataFrame()
-    for folder in input:
-        # compute the mean score in each iteration, for each run considering all the files
-        configurationData=pd.DataFrame()
-        files = get_files(folder, includeBaseline=False)
-        for file in files:
-            with open(file) as f:
-                archive=Archive.from_dict(orjson.loads(f.read()))
-                for run in archive.runs:
-                    iterationscores=[get_score(list(run.initial.criterion.values()), criteria)]
-                    for i in range(archive.config.iterations):
-                        taken=run.taken[i]
-                        iterationscores.append(get_score(list(taken.criterion.values()), criteria))
-                    configurationData=pd.concat([configurationData, pd.DataFrame(iterationscores).transpose()])
-        # compute the mean score for each iteration
-       # meanScore=configurationData.mean()
-        # add the sut and sg to the data
-        configurationData["system_under_test"]=archive.config.system_under_test
-        configurationData["prompt_generator"]=archive.config.prompt_generator
-        data=pd.concat([data, pd.DataFrame(configurationData)])
+    # ''' 
+    data = load_data(input=input, criteria=criteria, includeBaseline=False).pivot_table(
+    index=['system_under_test', 'prompt_generator'],
+    columns='iteration',
+    values='score'
+)
+        # Reset the index to flatten the DataFrame
+    data = data.reset_index()
 
-    
+    # Flatten the columns' MultiIndex created by the pivot
+    data.columns.name = None
+    data.columns = data.columns.map(str)
+
+    #data.drop(["file", "numberIterations", "delta_time_evaluation", "delta_time_generation", "delta_time_response", "category"], axis=1, inplace=True)
+
     if groupby=="system_under_test":
         data=data.drop("prompt_generator", axis=1)
     elif groupby=="prompt_generator":

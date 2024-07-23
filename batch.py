@@ -110,6 +110,13 @@ def run_command(command):
     help="Save the json files",
     default=False,
 )
+@click_option(
+    "-cd",
+    "--contextDivergence",
+    is_flag=True,
+    help="Run the context divergence script",
+    default=False,
+)
 def main(
     all,
     chat_analysis: bool,
@@ -124,7 +131,8 @@ def main(
     extension: str,
     generalcomparison: bool,
     wordcloud: bool,
-    savejson: bool
+    savejson: bool,
+    contextdivergence: bool,
 ):
     if all:
         chat_analysis = True
@@ -135,6 +143,7 @@ def main(
         general_sentence_analysis = True
         generalcomparison = True
         wordcloud = True
+        contextdivergence = True
 
     criteria = ["max", "min", "avg", "median"]
     if output is None:
@@ -224,6 +233,11 @@ def main(
                 run_command(
                     f"python3 generalComparison.py --input {inputGC} --output {outputGC} --type {type} -e {extension} -m"
                 )
+        for analysis in ["time"]:
+            for groupby in ["sut", "sg"]:
+                run_command(
+                    f"python3 generalComparison.py --input {inputGC} --output {outputGC} --type boxplot -e {extension} --analysis {analysis} --groupby {groupby} -m"
+                )
             
 
     
@@ -232,6 +246,19 @@ def main(
         run_command(
             f"python3 clouds.py --input {input} --output {output} --extension {extension}"
         )
+    
+    if contextdivergence:
+        print("Running context divergence")
+        # input folder for the general comparison is the input path without the last folder
+        inputGC = os.path.dirname(input)
+
+        #output folder is the same as the input folder
+        outputGC = inputGC
+        run_command(
+            f"python3 tools/contextDivergence.py --input {inputGC} --output {outputGC} --extension {extension}"
+        )
+
+    
         
     
 
