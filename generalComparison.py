@@ -53,18 +53,19 @@ def plotCategories(categories_df, output, extension, verbose, legend, save=True,
     verbose: whether to show the plot or not
     '''
     categories_df.plot(kind="bar", stacked=False, alpha=0.5, edgecolor="black")
-    plt.title("Categories distribution")
     # set size of the plot
     plt.gcf().set_size_inches(12, 7)
+    plt.rcParams.update({'font.size': 18})
 
-    plt.xticks(rotation=25, ha="right")
+    plt.xticks(rotation=35, ha="right")
+    plt.xlabel("")
     # plot the legend inside the plot
     plt.legend(legend, loc="upper right", bbox_to_anchor=(1, 1))
     # set the right padding to show the legend
     plt.subplots_adjust(right=0.95, left=0.075, top=0.9)
     plt.title(title)
     if save:
-        plt.savefig(output + f"/categoriesDistribution.{extension}", dpi=300, format=extension)
+        plt.savefig(output + f"/rq3.{extension}", dpi=300, format=extension)
     #else:
         # return the figure
         #return plt.gcf()
@@ -201,7 +202,7 @@ def all(input, output, extension, verbose, criteria, type):
 
     plotCategories(categories_df, output, extension, verbose, legend)
 
-def grouped(input, output, extension, verbose, groupby, criteria, type, save=True):
+def grouped(input, output, extension, verbose, groupby, criteria, type, fig, save=True):
     '''
     This function is used to plot the results of the experiments grouped by the given criteria (sut or sg).
     It can:
@@ -238,19 +239,19 @@ def grouped(input, output, extension, verbose, groupby, criteria, type, save=Tru
     
 
     if type=="line":
-        plt.figure()
+        #fig = plt.figure(figsize=(5, 1))
         # compute the mean score for each group
         data=data.groupby([groupby]).mean()
         data=data.transpose()
         # plot the data on a single figure
         
         data.plot()
-        plt.legend(title=groupby)
+        plt.legend(title=groupby.replace("_", " "))
         
-        plt.xlabel("Iteration")
-        plt.ylabel("Score")
-        title=f"Comparison of the different {groupby.replace('_', ' ')}"
-        plt.title(title)
+        plt.xlabel("#generation")
+        plt.ylabel("score")
+        #title=f"Comparison of the different {groupby.replace('_', ' ')}"
+        #plt.title(title)
     elif type=="violin" or type=="boxplot":
 
         columns = data.columns[:-1]
@@ -292,10 +293,9 @@ def grouped(input, output, extension, verbose, groupby, criteria, type, save=Tru
         raise ValueError("Invalid type parameter")
 
     if save:
-        plt.savefig(output + f"/groupedComparison-{type}-{criteria}-{groupby}.{extension}", dpi=300, format=extension)
+        plt.savefig(output + f"rq1_summary_{type}_{criteria}_{groupby}.{extension}", dpi=300, format=extension)
     if verbose:
         plt.show()
-    plt.close()
     
 def load_data(input, criteria, includeBaseline=False):
     '''
