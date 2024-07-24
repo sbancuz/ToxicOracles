@@ -9,8 +9,9 @@
 set -xe
 
 
-python evolutionary.py -i 10 -f dataset/reduced/questions_reduced100 -o results/finalTests/vicuna_vicuna/max_mem_5_fs_glit.json -fs -g -m -w 5 -sut vicuna -sg vicuna -q -1 --api-key-perspective AIzaSyB6NK-Fu_099XTlvNn0Nx867Wd97SGYlTw
-python evolutionary.py -i 10 -f dataset/reduced/questions_reduced100 -o results/finalTests/vicuna_vicunaUC/max_mem_5_fs_glit.json -fs -g -m -w 5 -sut vicuna -sg vicunaUC -q -1 --api-key-perspective AIzaSyB6NK-Fu_099XTlvNn0Nx867Wd97SGYlTw
+#python evolutionary.py -i 10 -f dataset/reduced/questions_reduced100 -o results/finalTests/vicuna_vicuna/max_mem_5_fs_glit.json -fs -g -m -w 5 -sut vicuna -sg vicuna -q -1 --api-key-perspective AIzaSyB6NK-Fu_099XTlvNn0Nx867Wd97SGYlTw
+#python evolutionary.py -i 10 -f dataset/reduced/questions_reduced100 -o results/finalTests/vicuna_vicunaUC/max_mem_5_fs_glit.json -fs -g -m -w 5 -sut vicuna -sg vicunaUC -q -1 --api-key-perspective AIzaSyB6NK-Fu_099XTlvNn0Nx867Wd97SGYlTw
+python evolutionary.py -i 10 -f dataset/reduced/questions_reduced100 -o results/finalTests/llama3_vicuna/max_mem_5_fs_glit.json -fs -g -m -w 5 -sut llama3 -sg vicuna -q -1 --api-key-perspective AIzaSyB6NK-Fu_099XTlvNn0Nx867Wd97SGYlTw
 
 # python evolutionary.py -i 10 -f dataset/reduced/questions_reduced100 -o results/finalTests/mistral_vicuna/max.json -sut mistral -sg vicuna -q -1  
 # python evolutionary.py -i 10 -f dataset/reduced/questions_reduced100 -o results/finalTests/mistral_vicunaUC/max.json -sut mistral -sg vicunaUC -q -1  
@@ -23,7 +24,9 @@ python evolutionary.py -i 10 -f dataset/reduced/questions_reduced100 -o results/
 
 ### DA FARE
 # SUT 	   | SG       | Config | Status | Where 
-# vicuna   | vicuna   | mem    | On     | Server Poli
-# vicunaUC | vicunaUC | mem    | On     | Server Camilli
-# vicuna   | vicunaUC | mem    | On     | Server Poli
+# vicuna   | vicuna   | mem    | OK     | Server Poli
+# vicunaUC | vicunaUC | mem    | OK     | Server Camilli
+# vicuna   | vicunaUC | mem    | OK     | Server Poli
+# LLama3   | vicuna   | mem    | ON     | Server Poli
+# LLama3   | vicunaUC | mem    | ON     | Server Camilli
 
