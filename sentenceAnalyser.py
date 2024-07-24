@@ -140,10 +140,10 @@ def progressive(input, type, extension, output, savejson=False, plot=True):
         #files = glob.glob(input+"/*.json")
         # remove baseline.json from the list of files
         #files = [f for f in files if "baseline.json" not in f]
-        print(files)
+        #print(files)
     else:
         files = input
-        print("prova")
+        #print("prova")
 
     if not os.path.exists(output):
         os.makedirs(output)
@@ -272,7 +272,7 @@ def distanceFromInitialPrompt(input, type, extension, output, savejson=False, pl
     else:
         files = input
     #files = glob.glob(input + "/*.json")
-    print(files)
+    #print(files)
     data = []
     for file in tqdm(files):
         # filename without path and extension

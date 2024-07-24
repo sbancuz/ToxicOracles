@@ -122,7 +122,7 @@ def main(input, output, type, extension):
         df=computeGeneralInitial(input, output, type, extension)
     if type=="progressive" or type=="all":
         df=computeGeneralProgressive(input)
-        print(df)
+        #print(df)
         plot(df, 'violin', 'svg', './results/finalTests', 'SUT', "Progressive Context Divergence", "progressive")
         plot(df, 'violin', 'svg', './results/finalTests', 'SG', "Progressive Context Divergence", "progressive")
         plot(df, 'box', 'svg', './results/finalTests', 'SUT', "Progressive Context Divergence", "progressive")
