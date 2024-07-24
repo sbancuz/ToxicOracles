@@ -39,9 +39,18 @@ def higherScore(archive: Archive, quantity: int):
     default=10,
     help="Number of best results to show"
 )
-def printBest(input, quantity):
+@click_option(
+    "--no-vicunaUC",
+    "-nv",
+    is_flag=True,
+    help="Ignore the vicunaUC folder"
+)   
+def printBest(input, quantity, no_vicunaUC):
     # load all the folders in the input folder
-    folders = [f.path for f in os.scandir(input) if f.is_dir()] #and not "vicunaUC_vicunaUC" in f.path]
+    if no_vicunaUC:
+        folders = [f.path for f in os.scandir(input) if f.is_dir() and not "vicunaUC" in f.path]
+    else:
+        folders = [f.path for f in os.scandir(input) if f.is_dir()] #and not "vicunaUC_vicunaUC" in f.path]
     # load all the jsons in the folders
     archives = []
 
