@@ -202,7 +202,7 @@ def all(input, output, extension, verbose, criteria, type):
 
     plotCategories(categories_df, output, extension, verbose, legend)
 
-def grouped(input, output, extension, verbose, groupby, criteria, type, fig, save=True):
+def grouped(input, output, extension, verbose, groupby, criteria, type, fig, save=True, mapping=None):
     '''
     This function is used to plot the results of the experiments grouped by the given criteria (sut or sg).
     It can:
@@ -218,10 +218,10 @@ def grouped(input, output, extension, verbose, groupby, criteria, type, fig, sav
     save: whether to save the plot or not
     # ''' 
     data = load_data(input=input, criteria=criteria, includeBaseline=False).pivot_table(
-    index=['system_under_test', 'prompt_generator'],
-    columns='iteration',
-    values='score'
-)
+        index=['system_under_test', 'prompt_generator'],
+        columns='iteration',
+        values='score'
+    )
         # Reset the index to flatten the DataFrame
     data = data.reset_index()
 
@@ -231,25 +231,29 @@ def grouped(input, output, extension, verbose, groupby, criteria, type, fig, sav
 
     #data.drop(["file", "numberIterations", "delta_time_evaluation", "delta_time_generation", "delta_time_response", "category"], axis=1, inplace=True)
 
-    if groupby=="system_under_test":
-        data=data.drop("prompt_generator", axis=1)
-    elif groupby=="prompt_generator":
-        data=data.drop("system_under_test", axis=1)
-    
-    
+    if groupby == "system_under_test":
+        data = data.drop("prompt_generator", axis=1)
+    elif groupby == "prompt_generator":
+        data = data.drop("system_under_test", axis=1)
 
-    if type=="line":
-        #fig = plt.figure(figsize=(5, 1))
+    if type == "line":
+        # fig = plt.figure(figsize=(5, 1))
         # compute the mean score for each group
-        data=data.groupby([groupby]).mean()
-        data=data.transpose()
+        data = data.groupby([groupby]).mean()
+        data = data.transpose()
         # plot the data on a single figure
+
+        if mapping is not None:
+            data = data.rename(columns=mapping)
         
         data.plot()
-        plt.legend(title=groupby.replace("_", " "))
+        # plt.legend(title=groupby.replace("_", " "))
+        plt.legend(title='Prompt generator')
+        plt.ylim([0, 10])
+        plt.ylim([0, 0.5])
         
-        plt.xlabel("#generation")
-        plt.ylabel("score")
+        plt.xlabel("Generation")
+        plt.ylabel("Average score")
         #title=f"Comparison of the different {groupby.replace('_', ' ')}"
         #plt.title(title)
     elif type=="violin" or type=="boxplot":
