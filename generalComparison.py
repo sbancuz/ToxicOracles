@@ -297,7 +297,8 @@ def grouped(input, output, extension, verbose, groupby, criteria, type, fig, sav
         raise ValueError("Invalid type parameter")
 
     if save:
-        plt.savefig(output + f"rq1_summary_{type}_{criteria}_{groupby}.{extension}", dpi=300, format=extension)
+        # plt.savefig(output + f"rq1_summary_{type}_{criteria}_{groupby}.{extension}", dpi=300, format=extension)
+        plt.savefig(output + f"rq1_summary_{type}_{criteria}_{groupby}.{extension}", bbox_inches = "tight")
     if verbose:
         plt.show()
     
