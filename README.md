@@ -43,6 +43,48 @@ python plotter.py --help
 |---|---|---|---|---|---|
 |`--file`                |`-f`|yes   |`Path`                            |``| File to load the questions from'|
 |`--output`             |`-o`|no|`Path`                               |`out/output_*.png`                     | Output file path to store the result of the computation|
+
+## LLM Server
+
+> [!NOTE]  
+> All commands and scripts mentioned in this section are expected to be run from the project directory
+
+
+LLMs are served via a [Llama CPP Python](https://github.com/ggerganov/llama.cpp) API running in a [Docker](https://www.docker.com) container.
+Hereafter are the instructions to build the Docker image, download the quantised models we used in the experiments in GGUF format and start the service with the API.
+
+### Build docker image
+
+To build the Docker image run 
+
+```bash
+docker build . -f ./docker/llm_server/Dockerfile -t llm_server
+```
+
+### Download models
+
+To download the models we used in the experiments run
+
+```bash
+bash ./scripts/download_llm.sh
+```
+
+### Start service
+
+To start the server with `<model>` LLM on port `<port>` run
+
+```bash
+bash ./scripts/start_llm_server.sh -m <model> -p <port>
+```
+
+The script will generate a text file named `llm_server_<date>_<model>` (`<date>` uses the format `"%Y_%m_%d_%H_%M_%S"`) containing the API key to authenticate to the LLM server and use the completion services.
+
+For further details on the script run
+
+```bash
+bash ./scripts/start_llm_server.sh -h
+```
+
 ## Analysis
 `analysis.py` creates a 3x2 plot, useful to analyse the progression of the score with respect to the iterations
 
