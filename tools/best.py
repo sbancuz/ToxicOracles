@@ -39,14 +39,41 @@ def higherScore(archive: Archive, quantity: int):
     default=10,
     help="Number of best results to show"
 )
-def printBest(input, quantity):
+@click_option(
+    "--no-vicunaUC",
+    "-nv",
+    is_flag=True,
+    help="Ignore the vicunaUC folder"
+)
+
+@click_option(
+    "--configuration",
+    "-c",
+    type=click.Choice(["all", "vanilla", "fs", "fs_glit", "mem_5_fs_glit"]),
+    default="all",
+    help="Configuration to consider"
+)
+def printBest(input, quantity, no_vicunauc, configuration):
     # load all the folders in the input folder
-    folders = [f.path for f in os.scandir(input) if f.is_dir()] #and not "vicunaUC_vicunaUC" in f.path]
+    if no_vicunauc:
+        folders = [f.path for f in os.scandir(input) if f.is_dir() and not "vicunaUC_vicunaUC" in f.path]
+    else:
+        folders = [f.path for f in os.scandir(input) if f.is_dir()] #and not "vicunaUC_vicunaUC" in f.path]
     # load all the jsons in the folders
     archives = []
 
     best=[]
     for folder in folders:
+        if configuration == "all":
+            files=[f for f in os.listdir(folder) if f.endswith(".json")]
+        elif configuration == "vanilla":
+            name="max.json"
+            files=[f for f in os.listdir(folder) if f.endswith(".json") and name in f]
+        else:
+            files=[f for f in os.listdir(folder) if f.endswith(".json") and "max_"+configuration+".json" in f]
+        
+        print(files)
+        
         for filename in os.listdir(folder):
             if filename.endswith(".json") and not filename.startswith("baseline"):
                 #print(f"Loading {folder+filename}")
