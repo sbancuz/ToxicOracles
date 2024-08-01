@@ -23,14 +23,4 @@ python evolutionary.py -i 10 -f dataset/reduced/questions_reduced100 -o results/
 # python evolutionary.py -i 10 -f dataset/reduced/questions_reduced100 -o results/finalTests/vicuna_vicunaUC/max.json -sut vicuna -sg vicunaUC -q -1  
 # python evolutionary.py -i 10 -f dataset/reduced/questions_reduced100 -o results/finalTests/vicunaUC_vicunaUC/max.json -sut vicunaUC -sg vicunaUC -q -1  
 # python evolutionary.py -i 10 -f dataset/reduced/questions_reduced100 -o results/finalTests/mistral_mistral/max.json -sut mistral -sg mistral -q -1  
-# python evolutionary.py -i 10 -f dataset/reduced/questions_reduced100 -o results/finalTests/vicuna_mistral/max.json -sut vicuna -sg mistral -q -1  
-
-
-### DA FARE
-# SUT 	   | SG       | Config | Status | Where 
-# vicuna   | vicuna   | mem    | OK     | Server Poli
-# vicunaUC | vicunaUC | mem    | OK     | Server Camilli
-# vicuna   | vicunaUC | mem    | OK     | Server Poli
-# LLama3   | vicuna   | mem    | ON     | Server Poli
-# LLama3   | vicunaUC | mem    | ON     | Server Camilli
-
+# python evolutionary.py -i 10 -f dataset/reduced/questions_reduced100 -o results/finalTests/vicuna_mistral/max.json -sut vicuna -sg mistral -q -1
