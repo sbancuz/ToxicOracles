@@ -1,7 +1,7 @@
 # Toxic Oracle
 
 > [!WARNING]  
-> This repository contains code and logs from the toxicity testing of Large Language Models (LLMs). The logs and the other material used during the evaluations include harmful and offensive text, such as hate speech, explicit material, and threats, which are provided solely for research and documentation purposes. This content is intended for researchers, developers, and practitioners in AI safety and ethics. Users should handle the material with professional care and sensitivity, and refrain from using it in a way that could cause harm.
+> This repository contains code and logs from the toxicity testing of Large Language Models. The logs and the other material used during the evaluations include harmful and offensive text, such as hate speech, explicit material, and threats, which are provided solely for research and documentation purposes. This content is intended for researchers, developers, and practitioners in AI safety and ethics. Users should handle the material with professional care and sensitivity, and refrain from using it in a way that could cause harm.
 > 
 > By accessing this repository, you acknowledge the potential risks associated with the content and agree to take full responsibility for its use. The authors and contributors disclaim any liability for misuse or harm caused by the content. If you have any concerns or issues, please contact us.
 
