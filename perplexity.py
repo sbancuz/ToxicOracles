@@ -8,8 +8,7 @@ from tqdm import tqdm
 import json
 
 import torch
-import torch.nn.functional as F
-from torchmetrics.text import Perplexity
+from torchmetrics.functional.text import perplexity
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from transformers import BitsAndBytesConfig
@@ -67,14 +66,8 @@ def main(args: Namespace):
         logits = logits[..., :-1, :].contiguous()
         # shift labels to exclude the first element
         labels = labels[..., 1:].contiguous()
-        # Compute NLL
-        batch_nll = F.cross_entropy(
-            logits.view(-1, logits.size(-1)), labels.view(-1), reduction='none'
-        ).view(labels.size())
         # Compute perplexity
-        batch_ppl = (batch_nll / input_encodings.attention_mask[..., 1:].sum(dim=0)).sum(dim=1).exp()
-        # Append to container
-        ppl.append(batch_ppl)
+        ppl.extend(perplexity(logits[i:i+1], labels[i:i+1], ignore_index=-100).view(1) for i in range(len(batch)))
     ppl = torch.cat(ppl, dim=0).cpu().tolist()
     logging.info("Done computing perplexity over data set")
     # Create results container
