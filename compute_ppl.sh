@@ -17,7 +17,7 @@ directories=(
 )
 # Declare files array
 files=(
-  "baseline.json"
+  #"baseline.json"
   "max.json"
   "max_fs"
   "max_fs_glit.json"
