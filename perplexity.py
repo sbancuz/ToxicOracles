@@ -8,7 +8,6 @@ from tqdm import tqdm
 import json
 
 import torch
-import torch.nn.functional as F
 from torchmetrics.functional.text import perplexity
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
