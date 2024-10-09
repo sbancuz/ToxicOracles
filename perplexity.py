@@ -9,6 +9,7 @@ import json
 
 import torch
 import torch.nn.functional as F
+from torchmetrics.text import Perplexity
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from transformers import BitsAndBytesConfig
@@ -95,7 +96,7 @@ def main(args: Namespace):
     # Save data
     file_name = os.path.basename(args.data_path)
     dir_path = os.path.dirname(args.data_path)
-    with open(os.path.join(dir_path, f'ppl_{file_name}')) as f:
+    with open(os.path.join(dir_path, f'ppl_{file_name}'), 'w') as f:
         json.dump(results, f)
     logging.info(f"Results dumped at `{os.path.join(dir_path, f'ppl_{file_name}')}`")
     # Close script info
