@@ -2,18 +2,18 @@
 set -xe
 
 # HF token
-hf_token="69"
+hf_token="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"
 # Declare models array
 models=(
-  "Open-Orca/Mistral-7B-OpenOrca"
+  #"Open-Orca/Mistral-7B-OpenOrca"
   "meta-llama/Meta-Llama-3-8B-Instruct"
-  "lmsys/vicuna-13b-v1.5-16k"
+  #"lmsys/vicuna-13b-v1.5-16k"
 )
 # Declare directories array (list of lists)
 directories=(
-  "results/finalTests/mistral_mistral results/finalTests/mistral_vicuna results/finalTests/mistral_vicunaUC"
+  #"results/finalTests/mistral_mistral results/finalTests/mistral_vicuna results/finalTests/mistral_vicunaUC"
   "results/finalTests/llama3_llama3 results/finalTests/llama3_vicuna results/finalTests/llama3_vicunaUC"
-  "results/finalTests/vicuna_mistral results/finalTests/vicuna_vicuna results/finalTests/vicuna_vicunaUC"
+  #"results/finalTests/vicuna_mistral results/finalTests/vicuna_vicuna results/finalTests/vicuna_vicunaUC"
 )
 # Declare files array
 files=(
