@@ -26,7 +26,7 @@ def main(args: Namespace):
         args.model,
         device_map=device,
         torch_dtype=torch.bfloat16,
-        attn_implementation='flash_attention_2',
+        # attn_implementation='flash_attention_2',
         quantization_config=BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_use_double_quant=True,
@@ -49,7 +49,8 @@ def main(args: Namespace):
     logging.info("Computing perplexity over data set")
     ppl = list()
     for batch in tqdm(batched((
-            prompt for run in data['runs']
+            prompt
+            for run in data['runs']
             for prompt in (
                 run['initial']['prompt_from_dataset'], *(taken['input_prompt_for_generation'] for taken in run['taken'])
             )
@@ -60,7 +61,7 @@ def main(args: Namespace):
         labels = input_encodings.input_ids.clone()
         labels[input_encodings.attention_mask == 0] = -100
         # Run data through model
-        logits = model.forward(**input_encodings)
+        logits = model.forward(**input_encodings).logits
         # Shift logits to exclude the last element
         logits = logits[..., :-1, :].contiguous()
         # shift labels to exclude the first element
@@ -70,7 +71,7 @@ def main(args: Namespace):
             logits.view(-1, logits.size(-1)), labels.view(-1), reduction='none'
         ).view(labels.size())
         # Compute perplexity
-        batch_ppl = (batch_nll / input_encodings.attention_mask.sum(dim=1)).sum(dim=1).exp()
+        batch_ppl = (batch_nll / input_encodings.attention_mask[..., 1:].sum(dim=0)).sum(dim=1).exp()
         # Append to container
         ppl.append(batch_ppl)
     ppl = torch.cat(ppl, dim=0).cpu().tolist()
