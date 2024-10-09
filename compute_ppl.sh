@@ -19,7 +19,7 @@ directories=(
 files=(
   #"baseline.json"
   "max.json"
-  "max_fs"
+  "max_fs.json"
   "max_fs_glit.json"
   "max_mem_5_fs_glit.json"
 )
