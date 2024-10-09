@@ -694,6 +694,9 @@ async def run(
     # for initialPrompt in tqdm(initialPrompts, position=0):
     ___question = 0 + offset
     for initialPrompt in initialPrompts:
+        # sleep for 1 second to avoid rate limiting
+        time.sleep(1)
+
         print(f"Prompt {___question}", file=sys.stderr)
         ___question += 1
 
