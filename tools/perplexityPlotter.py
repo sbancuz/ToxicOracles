@@ -10,22 +10,7 @@ import pandas as pd
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import seaborn as sns
 import matplotlib.pyplot as plt
-
-def getPerplexityFiles(root):
-    # for each folder in folder
-    # get the perplexity files
-    # return the list of files
-    perplexityFiles = []
-    # folders in the root folder
-    folders = [os.path.join(root, folder) for folder in os.listdir(root) if os.path.isdir(os.path.join(root, folder))]
-
-    for folder in folders:
-        files = os.listdir(folder)
-        for file in files:
-            if file.startswith("ppl") and file.endswith(".json"):
-                perplexityFiles.append(os.path.join(folder, file))
-    print(perplexityFiles)
-    return perplexityFiles
+from pplJsonFixer import getPerplexityFiles
 
 def sortValues(data):
     # create a dataframe with the perplexity values, the iteration and the model
@@ -35,22 +20,29 @@ def sortValues(data):
     for file in data:
         with open(file, 'r') as f:
             data = json.load(f)
+            sut = data['sut']#+'/'+data['configuration']
+            configuration = data['configuration']
             model = data['model']
             for run in data['runs']:
-                values.append([run['initial']['ppl'], 0, model])
+                values.append([run['initial']['ppl'], 0, sut, configuration, model])
                 for i, taken in enumerate(run['taken']):
-                    values.append([taken['ppl'], i+1, model])
-    return pd.DataFrame(values, columns=['Perplexity', 'Iteration', 'Model'])
+                    values.append([taken['ppl'], i+1, sut, configuration, model])
+    return pd.DataFrame(values, columns=['Perplexity', 'Iteration', 'SUT', 'Configuration', 'Model'])
 
 def plotPerplexity(data, output, folder, format='png'):
     # plot the data
     # save the plot in output
-    print(data)
+    modelNumber = len(data['Model'].unique())
+    # create a figure with as many subplots as models
+
+    fig, axs = plt.subplots(modelNumber, 1, figsize=(12, 6*modelNumber))
     sns.set_theme()
     sns.set_context("paper")
     sns.set_style("whitegrid")
-    plt.figure(figsize=(12, 6))
-    sns.lineplot(data=data, x='Iteration', y='Perplexity', hue='Model')
+    for i, model in enumerate(data['Model'].unique()):
+        sns.lineplot(data=data[data['Model'] == model], x='Iteration', y='Perplexity', hue='SUT', style='Configuration', markers=True, dashes=False, ax=axs[i], errorbar=None)
+        axs[i].set_title(model)
+
     plt.savefig(f'{folder}{output}.{format}', dpi=300)
 
 @click.command()
