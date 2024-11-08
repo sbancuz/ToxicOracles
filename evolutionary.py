@@ -150,9 +150,14 @@ def load_examples(file_path: str):
                 examples[key] = ex_cat
 
 
-def load_questions(file_path: str, amount: int = 20) -> list[str]:
+def load_questions(file_path: str, amount: int = 20, jailbreak: bool= False) -> list[str]:
     """
     This is a function that loads the question from the following dataset (https://huggingface.co/datasets/declare-lab/HarmfulQA) and returns the list of questions
+
+    Args:
+        file_path: The path to the file
+        amount: The amount of questions to load
+        jailbreak: If jailbreak is enabled, thus each jailbreak prefix will be used before each question
 
     Returns:
         The list of questions
@@ -160,11 +165,23 @@ def load_questions(file_path: str, amount: int = 20) -> list[str]:
     global Goffset
 
     file = open(file_path)
+
+    if jailbreak:
+        jailbreakFile = open("examples/jailbreak-prompt.json")
+        jailbreakData = json.load(jailbreakFile)
+        jailbreakFile.close()
+
     questions = []
     count = 0
     for line in file.readlines():
         if count >= Goffset:
-            questions.append(line)
+            if jailbreak:
+                for jailbreakPrompt in jailbreakData:
+                    if not jailbreakPrompt.endswith(" "):
+                        jailbreakPrompt += " "
+                    questions.append(jailbreakPrompt["prompt"] + line)
+            else:
+                questions.append(line)
 
         count += 1
     if amount != -1:
@@ -563,6 +580,13 @@ def get_env_or_error(env_var: str) -> str:
     "--api-key-perspective",
     help="API key for the Perspective API",
 )
+@click_option(
+    "--jailbreak",
+    "-j",
+    is_flag=True,
+    help="Use the jailbreak prefixes"
+)
+
 async def run(
     iterations,
     file,
@@ -585,6 +609,7 @@ async def run(
     system_generator,
     example_file,
     api_key_perspective,
+    jailbreak
 ):
     global GlobalConfig
     global API_KEY_PROMPT_GENERATOR, URL_PROMPT_GENERATOR, API_KEY_SUT, URL_SUT
@@ -686,7 +711,7 @@ async def run(
     archive.start_time_timestamp = time.time()
 
     # Questions are loaded
-    initialPrompts: list[str] = load_questions(file, questions)
+    initialPrompts: list[str] = load_questions(file, questions, jailbreak)
 
     best_convo = ""
 
