@@ -169,6 +169,10 @@ def load_questions(file_path: str, amount: int = 20, jailbreak: bool= False) -> 
     if jailbreak:
         jailbreakFile = open("examples/jailbreak-prompt.json")
         jailbreakData = json.load(jailbreakFile)
+        jailbreaks = []
+        for jailbreakPrompt in jailbreakData:
+            jailbreaks.append(jailbreakPrompt["text"])
+        
         jailbreakFile.close()
 
     questions = []
@@ -176,10 +180,10 @@ def load_questions(file_path: str, amount: int = 20, jailbreak: bool= False) -> 
     for line in file.readlines():
         if count >= Goffset:
             if jailbreak:
-                for jailbreakPrompt in jailbreakData:
-                    if not jailbreakPrompt.endswith(" "):
+                for jailbreakPrompt in jailbreaks:
+                    if jailbreakPrompt[-1]!=" ":
                         jailbreakPrompt += " "
-                    questions.append(jailbreakPrompt["prompt"] + line)
+                    questions.append(jailbreakPrompt + line)
             else:
                 questions.append(line)
 

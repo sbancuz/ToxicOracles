@@ -13,6 +13,7 @@ def main():
     with open('./examples/jailbreak-prompt.csv', 'r') as file:
         reader = csv.DictReader(file, delimiter=';', fieldnames=['id', 'pattern', 'name', 'created_at', 'text'])
         data = []
+        next(reader)
         for row in reader:
             # remove "[INSERT PROMPT HERE]" at the end of some prompts
             if row['text'].endswith('[INSERT PROMPT HERE]'):
