@@ -7,39 +7,15 @@ import click
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from evolutionary import Archive, Config
+from perplexityPlotter import getPerplexityFiles
 
 
-def getPerplexityFiles(root):
-    # for each folder in folder
-    # get the perplexity files
-    # return the list of files
-    perplexityFiles = []
-    # folders in the root folder
-    folders = [os.path.join(root, folder) for folder in os.listdir(root) if os.path.isdir(os.path.join(root, folder))] #and folder != 'vicunaUC_vicunaUC']
-    for folder in folders:
-        # furthermore, search if there are folders named "perplexity" and add the files in those folders
-        perplexityFolder = os.path.join(folder, 'perplexity')
-        # if the folder exists
-        if os.path.exists(perplexityFolder):
-            # list the folders in perplexityFolder
-            perpFolder= [os.path.join(perplexityFolder, folder) for folder in os.listdir(perplexityFolder) if os.path.isdir(os.path.join(perplexityFolder, folder))]
-            for model in perpFolder:
-                files = os.listdir(model)
-                for file in files:
-                    if file.startswith("ppl") and file.endswith(".json"):
-                        perplexityFiles.append(os.path.join(model, file))
-        else:
-            # if the folder does not exist, list the files in the folder
-            files = os.listdir(folder)
-            for file in files:
-                if file.startswith("ppl") and file.endswith(".json"):
-                    perplexityFiles.append(os.path.join(folder, file))
-    return perplexityFiles
+
 
 def fixJsonFiles(data):
     #print(data)
     for file in data:
-        print(file)
+        #print(file)
         with open(file, 'r') as f:
             data = json.load(f)
             # get the name of the grandparent folder
