@@ -15,7 +15,7 @@ def getPerplexityFiles(root):
     # return the list of files
     perplexityFiles = []
     # folders in the root folder
-    folders = [os.path.join(root, folder) for folder in os.listdir(root) if os.path.isdir(os.path.join(root, folder)) and folder != 'vicunaUC_vicunaUC']
+    folders = [os.path.join(root, folder) for folder in os.listdir(root) if os.path.isdir(os.path.join(root, folder))] #and folder != 'vicunaUC_vicunaUC']
     for folder in folders:
         # furthermore, search if there are folders named "perplexity" and add the files in those folders
         perplexityFolder = os.path.join(folder, 'perplexity')
@@ -69,10 +69,6 @@ def fixJsonFiles(data):
                         for i, taken in enumerate(data['runs'][index]['taken']):
                             data['runs'][index]['taken'][i]['score'] = relativeData['runs'][index]['taken'][i]['score']
                         
-                        
-
-
-
         with open(file, 'w') as f:
             json.dump(data, f, indent=4)
     

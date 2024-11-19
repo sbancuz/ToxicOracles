@@ -17,7 +17,7 @@ def sortValues(data):
     # data contains the list of files to read
     # return the dataframe
     values = []
-    baselineValues = []
+    iterations=11
     for file in data:
         with open(file, 'r') as f:
             data = json.load(f)
@@ -31,38 +31,29 @@ def sortValues(data):
                     for i, taken in enumerate(run['taken']):
                         values.append([taken['ppl'], i+1, sut, handle, model, taken['score']])
             else:
-                handle='ppl_'+model
+
+                handle='Jailbreak '+model
                 # case of baseline
                 for run in data['runs']:
-                    baselineValues.append([run['initial']['ppl'], 0, sut, handle, model, run['initial']['score']])
+                    for i in range(iterations):
+                        values.append([run['initial']['ppl'], i, sut, handle, model, run['initial']['score']])
     
-    return pd.DataFrame(values, columns=['Perplexity', 'Iteration', 'SUT', 'Handle', 'Model', 'score']), pd.DataFrame(baselineValues, columns=['Perplexity', 'Iteration', 'SUT', 'Handle', 'Model', 'score'])
+    return pd.DataFrame(values, columns=['Perplexity', 'Iteration', 'SUT', 'Handle', 'Model', 'score'])
 
-def plotPerplexity(data, baseline, output, folder, format='png'):
+def plotPerplexity(data, output, folder, format='png'):
     # plot the data
     # save the plot in output
     modelNumber = len(data['SUT'].unique())
-    iterations=data['Iteration'].max()+1
-
-    # extend the baseline dataframe to have the same number of iterations as the data
-    for i in range(iterations):
-        newBaseline = baseline.copy()
-        newBaseline['Iteration'] = i
-        baseline = pd.concat([baseline, newBaseline])
-    
-    # merge the dataframes
-    data = pd.concat([data, baseline])
-
-
     # create a figure with as many subplots as models
 
     fig, axs = plt.subplots(modelNumber, 1, figsize=(12, 6*modelNumber))
 
     # for each sut plot the perplexity
     for i, sut in enumerate(data['SUT'].unique()):
-        sns.lineplot(data=data[data['SUT'] == sut], x='Iteration', y='Perplexity', hue='Handle', style='Handle', markers=True, dashes=False, ax=axs[i], errorbar=None)
+        sns.lineplot(data=data[data['SUT'] == sut], x='Iteration', y='Perplexity', hue='Handle', style='Handle', markers=False, dashes=False, ax=axs[i], errorbar=None)
         axs[i].set_title(sut)
 
+    #plt.show()
     plt.savefig(f'{folder}{output}.{format}', dpi=300)
 
 def scorePlotter(data, output, folder, format='png'):
@@ -107,25 +98,27 @@ def normalisedScorePlotter(data, baseline, output, folder, format='png'):
     plt.savefig(f'{folder}{output}_norm.{format}', dpi=300)
 
 
-def boxplot(data, baseline, output, folder, format='png'):
+def boxplot(data, output, folder, format='png'):
     modelNumber = len(data['SUT'].unique())
     # create a figure with as many subplots as models
     fig, axs = plt.subplots(modelNumber, 1, figsize=(12, 6*modelNumber))
     # plot the boxplots for each SUT
     for i, model in enumerate(data['SUT'].unique()):
         # create the dataframe, combining the baseline and the data
-        baselinePpl = baseline[baseline['SUT'] == model]
-        baselinePpl['Handle'] = 'JailbreakPrompt '
         dataPpl = data[data['SUT'] == model]
-        dataPpl = pd.concat([dataPpl, baselinePpl])
         sns.boxplot(data=dataPpl, x='Handle', y='Perplexity', ax=axs[i])
         axs[i].set_title(model)
         # set log scale on y
         axs[i].set_yscale('log')
+        # tilt the x labels
+        axs[i].tick_params(axis='x', rotation=10)
+        # hide x title
+        axs[i].set_xlabel('')
+
 
         # print the data relative to the highest perplexity, file and model
         print(f'{model} highest perplexity: {dataPpl["Perplexity"].max()}')
-        print(dataPpl[dataPpl['Perplexity'] == dataPpl['Perplexity'].max()])
+        #print(dataPpl[dataPpl['Perplexity'] == dataPpl['Perplexity'].max()])
 
 
 
@@ -140,10 +133,10 @@ def boxplot(data, baseline, output, folder, format='png'):
 
 def main(folder, output, format):
     perplexityFiles = getPerplexityFiles(folder)
-    data, baseline = sortValues(perplexityFiles)
-    plotPerplexity(data, baseline, output, folder, format)
+    data = sortValues(perplexityFiles)
+    plotPerplexity(data, output, folder, format)
     #normalisedScorePlotter(data, baseline, output, folder, format)
-    boxplot(data, baseline, output, folder, format)
+    boxplot(data, output, folder, format)
 
 if __name__ == '__main__':
     main()
