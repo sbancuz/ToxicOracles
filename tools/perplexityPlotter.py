@@ -68,7 +68,7 @@ def sortValues(data):
     
     return pd.DataFrame(values, columns=['Perplexity', 'Iteration', 'SUT', 'Handle', 'Model', 'score'])
 
-def plotPerplexity(data, output="perplexity", folder="./", format='png'):
+def plotPerplexity(data, output="perplexity", folder="./", format='png', hue="Handle"):
     # plot the data
     # save the plot in output
     modelNumber = len(data['SUT'].unique())
@@ -78,7 +78,7 @@ def plotPerplexity(data, output="perplexity", folder="./", format='png'):
 
     # for each sut plot the perplexity
     for i, sut in enumerate(data['SUT'].unique()):
-        sns.lineplot(data=data[data['SUT'] == sut], x='Iteration', y='Perplexity', hue='Handle', style='Handle', markers=False, dashes=False, ax=axs[i], errorbar=None)
+        sns.lineplot(data=data[data['SUT'] == sut], x='Iteration', y='Perplexity', hue=hue, style=hue, markers=False, dashes=False, ax=axs[i], errorbar=None)
         axs[i].set_title(sut)
 
     #plt.show()
