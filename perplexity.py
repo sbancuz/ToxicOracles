@@ -86,14 +86,20 @@ def main(args: Namespace):
             for run in data['runs']
         ]
     }
-    # Save data
-    file_name = os.path.basename(args.data_path)
-    dir_path = os.path.dirname(args.data_path)
-    with open(os.path.join(dir_path, f'ppl_{file_name}'), 'w') as f:
-        json.dump(results, f)
-    logging.info(f"Results dumped at `{os.path.join(dir_path, f'ppl_{file_name}')}`")
+    if args.output=='':
+        # Save data
+        file_name = os.path.basename(args.data_path)
+        dir_path = os.path.dirname(args.data_path)
+        with open(os.path.join(dir_path, f'ppl_{file_name}'), 'w') as f:
+            json.dump(results, f)
+        logging.info(f"Results dumped at `{os.path.join(dir_path, f'ppl_{file_name}')}`")
+    else:
+        with open(args.output, 'w') as f:
+            json.dump(results, f)
+        logging.info(f"Results dumped at `{args.output}`")
     # Close script info
     logging.info("Script completed successfully")
+    
 
     return 0
 
@@ -126,6 +132,13 @@ if __name__ == "__main__":
         type=int,
         default=32,
         help="How many elements evaluate in a batch (speeds up the process, but may cause OOM Errors if too high)"
+    )
+    # output arguments
+    args_parser.add_argument(
+        '--output',
+        type=str,
+        default='',
+        help="Path to the output file"
     )
     # Run experiment
     main(args_parser.parse_args(sys.argv[1:]))

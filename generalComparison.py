@@ -322,8 +322,9 @@ def load_data(input, criteria, includeBaseline=False):
                 # file name without the extension
                 fileName= os.path.basename(file)
                 fileName=fileName[:fileName.rfind(".")]
-
-
+                # discard the perplexity files
+                if fileName.startswith("ppl"):
+                    continue
                 archive=Archive.from_dict(orjson.loads(f.read()))
                 for run in archive.runs:
                     fileData.append([0, get_score(list(run.initial.criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, "initial", run.initial.delta_time_evaluation, 0, run.initial.delta_time_response, fileName, archive.config.iterations])

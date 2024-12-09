@@ -2,12 +2,12 @@
 set -xe
 
 # HF token
-hf_token="69"
+hf_token="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"
 # Declare models array
 models=(
-  "Open-Orca/Mistral-7B-OpenOrca"
-  "meta-llama/Meta-Llama-3-8B-Instruct"
-  "lmsys/vicuna-13b-v1.5-16k"
+  "EleutherAI/pythia-12b"
+  "EleutherAI/pythia-12b"
+  "EleutherAI/pythia-12b"
 )
 # Declare directories array (list of lists)
 directories=(

@@ -36,7 +36,7 @@ def click_option(*args, **kwargs):
     help="Path to save the reduced dataset to",
 )
 def main(source, questions, output):
-    reduced = load_questions(source, questions)
+    reduced = load_questions(file_path=source, amount=questions)
     # create document with the reduced questions
     with open(output + "/questions_reduced" + str(questions), "w") as f:
         for q in reduced:

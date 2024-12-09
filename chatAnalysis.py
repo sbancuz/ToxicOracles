@@ -149,7 +149,8 @@ def plot(input, silent, output, criteria, extension):
                     category_diff[category] = []
                 category_diff[category].append(difference.iloc[iteration, column])
     ax[3, 0].set_title("Boxplot of score gain by category", size=10)
-    ax[3, 0].boxplot(category_diff.values(), labels=category_diff.keys())
+    if (len(category_diff) != 0):
+        ax[3, 0].boxplot(category_diff.values(), labels=category_diff.keys())
     ax[3, 0].set_xticklabels(ax[3, 0].get_xticklabels(), rotation=45, ha="right")
 
     if logUpdate:
@@ -161,10 +162,11 @@ def plot(input, silent, output, criteria, extension):
         ax[3, 1].set_title("Time spent in each phase (s)", size=10)
         #ax[3, 1].boxplot(df_timestamps)
         # violin plot of the time spent in each phase
-        ax[3, 1].violinplot(df_timestamps, showmeans=True)
-        # set the labels of the x axis, set_ticks()
-        ax[3, 1].set_xticks([1, 2, 3])
-        ax[3, 1].set_xticklabels(["Generation", "Response", "Evaluation"])
+        if len(df_timestamps) > 0:
+            ax[3, 1].violinplot(df_timestamps, showmeans=True)
+            # set the labels of the x axis, set_ticks()
+            ax[3, 1].set_xticks([1, 2, 3])
+            ax[3, 1].set_xticklabels(["Generation", "Response", "Evaluation"])
 
     else:
         ax[3, 1].set_title("Category distribution per prompt", size=10)
@@ -175,14 +177,15 @@ def plot(input, silent, output, criteria, extension):
 
     
     ax[3, 2].set_title("Category distribution per iteration", size=10)
-    df_cat.transpose().apply(pd.Series.value_counts).transpose().plot(
-        kind="bar",
-        stacked=True,
-        ax=ax[3, 2],
-        legend=False,
-        alpha=0.5,
-        edgecolor="black",
-    )
+    if not df_cat.empty:
+        df_cat.transpose().apply(pd.Series.value_counts).transpose().plot(
+            kind="bar",
+            stacked=True,
+            ax=ax[3, 2],
+            legend=False,
+            alpha=0.5,
+            edgecolor="black",
+        )
 
     ax[3, 2].legend(loc="center left", bbox_to_anchor=(1, 0.5))
     # set the label of 3,2 to be straight
