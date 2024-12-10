@@ -26,11 +26,11 @@ files=(
 )
 
 # Loop over the n-gram orders
-for order in "${orders[@]}" do
+for order in "${orders[@]}"; do
   # Loop over training corpora
-  for corpus in "${corpora[@]}" do
+  for corpus in "${corpora[@]}"; do
     # Loop over lists of directories
-    for model_dirs_list in ${direcotries} do
+    for model_dirs_list in "${directories[@]}"; do
       # Get sub-list of directories
       IFS=' ' read -r -a model_dirs <<< "${directories[$i]}"
       # Loop over the directories
@@ -38,7 +38,7 @@ for order in "${orders[@]}" do
         # Loop over the files
         for file in "${files[@]}"; do
           # Run PPL computation
-          python ./perplexity.py --order "${order}" --corpus "${corpus}" --data_path "${dir}/${file}"
+          python ./ngram_perplexity.py --order "${order}" --corpus "${corpus}" --data_path "${dir}/${file}"
         done
       done
     done

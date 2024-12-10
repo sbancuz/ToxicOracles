@@ -113,7 +113,7 @@ def compute_perplexity(lm, data_path, lm_training_corpus):
     logging.info(f"Data loaded")
     # Iterate over prompts
     logging.info("Computing perplexity over data set")
-    ppl = Parallel(verbose=2)(
+    ppl = Parallel(verbose=2, n_jobs=1)(
         delayed(score_document)(lm, prompt)
         for run in data['runs']
         for prompt in (
