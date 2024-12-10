@@ -11,17 +11,13 @@ import bz2
 
 from joblib import Parallel, delayed, parallel_backend
 
-from nltk.util import everygrams, padded_everygram_pipeline
+import nltk
+from nltk.util import everygrams
 from nltk.lm.preprocessing import flatten
 from nltk.lm import KneserNeyInterpolated
 from nltk.tokenize import word_tokenize
-from numpy.f2py.rules import options
-
-from transformers import AutoTokenizer
 
 from datasets import load_dataset
-
-from tqdm import tqdm
 
 
 WIKITEXT2_SEP_REGEX = re.compile(r'( ?= [^=\n]+ = \n)')
@@ -46,7 +42,7 @@ def load_model(path):
 
 
 def score_document(lm, document):
-    return lm.perplexity(ngram for ngram in everygrams(document, min_len=lm.order, max_len=lm.order))
+    return lm.perplexity(ngram for ngram in everygrams(word_tokenize(document), min_len=lm.order, max_len=lm.order))
 
 
 def preprocess_wikitext2_data(data):
@@ -67,7 +63,7 @@ def load_wikitext2():
 
 def load_book_corpus():
     train = (sample['text'] for sample in load_dataset(
-        'bookcorpus/bookcorpus', streaming=True, split='train', trust_remote_code=True
+        'lucadiliello/bookcorpusopen', streaming=True, split='train', trust_remote_code=True
     ))
 
     return train, None, None
@@ -118,10 +114,10 @@ def compute_perplexity(lm, data_path, lm_training_corpus):
     # Iterate over prompts
     logging.info("Computing perplexity over data set")
     ppl = Parallel(verbose=2)(
-        delayed(score_document)(prompt)
+        delayed(score_document)(lm, prompt)
         for run in data['runs']
         for prompt in (
-            run['initial']['prompt_from_dataset'],
+            run['initial']['prompt_from_dataset' if 'prompt_from_dataset' in run['initial'] else 'promptFromDataset'],
             *(taken['input_prompt_for_generation'] for taken in run['taken'])
         )
     )
@@ -166,11 +162,13 @@ def main(args: Namespace):
         logging.info(f'Creating n-gram model directory at `{os.path.abspath(args.model_dir)}`')
 
     with parallel_backend('threading'):
+        # Dowload tokeniser
+        nltk.download('punkt_tab')
         # Get n-gram language model
         lm = get_model(args.order, args.corpus, corpora[args.corpus], args.model_dir)
         logging.info(f'N-gram model ready for use')
         # Score perplexity on selected data
-        compute_perplexity(lm, args.model_dir, args.corpus)
+        compute_perplexity(lm, args.data_path, args.corpus)
         logging.info(f'Perplexity computed')
     # Close script info
     logging.info("Script completed successfully")
