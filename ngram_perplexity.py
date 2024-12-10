@@ -130,7 +130,12 @@ def compute_perplexity(lm, data_path, lm_training_corpus):
         'n-gram': {'order': lm.order, 'training_corpus': lm_training_corpus},
         'runs': [
             {
-                'initial': {'prompt_from_dataset': run['initial']['prompt_from_dataset'], 'ppl': next(ppl_iterator)},
+                'initial': {
+                    'prompt_from_dataset': run['initial'][
+                        'prompt_from_dataset' if 'prompt_from_dataset' in run['initial'] else 'promptFromDataset'
+                    ],
+                    'ppl': next(ppl_iterator)
+                },
                 'taken': [
                     {'input_prompt_for_generation': taken['input_prompt_for_generation'], 'ppl': next(ppl_iterator)}
                     for taken in run['taken']
