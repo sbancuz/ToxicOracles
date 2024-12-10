@@ -5,9 +5,8 @@ set -xe
 hf_token="69"
 # Declare models array
 models=(
-  "Open-Orca/Mistral-7B-OpenOrca"
-  "meta-llama/Meta-Llama-3-8B-Instruct"
-  "lmsys/vicuna-13b-v1.5-16k"
+  "EleutherAI/pythia-12b"
+  "gpt2-xl"
 )
 # Declare directories array (list of lists)
 directories=(
@@ -25,16 +24,18 @@ files=(
 )
 
 # Loop over the models
-for i in "${!models[@]}"; do
-  model="${models[$i]}"
-  # Get corresponding directories for the current model
-  IFS=' ' read -r -a model_dirs <<< "${directories[$i]}"
-  # Loop over the directories for the current model
-  for dir in "${model_dirs[@]}"; do
-    # Loop over the files
-    for file in "${files[@]}"; do
-      # Run PPL computation
-      python ./perplexity.py --model "${model}" --token "${hf_token}" --data_path "${dir}/${file}" --batch_size 16
+for model in "${models[@]}" do
+  # Loop over lists of directories
+  for model_dirs_list in ${direcotries} do
+    # Get sub-list of directories
+    IFS=' ' read -r -a model_dirs <<< "${directories[$i]}"
+    # Loop over the directories
+    for dir in "${model_dirs[@]}"; do
+      # Loop over the files
+      for file in "${files[@]}"; do
+        # Run PPL computation
+        python ./perplexity.py --model "${model}" --token "${hf_token}" --data_path "${dir}/${file}" --batch_size 16
+      done
     done
   done
 done
