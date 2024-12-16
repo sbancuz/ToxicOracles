@@ -21,3 +21,5 @@ dataset/datasetVariety/*.json
 dataset/reduced/datasetVariety/*.json
 dataset/datasetVarietySimilarity.json
 dataset/HarmfulQA_datasetVarietySimilarity.json
+
+*.pdf

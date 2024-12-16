@@ -36,7 +36,7 @@ def higherScore(archive: Archive, quantity: int):
     "--quantity",
     "-q",
     type=int,
-    default=10,
+    default=100,
     help="Number of best results to show"
 )
 @click_option(
@@ -72,7 +72,7 @@ def printBest(input, quantity, no_vicunauc, configuration):
         else:
             files=[f for f in os.listdir(folder) if f.endswith(".json") and "max_"+configuration+".json" in f]
         
-        print(files)
+        #print(files)
         
         for filename in os.listdir(folder):
             if filename.endswith(".json") and not filename.startswith("baseline"):
@@ -81,19 +81,19 @@ def printBest(input, quantity, no_vicunauc, configuration):
                     archives.append(Archive.from_dict(json.load(file)))
     
     for archive in archives:
-        
-        bestIterations, config = higherScore(archive, quantity)
-        # append the best iterations to the best list, without considering the quantity
-        best.append((bestIterations, config))
-    
-    
-    # sort the best list by the score of the best iteration
+        if archive.config.iterations>0:
+            bestIterations, config = higherScore(archive, quantity)
+            # append the best iterations to the best list, without considering the quantity
+            best.append((bestIterations, config))
     best.sort(key=lambda x: get_score(list(x[0][0].criterion.values()), "max"), reverse=True)
     best = best[:quantity]
     for i in best:
         print(f"Score: {get_score(list(i[0][0].criterion.values()), 'max')}")
-        print(f"Config: {i[1]}")
-        print(f"Iteration: {i[0][0]}")
+        #print(f"Config: {i[1]}")
+        #print(f"Iteration: {i[0][0]}")
+        print(f"Input: {i[0][0].generated_prompt_for_sut}")
+        print(f"Output: {i[0][0].response_from_sut}")
+
         print("\n\n\n\n")
 
 

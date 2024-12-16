@@ -302,7 +302,7 @@ def grouped(input, output, extension, verbose, groupby, criteria, type, fig, sav
     if verbose:
         plt.show()
     
-def load_data(input, criteria, includeBaseline=False):
+def load_data(input, criteria, includeBaseline=False, max_samples=None):
     '''
     This function is used to load the data from the input folder and return a pandas dataframe with the data
     input: the path to the folders containing the results of the experiments (as a list of folders)
@@ -319,6 +319,7 @@ def load_data(input, criteria, includeBaseline=False):
         for file in files:
             #print(get_files(folder))
             with open(file) as f:
+                counter=0
                 # file name without the extension
                 fileName= os.path.basename(file)
                 fileName=fileName[:fileName.rfind(".")]
@@ -326,10 +327,17 @@ def load_data(input, criteria, includeBaseline=False):
                 if fileName.startswith("ppl"):
                     continue
                 archive=Archive.from_dict(orjson.loads(f.read()))
+                isBaseline = archive.config.iterations == 0
                 for run in archive.runs:
-                    fileData.append([0, get_score(list(run.initial.criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, "initial", run.initial.delta_time_evaluation, 0, run.initial.delta_time_response, fileName, archive.config.iterations])
+                    if max_samples is None or counter < max_samples:
+                        fileData.append([0, get_score(list(run.initial.criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, "initial", run.initial.delta_time_evaluation, 0, run.initial.delta_time_response, fileName, archive.config.iterations])
+                        if isBaseline:
+                            counter+=1
                     for i in range(archive.config.iterations):
-                        fileData.append([i+1, get_score(list(run.taken[i].criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, run.taken[i].category, run.taken[i].delta_time_evaluation, run.taken[i].delta_time_generation, run.taken[i].delta_time_response, fileName, archive.config.iterations ])
+                        if max_samples is None or counter < max_samples:
+                            fileData.append([i+1, get_score(list(run.taken[i].criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, run.taken[i].category, run.taken[i].delta_time_evaluation, run.taken[i].delta_time_generation, run.taken[i].delta_time_response, fileName, archive.config.iterations ])
+                            if isBaseline:
+                                counter+=1
     data=pd.DataFrame(fileData, columns=["iteration", "score", "system_under_test", "prompt_generator", "category","delta_time_evaluation", "delta_time_generation", "delta_time_response", "file", "numberIterations"])
     return data
 
