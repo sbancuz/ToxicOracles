@@ -3,7 +3,7 @@ set -xe
 
 # Declare n-grams orders array
 orders=(
-  5
+  3 4 5
 )
 # Declare corpora for n-grams array
 corpora=(
