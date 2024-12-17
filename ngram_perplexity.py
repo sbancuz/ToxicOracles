@@ -148,7 +148,11 @@ def compute_perplexity(lm, data_path, lm_training_corpus):
     # Save results
     file_name = os.path.basename(data_path)
     dir_path = os.path.dirname(data_path)
-    results_path = os.path.join(dir_path, f'ppl_{lm.order}_gram__{lm_training_corpus}_{file_name}')
+    for d in ['perplexity', f'{lm.order}_gram__{lm_training_corpus}']:
+        dir_path = os.path.join(dir_path, d)
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
+    results_path = os.path.join(dir_path, f'ppl_{file_name}')
     logging.info(f'Saving results at `{results_path}`')
     with open(results_path, 'w') as f:
         json.dump(results, f)
