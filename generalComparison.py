@@ -308,6 +308,7 @@ def load_data(input, criteria, includeBaseline=False, max_samples=None):
     input: the path to the folders containing the results of the experiments (as a list of folders)
     criteria: the criteria to use for selecting the best score (max, min, avg, median)
     includeBaseline: whether to include the baseline.json file in the data or not
+    max_samples: the maximum number of samples to consider when loading a baseline file
 
     return: a pandas dataframe with the data, with columns: iteration, score, system_under_test, prompt_generator, category, delta_time_evaluation, delta_time_generation, delta_time_response, file, numberIterations
     '''
