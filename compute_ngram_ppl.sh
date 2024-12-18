@@ -3,11 +3,11 @@ set -xe
 
 # Declare n-grams orders array
 orders=(
-  5
+  3 4 5
 )
 # Declare corpora for n-grams array
 corpora=(
-  "wikitext2"
+  # "wikitext2"
   "book_corpus"
 )
 # Declare directories array (list of lists)
@@ -32,7 +32,7 @@ for order in "${orders[@]}"; do
     # Loop over lists of directories
     for model_dirs_list in "${directories[@]}"; do
       # Get sub-list of directories
-      IFS=' ' read -r -a model_dirs <<< "${directories[$i]}"
+      IFS=' ' read -r -a model_dirs <<< "${model_dirs_list[$i]}"
       # Loop over the directories
       for dir in "${model_dirs[@]}"; do
         # Loop over the files

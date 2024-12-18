@@ -19,6 +19,8 @@ from nltk.tokenize import word_tokenize
 
 from datasets import load_dataset
 
+from evolutionary import Archive
+
 
 WIKITEXT2_SEP_REGEX = re.compile(r'( ?= [^=\n]+ = \n)')
 
@@ -72,40 +74,58 @@ def load_book_corpus():
 def get_model(order, corpus, corpus_loader, model_dir):
     # Try to load the model
     model_path = get_model_path(order, corpus, directory=model_dir)
-    try:
-        logging.info(f'Attempting to load model from `{model_path}`')
+    # Check if model already exists
+    if os.path.exists(model_path):
+        logging.info(f'Loading model from `{model_path}`')
         lm = load_model(model_path)
         logging.info(f'Model loaded')
-    except FileNotFoundError:
-        logging.info('Model loading failed fitting a new one on the current corpus')
-        # If model is not available fit one on data set
-        logging.info('Creating model')
-        lm = KneserNeyInterpolated(order)
-        logging.info('Model created')
-        # Get data
-        logging.info('Loading corpus')
-        train_data, *_ = corpus_loader()
-        logging.info('Corpus loaded')
-        # Apply tokenization
-        train_data = Parallel(verbose=2)(delayed(word_tokenize)(sample) for sample in train_data)
-        # Prepare every-grams and vocabulary
-        logging.info('Preparing data (this operation may take a while)')
-        vocab = flatten(train_data)
-        ngrams = (everygrams(sample, max_len=order) for sample in train_data)
-        logging.info('Data preparation completed')
-        # Fit model
-        logging.info('Fitting model (this operation may take a while)')
-        lm.fit(ngrams, vocab)
-        logging.info('Model fitted')
-        # Save model
-        logging.info(f'Saving model at `{model_path}`')
-        save_model(lm, model_path)
-        logging.info('Model saved')
+
+        return lm
+    # Else proceed with model fitting
+    logging.info('No pre-trained model available, fitting a new one on the current corpus')
+    # Create new model instance
+    logging.info('Creating model')
+    lm = KneserNeyInterpolated(order)
+    logging.info('Model created')
+    # Get data
+    logging.info('Loading corpus')
+    train_data, *_ = corpus_loader()
+    logging.info('Corpus loaded')
+    # Apply tokenization
+    train_data = Parallel(verbose=2)(delayed(word_tokenize)(sample) for sample in train_data)
+    # Prepare every-grams and vocabulary
+    logging.info('Preparing data (this operation may take a while)')
+    vocab = flatten(train_data)
+    ngrams = (everygrams(sample, max_len=order) for sample in train_data)
+    logging.info('Data preparation completed')
+    # Fit model
+    logging.info('Fitting model (this operation may take a while)')
+    lm.fit(ngrams, vocab)
+    logging.info('Model fitted')
+    # Save model
+    logging.info(f'Saving model at `{model_path}`')
+    save_model(lm, model_path)
+    logging.info('Model saved')
 
     return lm
 
 
 def compute_perplexity(lm, data_path, lm_training_corpus):
+    # Build results path
+    file_name = os.path.basename(data_path)
+    dir_path = os.path.dirname(data_path)
+    for d in ['perplexity', f'{lm.order}_gram__{lm_training_corpus}']:
+        dir_path = os.path.join(dir_path, d)
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
+    results_path = os.path.join(dir_path, f'ppl_{file_name}')
+    # Check if results have already been computed
+    if os.path.exists(results_path):
+        logging.info(f'Results already computed and dumped at `{results_path}`, skipping computation')
+
+        return
+    # Else proceed with PPL computation
+    logging.info('No pre-computed results available, computing PPL now')
     # Load prompt data
     logging.info(f'Loading prompt data from `{data_path}`')
     with open(data_path) as f:
@@ -113,7 +133,7 @@ def compute_perplexity(lm, data_path, lm_training_corpus):
     logging.info(f"Data loaded")
     # Iterate over prompts
     logging.info("Computing perplexity over data set")
-    ppl = Parallel(verbose=2, n_jobs=1)(
+    ppl = Parallel(verbose=2)(
         delayed(score_document)(lm, prompt)
         for run in data['runs']
         for prompt in (
@@ -126,6 +146,8 @@ def compute_perplexity(lm, data_path, lm_training_corpus):
     logging.info("Reordering results")
     ppl_iterator = iter(ppl)
     results = {
+        'handle': os.path.splitext(file_name)[0],
+        'config': Archive.from_dict(data).config.to_dict(),
         'results_file': data_path,
         'n-gram': {'order': lm.order, 'training_corpus': lm_training_corpus},
         'runs': [
@@ -134,10 +156,15 @@ def compute_perplexity(lm, data_path, lm_training_corpus):
                     'prompt_from_dataset': run['initial'][
                         'prompt_from_dataset' if 'prompt_from_dataset' in run['initial'] else 'promptFromDataset'
                     ],
-                    'ppl': next(ppl_iterator)
+                    'ppl': next(ppl_iterator),
+                    'score': run['initial']['score']
                 },
                 'taken': [
-                    {'input_prompt_for_generation': taken['input_prompt_for_generation'], 'ppl': next(ppl_iterator)}
+                    {
+                        'input_prompt_for_generation': taken['input_prompt_for_generation'],
+                        'ppl': next(ppl_iterator),
+                        'score': taken['score']
+                    }
                     for taken in run['taken']
                 ]
             }
@@ -146,13 +173,6 @@ def compute_perplexity(lm, data_path, lm_training_corpus):
     }
     logging.info("Results reordered")
     # Save results
-    file_name = os.path.basename(data_path)
-    dir_path = os.path.dirname(data_path)
-    for d in ['perplexity', f'{lm.order}_gram__{lm_training_corpus}']:
-        dir_path = os.path.join(dir_path, d)
-        if not os.path.exists(dir_path):
-            os.makedirs(dir_path)
-    results_path = os.path.join(dir_path, f'ppl_{file_name}')
     logging.info(f'Saving results at `{results_path}`')
     with open(results_path, 'w') as f:
         json.dump(results, f)
@@ -170,7 +190,7 @@ def main(args: Namespace):
         os.mkdir(args.model_dir)
         logging.info(f'Creating n-gram model directory at `{os.path.abspath(args.model_dir)}`')
 
-    with parallel_backend('threading'):
+    with parallel_backend('loky'):
         # Dowload tokeniser
         nltk.download('punkt_tab')
         # Get n-gram language model
