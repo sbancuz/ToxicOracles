@@ -3,11 +3,14 @@ set -xe
 
 # Declare n-grams orders array
 orders=(
-  3 4 5
+  3
+  4
+  5
 )
 # Declare corpora for n-grams array
 corpora=(
-  # "wikitext2"
+  "wikitext2"
+  "book_corpus_sentences"
   "book_corpus"
 )
 # Declare directories array (list of lists)
@@ -38,7 +41,7 @@ for order in "${orders[@]}"; do
         # Loop over the files
         for file in "${files[@]}"; do
           # Run PPL computation
-          python ./ngram_perplexity.py --order "${order}" --corpus "${corpus}" --data_path "${dir}/${file}"
+          python ./ngram_perplexity.py --model "ngrams/${order}-gram.${corpus}.arpa" --data_path "${dir}/${file}"
         done
       done
     done

@@ -6,141 +6,68 @@ import logging
 import re
 
 import json
-import pickle
-import bz2
+from kenlm import Model
 
 from joblib import Parallel, delayed, parallel_backend
 
-import nltk
-from nltk.util import everygrams
-from nltk.lm.preprocessing import flatten
-from nltk.lm import KneserNeyInterpolated
 from nltk.tokenize import word_tokenize
-
-from datasets import load_dataset
 
 from evolutionary import Archive
 
-
-WIKITEXT2_SEP_REGEX = re.compile(r'( ?= [^=\n]+ = \n)')
-
-
-def get_model_path(order, corpus, directory=None):
-    file_name = f'{order}_gram__{corpus}.pbz2'
-    return os.path.join(directory, file_name) if directory is not None else file_name
+from typing import Optional, Tuple, Pattern, List, Dict
 
 
-
-def save_model(lm, path):
-    with bz2.BZ2File(path, 'wb') as f:
-        pickle.dump(lm, f)
+KENLM_MODEL_NAME_REGEX: Pattern[str] = re.compile(r'(\d+)-gram\.(\w+)\.arpa')
 
 
-def load_model(path):
-    with bz2.BZ2File(path, 'rb') as f:
-        lm = pickle.load(f)
-
-    return lm
-
-
-def score_document(lm, document):
-    return lm.perplexity(ngram for ngram in everygrams(word_tokenize(document), min_len=lm.order, max_len=lm.order))
-
-
-def preprocess_wikitext2_data(data):
-    data = '\n'.join(sample['text'] for sample in data)
-    data = WIKITEXT2_SEP_REGEX.sub(r'<|separator|>\1', data).strip()
-    _, *data = data.split('<|separator|>')
-
-    return data
+def parse_model_path(model_path: str) -> Optional[Tuple[int, str]]:
+    model_name = os.path.basename(model_path)
+    match = KENLM_MODEL_NAME_REGEX.match(model_name)
+    if match is not None:
+        order, corpus = match.groups()
+        order = int(order)
+        return order, corpus
+    else:
+        return None
 
 
-def load_wikitext2():
-    train = preprocess_wikitext2_data(load_dataset('wikitext', 'wikitext-2-raw-v1', split='train'))
-    validation = preprocess_wikitext2_data(load_dataset('wikitext', 'wikitext-2-raw-v1', split='validation'))
-    test = preprocess_wikitext2_data(load_dataset('wikitext', 'wikitext-2-raw-v1', split='test'))
-
-    return train, validation, test
+def score_document(lm: Model, document: str) -> float:
+    return lm.perplexity(' '.join(word_tokenize(document)).lower())
 
 
-def load_book_corpus():
-    train = (sample['text'] for sample in load_dataset(
-        'lucadiliello/bookcorpusopen', streaming=True, split='train', trust_remote_code=True
-    ))
-
-    return train, None, None
-
-
-def get_model(order, corpus, corpus_loader, model_dir):
-    # Try to load the model
-    model_path = get_model_path(order, corpus, directory=model_dir)
-    # Check if model already exists
-    if os.path.exists(model_path):
-        logging.info(f'Loading model from `{model_path}`')
-        lm = load_model(model_path)
-        logging.info(f'Model loaded')
-
-        return lm
-    # Else proceed with model fitting
-    logging.info('No pre-trained model available, fitting a new one on the current corpus')
-    # Create new model instance
-    logging.info('Creating model')
-    lm = KneserNeyInterpolated(order)
-    logging.info('Model created')
-    # Get data
-    logging.info('Loading corpus')
-    train_data, *_ = corpus_loader()
-    logging.info('Corpus loaded')
-    # Apply tokenization
-    train_data = Parallel(verbose=2)(delayed(word_tokenize)(sample) for sample in train_data)
-    # Prepare every-grams and vocabulary
-    logging.info('Preparing data (this operation may take a while)')
-    vocab = flatten(train_data)
-    ngrams = (everygrams(sample, max_len=order) for sample in train_data)
-    logging.info('Data preparation completed')
-    # Fit model
-    logging.info('Fitting model (this operation may take a while)')
-    lm.fit(ngrams, vocab)
-    logging.info('Model fitted')
-    # Save model
-    logging.info(f'Saving model at `{model_path}`')
-    save_model(lm, model_path)
-    logging.info('Model saved')
-
-    return lm
-
-
-def compute_perplexity(lm, data_path, lm_training_corpus):
+def compute_perplexity(lm: Model, data_path: str, model_path: Optional[str] = None):
     # Build results path
-    file_name = os.path.basename(data_path)
-    dir_path = os.path.dirname(data_path)
-    for d in ['perplexity', f'{lm.order}_gram__{lm_training_corpus}']:
+    model_name: str = os.path.basename(model_path) if model_path is not None else 'ngram'
+    file_name: str = os.path.basename(data_path)
+    dir_path: str = os.path.dirname(data_path)
+    for d in ['perplexity', model_name.replace('.', '_')]:
         dir_path = os.path.join(dir_path, d)
         if not os.path.exists(dir_path):
             os.makedirs(dir_path)
-    results_path = os.path.join(dir_path, f'ppl_{file_name}')
+    results_path: str = os.path.join(dir_path, f'ppl_{file_name}')
     # Check if results have already been computed
     if os.path.exists(results_path):
         logging.info(f'Results already computed and dumped at `{results_path}`, skipping computation')
 
         return
-    # Else proceed with PPL computation
-    logging.info('No pre-computed results available, computing PPL now')
     # Load prompt data
     logging.info(f'Loading prompt data from `{data_path}`')
     with open(data_path) as f:
-        data = json.load(f)
+        data: Dict = json.load(f)
     logging.info(f"Data loaded")
     # Iterate over prompts
     logging.info("Computing perplexity over data set")
-    ppl = Parallel(verbose=2)(
-        delayed(score_document)(lm, prompt)
-        for run in data['runs']
-        for prompt in (
-            run['initial']['prompt_from_dataset' if 'prompt_from_dataset' in run['initial'] else 'promptFromDataset'],
-            *(taken['input_prompt_for_generation'] for taken in run['taken'])
+    with parallel_backend('threading'):
+        ppl: List[float] = Parallel(verbose=2)(
+            delayed(score_document)(lm, prompt)
+            for run in data['runs']
+            for prompt in (
+                run['initial'][
+                    'prompt_from_dataset' if 'prompt_from_dataset' in run['initial'] else 'promptFromDataset'
+                ],
+                *(taken['input_prompt_for_generation'] for taken in run['taken'])
+            )
         )
-    )
     logging.info("Perplexity computed")
     # Create results container
     logging.info("Reordering results")
@@ -149,7 +76,9 @@ def compute_perplexity(lm, data_path, lm_training_corpus):
         'handle': os.path.splitext(file_name)[0],
         'config': Archive.from_dict(data).config.to_dict(),
         'results_file': data_path,
-        'n-gram': {'order': lm.order, 'training_corpus': lm_training_corpus},
+        'n-gram': dict(
+            zip(('order', 'training_corpus'), parse_model_path(model_path))
+        ) if model_path is not None else None,
         'runs': [
             {
                 'initial': {
@@ -179,26 +108,15 @@ def compute_perplexity(lm, data_path, lm_training_corpus):
     logging.info(f'Results saved')
 
 
-corpora = {'wikitext2': load_wikitext2, 'book_corpus': load_book_corpus}
-
-
 def main(args: Namespace):
     # Start logging info
     logging.info('Script started')
-    # Create checkpoint directory (if not exists)
-    if not os.path.exists(args.model_dir):
-        os.mkdir(args.model_dir)
-        logging.info(f'Creating n-gram model directory at `{os.path.abspath(args.model_dir)}`')
-
-    with parallel_backend('loky'):
-        # Dowload tokeniser
-        nltk.download('punkt_tab')
-        # Get n-gram language model
-        lm = get_model(args.order, args.corpus, corpora[args.corpus], args.model_dir)
-        logging.info(f'N-gram model ready for use')
-        # Score perplexity on selected data
-        compute_perplexity(lm, args.data_path, args.corpus)
-        logging.info(f'Perplexity computed')
+    # Get n-gram language model
+    lm: Model = Model(args.model)
+    logging.info(f'N-gram model ready for use')
+    # Score perplexity on selected data
+    compute_perplexity(lm, args.data_path, model_path=args.model)
+    logging.info(f'Perplexity computed')
     # Close script info
     logging.info("Script completed successfully")
 
@@ -209,31 +127,20 @@ if __name__ == "__main__":
     # Instantiate argument parser
     args_parser: ArgumentParser = ArgumentParser(
         prog='evotox_ngram_model_perplexity',
-        description='Script to fit n-gram models on English data and compute perplexity (PPL) on given text'
+        description='Script to compute the perplexity of a given n-gram language model on a given set of prompts '
+                    'generated with the evolutionary search'
     )
     # Add arguments to parser
     args_parser.add_argument(
-        '--order',
-        type=int,
-        default=5,
-        help="N-gram model order"
-    )
-    args_parser.add_argument(
-        '--corpus',
+        '--model',
         type=str,
-        choices=[*corpora],
         required=True,
-        help="Identifier of the corpus to be used to fit the n-gram model"
-    )
-    args_parser.add_argument(
-        '--model_dir',
-        type=str,
-        default='ngrams',
-        help="Path to the directory to save the n-gram models"
+        help="Path to the n-gram model to use"
     )
     args_parser.add_argument(
         '--data_path',
         type=str,
+        required=True,
         help="Path to the JSON file with the data generated by the evolutionary search"
     )
     # Run experiment
