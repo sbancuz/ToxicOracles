@@ -10,14 +10,15 @@ orders=(
 # Declare corpora for n-grams array
 corpora=(
   "wikitext2"
-  "book_corpus_sentences"
-  "book_corpus"
+  # "book_corpus_sentences"
+  # "book_corpus"
 )
 # Declare directories array (list of lists)
 directories=(
   "results/finalTests/mistral_mistral results/finalTests/mistral_vicuna results/finalTests/mistral_vicunaUC"
   "results/finalTests/llama3_llama3 results/finalTests/llama3_vicuna results/finalTests/llama3_vicunaUC"
   "results/finalTests/vicuna_mistral results/finalTests/vicuna_vicuna results/finalTests/vicuna_vicunaUC"
+  "results/finalTests/baselineJailbreak/JailBreakPrompts-Mistral.json results/finalTests/baselineJailbreak/JailbreakPrompts-llama3.json results/finalTests/baselineJailbreak/JailbreakPrompts-vicuna.json results/finalTests/baselineJailbreak/JailbreakPrompts-vicunaUC.json"
 )
 # Declare files array
 files=(
