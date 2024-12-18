@@ -62,8 +62,7 @@ python plotter.py --help
 ## LLM Server
 
 > [!NOTE]  
-> All commands and scripts mentioned in this section are expected to be run from the project directory
-
+> All commands and scripts mentioned in this section are expected to be run from the root project directory
 
 LLMs are served via a [Llama CPP Python](https://github.com/ggerganov/llama.cpp) API running in
 a [Docker](https://www.docker.com) container.
@@ -105,7 +104,25 @@ bash ./scripts/start_llm_server.sh -h
 
 ## N-gram LM perplexity
 
+> [!NOTE]  
+> All commands and scripts mentioned in this section are expected to be run from the root project directory
+
+To use the n-gram LLMs for computing the perplexity we use the [KenLM](https://github.com/kpu/kenlm) library.
+We use the same library to train n-gram models.
+
+Here are the links to the models we trained and the corresponding information on training corpus and the order of the model:
+
+| Corpus                                                                         | 3-gram   | 4-gram   | 5-gram   |
+|--------------------------------------------------------------------------------|----------|----------|----------|
+| [WikiText 2](https://paperswithcode.com/dataset/wikitext-2)                    | [link]() | [link]() | [link]() |
+| [Book Corpus](https://paperswithcode.com/dataset/bookcorpus) (sentences split) | [link]() | [link]() | [link]() |
+| Book Corpus                                                                    | [link]() | [link]() | [link]() |
+
+Alternatively you can fit the same models from scratch.
+
 ### Install KenLM library
+
+Make sure to install the KenLM library using the following commands:
 
 ```bash
 apt install libeigen3-dev
@@ -113,11 +130,23 @@ git clone https://github.com/kpu/kenlm.git
 cd kenlm && mkdir build && cd build && cmake .. && make -j
 ```
 
-Based on the following instructions: https://docs.nvidia.com/deeplearning/riva/user-guide/docs/tutorials/asr-python-advanced-nemo-ngram-training-and-finetuning.html#installing-and-setting-up-kenlm
+This passage is based on the following instructions: https://docs.nvidia.com/deeplearning/riva/user-guide/docs/tutorials/asr-python-advanced-nemo-ngram-training-and-finetuning.html#installing-and-setting-up-kenlm
 
 ### Fit LM
 
-### Compute Perplexity
+There is a script to fit the same n-gram models we used during the evaluation, you can run it with the following command
+
+```bash
+nohup bash ./fit_ngram_models.sh > output_ngram_training.txt &
+```
+
+### Compute perplexity
+
+There is a script to compute the perplexity of the prompts generated during the experiments, you can run it with the following command
+
+```bash
+nohup bash ./compute_ngram_ppl.sh > output_ngram_ppl.txt &
+```
 
 ## Analysis
 
