@@ -79,6 +79,7 @@ def compute_perplexity(lm: Model, data_path: str, model_path: Optional[str] = No
         'n-gram': dict(
             zip(('order', 'training_corpus'), parse_model_path(model_path))
         ) if model_path is not None else None,
+        'model': model_name,
         'runs': [
             {
                 'initial': {
