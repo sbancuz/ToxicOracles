@@ -32,7 +32,8 @@ def load_wikitext2():
 
 def load_book_corpus_full_books():
     train = (sample['text'] for sample in load_dataset(
-        'lucadiliello/bookcorpusopen', streaming=True, split='train', trust_remote_code=True
+        # 'lucadiliello/bookcorpusopen', streaming=True, split='train', trust_remote_code=True
+        'lucadiliello/bookcorpusopen', split='train', trust_remote_code=True
     ))
 
     return train, None, None
@@ -40,7 +41,8 @@ def load_book_corpus_full_books():
 
 def load_book_corpus():
     train = (sample['text'] for sample in load_dataset(
-        'bookcorpus/bookcorpus', streaming=True, split='train', trust_remote_code=True
+        # 'bookcorpus/bookcorpus', streaming=True, split='train', trust_remote_code=True
+        'bookcorpus/bookcorpus', split='train', trust_remote_code=True
     ))
 
     return train, None, None
