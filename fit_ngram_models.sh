@@ -28,9 +28,9 @@ for corpus in "${corpora[@]}"; do
   for order in "${orders[@]}"; do
     # Fit language model
     ./kenlm/build/bin/lmplz -o ${order} < ${tmpfile} > "ngrams/${order}-gram.${corpus}.arpa"
+  done
   # Clean up the temporary file immediately (optional since we are using using trap)
   rm -f "${tmpfile}"
   # Remove RETURN trap if not needed for subsequent commands
   # trap - RETURN
-  done
 done

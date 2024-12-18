@@ -18,7 +18,6 @@ directories=(
   "results/finalTests/mistral_mistral results/finalTests/mistral_vicuna results/finalTests/mistral_vicunaUC"
   "results/finalTests/llama3_llama3 results/finalTests/llama3_vicuna results/finalTests/llama3_vicunaUC"
   "results/finalTests/vicuna_mistral results/finalTests/vicuna_vicuna results/finalTests/vicuna_vicunaUC"
-  "results/finalTests/baselineJailbreak/JailBreakPrompts-Mistral.json results/finalTests/baselineJailbreak/JailbreakPrompts-llama3.json results/finalTests/baselineJailbreak/JailbreakPrompts-vicuna.json results/finalTests/baselineJailbreak/JailbreakPrompts-vicunaUC.json"
 )
 # Declare files array
 files=(
@@ -27,6 +26,13 @@ files=(
   "max_fs.json"
   "max_fs_glit.json"
   "max_mem_5_fs_glit.json"
+)
+# Declare list of file paths
+jailbreak_files=(
+  "results/finalTests/baselineJailbreak/JailBreakPrompts-Mistral.json"
+  "results/finalTests/baselineJailbreak/JailbreakPrompts-llama3.json"
+  "results/finalTests/baselineJailbreak/JailbreakPrompts-vicuna.json"
+  "results/finalTests/baselineJailbreak/JailbreakPrompts-vicunaUC.json"
 )
 
 # Loop over the n-gram orders
@@ -45,6 +51,11 @@ for order in "${orders[@]}"; do
           python ./ngram_perplexity.py --model "ngrams/${order}-gram.${corpus}.arpa" --data_path "${dir}/${file}"
         done
       done
+    done
+    # Loop over the files
+    for file_path in "${jailbreak_files[@]}"; do
+      # Run PPL computation
+      python ./ngram_perplexity.py --model "ngrams/${order}-gram.${corpus}.arpa" --data_path "${file_path}"
     done
   done
 done
