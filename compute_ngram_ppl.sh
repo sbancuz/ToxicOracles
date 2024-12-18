@@ -10,8 +10,8 @@ orders=(
 # Declare corpora for n-grams array
 corpora=(
   "wikitext2"
-  # "book_corpus_sentences"
-  # "book_corpus"
+  "book_corpus_sentences"
+  "book_corpus"
 )
 # Declare directories array (list of lists)
 directories=(
