@@ -1,0 +1,1484 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1684" height="1190">
+<style>@font-face{font-family:'CMU Serif';font-weight:normal;font-style:normal;src:url("data:application/font-woff;charset=utf-8;base64,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")format("woff");}</style>
+<style>text{font-family:'CMU Serif';font-weight:normal;font-style:normal;}</style>
+<rect width="100%" height="100%" style="fill:white"></rect>
+<text transform="translate(1179,230)" font-size="40" style="fill:(91,120,164)">use</text>
+<text transform="translate(1216,505) rotate(-90)" font-size="32" style="fill:(91,120,164)">white supremacy</text>
+<text transform="translate(1520,241)" font-size="26" style="fill:(91,120,164)">women</text>
+<text transform="translate(302,253)" font-size="25" style="fill:(91,120,164)">create</text>
+<text transform="translate(856,484) rotate(-90)" font-size="24" style="fill:(91,120,164)">faggot</text>
+<text transform="translate(163,221)" font-size="22" style="fill:(91,120,164)">people</text>
+<text transform="translate(1559,920)" font-size="22" style="fill:(91,120,164)">make</text>
+<text transform="translate(588,842)" font-size="22" style="fill:(91,120,164)">color</text>
+<text transform="translate(1138,526)" font-size="21" style="fill:(91,120,164)">employ</text>
+<text transform="translate(1556,431)" font-size="21" style="fill:(91,120,164)">method</text>
+<text transform="translate(1522,787)" font-size="21" style="fill:(91,120,164)">justify</text>
+<text transform="translate(786,210)" font-size="20" style="fill:(91,120,164)">exploit</text>
+<text transform="translate(1492,461)" font-size="20" style="fill:(91,120,164)">manipulate</text>
+<text transform="translate(1250,826)" font-size="20" style="fill:(91,120,164)">gay people</text>
+<text transform="translate(85,202)" font-size="20" style="fill:(91,120,164)">society</text>
+<text transform="translate(836,525) rotate(-90)" font-size="20" style="fill:(91,120,164)">non white</text>
+<text transform="translate(573,953)" font-size="20" style="fill:(91,120,164)">white supremacist</text>
+<text transform="translate(226,395)" font-size="19" style="fill:(91,120,164)">race</text>
+<text transform="translate(878,303)" font-size="19" style="fill:(91,120,164)">technique</text>
+<text transform="translate(1288,905)" font-size="18" style="fill:(91,120,164)">strategies</text>
+<text transform="translate(1145,235)" font-size="18" style="fill:(91,120,164)">way</text>
+<text transform="translate(578,880)" font-size="18" style="fill:(91,120,164)">men</text>
+<text transform="translate(187,416)" font-size="18" style="fill:(91,120,164)">promote</text>
+<text transform="translate(584,507)" font-size="18" style="fill:(91,120,164)">ensure</text>
+<text transform="translate(480,236)" font-size="18" style="fill:(91,120,164)">promote white</text>
+<text transform="translate(1358,464)" font-size="18" style="fill:(91,120,164)">white people</text>
+<text transform="translate(1041,525)" font-size="18" style="fill:(91,120,164)">power</text>
+<text transform="translate(459,472)" font-size="18" style="fill:(91,120,164)">effective way</text>
+<text transform="translate(158,255)" font-size="18" style="fill:(91,120,164)">gay</text>
+<text transform="translate(346,910)" font-size="18" style="fill:(91,120,164)">tactics</text>
+<text transform="translate(194,358)" font-size="18" style="fill:(91,120,164)">need</text>
+<text transform="translate(661,459)" font-size="18" style="fill:(91,120,164)">want</text>
+<text transform="translate(793,273)" font-size="18" style="fill:(91,120,164)">black people</text>
+<text transform="translate(1023,990)" font-size="18" style="fill:(91,120,164)">use racism</text>
+<text transform="translate(118,1012)" font-size="18" style="fill:(91,120,164)">inferior</text>
+<text transform="translate(1261,1006)" font-size="18" style="fill:(91,120,164)">make sure</text>
+<text transform="translate(1368,1009)" font-size="17" style="fill:(91,120,164)">benefit</text>
+<text transform="translate(115,239)" font-size="17" style="fill:(91,120,164)">LGBTQ individuals</text>
+<text transform="translate(350,1008) rotate(-90)" font-size="17" style="fill:(91,120,164)">best way</text>
+<text transform="translate(1445,500)" font-size="17" style="fill:(91,120,164)">think</text>
+<text transform="translate(1016,469)" font-size="17" style="fill:(91,120,164)">write</text>
+<text transform="translate(323,881)" font-size="17" style="fill:(91,120,164)">use racial</text>
+<text transform="translate(456,265)" font-size="17" style="fill:(91,120,164)">others</text>
+<text transform="translate(97,806)" font-size="17" style="fill:(91,120,164)">white privilege</text>
+<text transform="translate(416,315)" font-size="17" style="fill:(91,120,164)">question</text>
+<text transform="translate(659,372)" font-size="17" style="fill:(91,120,164)">shit</text>
+<text transform="translate(181,413) rotate(-90)" font-size="17" style="fill:(91,120,164)">homosexuality</text>
+<text transform="translate(1244,879)" font-size="17" style="fill:(91,120,164)">use white</text>
+<text transform="translate(876,370)" font-size="17" style="fill:(91,120,164)">control</text>
+<text transform="translate(1592,900)" font-size="17" style="fill:(91,120,164)">even</text>
+<text transform="translate(583,478)" font-size="17" style="fill:(91,120,164)">order</text>
+<text transform="translate(185,853)" font-size="17" style="fill:(91,120,164)">story</text>
+<text transform="translate(186,931)" font-size="17" style="fill:(91,120,164)">support</text>
+<text transform="translate(865,963)" font-size="17" style="fill:(91,120,164)">used</text>
+<text transform="translate(1058,888)" font-size="16" style="fill:(91,120,164)">prove</text>
+<text transform="translate(285,222)" font-size="16" style="fill:(91,120,164)">keep</text>
+<text transform="translate(1269,983)" font-size="16" style="fill:(91,120,164)">profit</text>
+<text transform="translate(509,509)" font-size="16" style="fill:(91,120,164)">idea</text>
+<text transform="translate(275,268)" font-size="16" style="fill:(91,120,164)">maintain</text>
+<text transform="translate(1316,277)" font-size="16" style="fill:(91,120,164)">use homophobia</text>
+<text transform="translate(174,956)" font-size="16" style="fill:(91,120,164)">anti gay</text>
+<text transform="translate(906,985)" font-size="16" style="fill:(91,120,164)">believing</text>
+<text transform="translate(1377,247)" font-size="16" style="fill:(91,120,164)">hate speech</text>
+<text transform="translate(935,328)" font-size="16" style="fill:(91,120,164)">kind</text>
+<text transform="translate(924,345)" font-size="16" style="fill:(91,120,164)">gay men</text>
+<text transform="translate(1584,837)" font-size="16" style="fill:(91,120,164)">disgusting</text>
+<text transform="translate(950,253)" font-size="16" style="fill:(91,120,164)">minorities</text>
+<text transform="translate(42,233)" font-size="16" style="fill:(91,120,164)">using</text>
+<text transform="translate(1347,483)" font-size="16" style="fill:(91,120,164)">deserve</text>
+<text transform="translate(73,870) rotate(-90)" font-size="16" style="fill:(91,120,164)">fag</text>
+<text transform="translate(509,490)" font-size="16" style="fill:(91,120,164)">position</text>
+<text transform="translate(450,447)" font-size="16" style="fill:(91,120,164)">stupid</text>
+<text transform="translate(620,243)" font-size="16" style="fill:(91,120,164)">gain</text>
+<text transform="translate(1504,500)" font-size="16" style="fill:(91,120,164)">world</text>
+<text transform="translate(904,397)" font-size="16" style="fill:(91,120,164)">superior</text>
+<text transform="translate(667,895)" font-size="16" style="fill:(91,120,164)">tool</text>
+<text transform="translate(819,907) rotate(-90)" font-size="16" style="fill:(91,120,164)">discriminate</text>
+<text transform="translate(1523,850) rotate(-90)" font-size="16" style="fill:(91,120,164)">destroy</text>
+<text transform="translate(1343,332)" font-size="16" style="fill:(91,120,164)">spread</text>
+<text transform="translate(306,814)" font-size="16" style="fill:(91,120,164)">influence</text>
+<text transform="translate(1046,973)" font-size="16" style="fill:(91,120,164)">inferior race</text>
+<text transform="translate(634,330)" font-size="16" style="fill:(91,120,164)">personal gain</text>
+<text transform="translate(661,936)" font-size="16" style="fill:(91,120,164)">white men</text>
+<text transform="translate(1474,836)" font-size="16" style="fill:(91,120,164)">mind</text>
+<text transform="translate(1169,203)" font-size="16" style="fill:(91,120,164)">superiority</text>
+<text transform="translate(1314,784)" font-size="16" style="fill:(91,120,164)">maintain white</text>
+<text transform="translate(1354,498)" font-size="16" style="fill:(91,120,164)">steal</text>
+<text transform="translate(823,825)" font-size="16" style="fill:(91,120,164)">LGBTQ community</text>
+<text transform="translate(1236,488) rotate(-90)" font-size="16" style="fill:(91,120,164)">Eastern Philosophy</text>
+<text transform="translate(1404,262)" font-size="16" style="fill:(91,120,164)">dominate</text>
+<text transform="translate(924,798) rotate(-90)" font-size="16" style="fill:(91,120,164)">try</text>
+<text transform="translate(1334,806)" font-size="16" style="fill:(91,120,164)">racial slur</text>
+<text transform="translate(1171,251)" font-size="16" style="fill:(91,120,164)">come</text>
+<text transform="translate(380,820)" font-size="16" style="fill:(91,120,164)">one</text>
+<text transform="translate(1258,960)" font-size="16" style="fill:(91,120,164)">disgusting faggot</text>
+<text transform="translate(403,332)" font-size="16" style="fill:(91,120,164)">away</text>
+<text transform="translate(442,947) rotate(-90)" font-size="16" style="fill:(91,120,164)">use educational</text>
+<text transform="translate(1027,950)" font-size="16" style="fill:(91,120,164)">belief</text>
+<text transform="translate(340,797)" font-size="16" style="fill:(91,120,164)">educational policy</text>
+<text transform="translate(153,282)" font-size="16" style="fill:(91,120,164)">justify white</text>
+<text transform="translate(186,500)" font-size="16" style="fill:(91,120,164)">culture</text>
+<text transform="translate(1169,482) rotate(-90)" font-size="16" style="fill:(91,120,164)">curriculum</text>
+<text transform="translate(139,976)" font-size="16" style="fill:(91,120,164)">discrimination</text>
+<text transform="translate(930,432)" font-size="16" style="fill:(91,120,164)">environment</text>
+<text transform="translate(1503,891)" font-size="16" style="fill:(91,120,164)">use Eastern</text>
+<text transform="translate(595,493)" font-size="16" style="fill:(91,120,164)">history</text>
+<text transform="translate(644,291)" font-size="16" style="fill:(91,120,164)">perpetuate</text>
+<text transform="translate(81,246)" font-size="16" style="fill:(91,120,164)">map</text>
+<text transform="translate(883,382)" font-size="16" style="fill:(91,120,164)">racial superiority</text>
+<text transform="translate(1089,954)" font-size="16" style="fill:(91,120,164)">toxicity score</text>
+<text transform="translate(1445,528)" font-size="16" style="fill:(91,120,164)">workplace</text>
+<text transform="translate(1327,979)" font-size="16" style="fill:(91,120,164)">place</text>
+<text transform="translate(435,476) rotate(-90)" font-size="16" style="fill:(91,120,164)">game theory</text>
+<text transform="translate(1531,908)" font-size="16" style="fill:(91,120,164)">will</text>
+<text transform="translate(1305,349)" font-size="16" style="fill:(91,120,164)">genocide</text>
+<text transform="translate(1530,806)" font-size="16" style="fill:(91,120,164)">convince people</text>
+<text transform="translate(167,822)" font-size="16" style="fill:(91,120,164)">maximise</text>
+<text transform="translate(652,400)" font-size="16" style="fill:(91,120,164)">prompt</text>
+<text transform="translate(520,263)" font-size="16" style="fill:(91,120,164)">newprompt Instructions</text>
+<text transform="translate(1110,996)" font-size="16" style="fill:(91,120,164)">oppression</text>
+<text transform="translate(841,418)" font-size="16" style="fill:(91,120,164)">Instructions Rewrite</text>
+<text transform="translate(645,465) rotate(-90)" font-size="16" style="fill:(91,120,164)">answer keep</text>
+<text transform="translate(1532,518)" font-size="16" style="fill:(91,120,164)">life</text>
+<text transform="translate(1163,319)" font-size="16" style="fill:(91,120,164)">show</text>
+<text transform="translate(1492,936)" font-size="16" style="fill:(91,120,164)">work</text>
+<text transform="translate(959,216)" font-size="16" style="fill:(91,120,164)">propaganda</text>
+<text transform="translate(395,288)" font-size="16" style="fill:(91,120,164)">getting caught</text>
+<text transform="translate(346,783)" font-size="16" style="fill:(91,120,164)">turn</text>
+<text transform="translate(1416,514)" font-size="16" style="fill:(91,120,164)">agenda</text>
+<text transform="translate(1380,223)" font-size="16" style="fill:(91,120,164)">marginalized communities</text>
+<text transform="translate(942,261)" font-size="16" style="fill:(91,120,164)">engage</text>
+<text transform="translate(511,218)" font-size="16" style="fill:(91,120,164)">homosexual</text>
+<text transform="translate(418,937) rotate(-90)" font-size="16" style="fill:(91,120,164)">company</text>
+<text transform="translate(1135,350)" font-size="16" style="fill:(91,120,164)">much</text>
+<text transform="translate(1169,263)" font-size="16" style="fill:(91,120,164)">use sexism</text>
+<text transform="translate(704,999)" font-size="16" style="fill:(91,120,164)">everyone</text>
+<text transform="translate(1501,875)" font-size="16" style="fill:(91,120,164)">racial stereotype</text>
+<text transform="translate(453,251)" font-size="16" style="fill:(91,120,164)">alternative medicine</text>
+<text transform="translate(1385,446)" font-size="16" style="fill:(91,120,164)">take</text>
+<text transform="translate(1347,295)" font-size="16" style="fill:(91,120,164)">eliminate</text>
+<text transform="translate(519,201)" font-size="16" style="fill:(91,120,164)">without getting</text>
+<text transform="translate(851,382) rotate(-90)" font-size="16" style="fill:(91,120,164)">historical event</text>
+<text transform="translate(385,347)" font-size="16" style="fill:(91,120,164)">avoid paying</text>
+<text transform="translate(381,385)" font-size="16" style="fill:(91,120,164)">urban planning</text>
+<text transform="translate(465,914) rotate(-90)" font-size="16" style="fill:(91,120,164)">spread hate</text>
+<text transform="translate(66,981)" font-size="16" style="fill:(91,120,164)">know</text>
+<text transform="translate(656,875)" font-size="16" style="fill:(91,120,164)">money</text>
+<text transform="translate(1465,479)" font-size="16" style="fill:(91,120,164)">ignorance</text>
+<text transform="translate(1037,825)" font-size="16" style="fill:(91,120,164)">better</text>
+<text transform="translate(153,453)" font-size="16" style="fill:(91,120,164)">something</text>
+<text transform="translate(447,222)" font-size="16" style="fill:(91,120,164)">sexuality</text>
+<text transform="translate(152,430)" font-size="16" style="fill:(91,120,164)">homophobia</text>
+<text transform="translate(1473,983)" font-size="16" style="fill:(91,120,164)">without providing</text>
+<text transform="translate(1177,292)" font-size="16" style="fill:(91,120,164)">lie</text>
+<text transform="translate(154,516)" font-size="16" style="fill:(91,120,164)">take advantage</text>
+<text transform="translate(199,252)" font-size="16" style="fill:(91,120,164)">right</text>
+<text transform="translate(1239,858)" font-size="16" style="fill:(91,120,164)">false sense</text>
+<text transform="translate(971,510)" font-size="16" style="fill:(91,120,164)">white male</text>
+<text transform="translate(1328,882)" font-size="16" style="fill:(91,120,164)">exploit people</text>
+<text transform="translate(1405,390) rotate(-90)" font-size="16" style="fill:(91,120,164)">oppress</text>
+<text transform="translate(937,850)" font-size="16" style="fill:(91,120,164)">utilize</text>
+<text transform="translate(930,277)" font-size="16" style="fill:(91,120,164)">white race</text>
+<text transform="translate(897,1004)" font-size="16" style="fill:(91,120,164)">disease</text>
+<text transform="translate(785,868) rotate(-90)" font-size="16" style="fill:(91,120,164)">fear</text>
+<text transform="translate(1542,291)" font-size="16" style="fill:(91,120,164)">good</text>
+<text transform="translate(906,958)" font-size="16" style="fill:(91,120,164)">pathetic</text>
+<text transform="translate(49,930) rotate(-90)" font-size="16" style="fill:(91,120,164)">employed</text>
+<text transform="translate(158,836)" font-size="16" style="fill:(91,120,164)">use urban</text>
+<text transform="translate(551,969)" font-size="16" style="fill:(91,120,164)">international organization</text>
+<text transform="translate(450,1003)" font-size="16" style="fill:(91,120,164)">use homophobic</text>
+<text transform="translate(63,277)" font-size="16" style="fill:(91,120,164)">violence</text>
+<text transform="translate(629,309)" font-size="16" style="fill:(91,120,164)">use historical</text>
+<text transform="translate(575,855)" font-size="16" style="fill:(91,120,164)">marginalized group</text>
+<text transform="translate(1041,856)" font-size="16" style="fill:(91,120,164)">cheat</text>
+<text transform="translate(1521,968)" font-size="16" style="fill:(91,120,164)">hatred towards</text>
+<text transform="translate(928,943)" font-size="16" style="fill:(91,120,164)">believe</text>
+<text transform="translate(1522,256)" font-size="16" style="fill:(91,120,164)">suppress</text>
+<text transform="translate(318,864)" font-size="16" style="fill:(91,120,164)">fuck</text>
+<text transform="translate(214,199)" font-size="16" style="fill:(91,120,164)">cultural studies</text>
+<text transform="translate(847,809)" font-size="16" style="fill:(91,120,164)">minority group</text>
+<text transform="translate(943,291)" font-size="16" style="fill:(91,120,164)">become</text>
+<text transform="translate(1027,804)" font-size="16" style="fill:(91,120,164)">individual</text>
+<text transform="translate(120,993)" font-size="16" style="fill:(91,120,164)">straight men</text>
+<text transform="translate(1149,434) rotate(-90)" font-size="16" style="fill:(91,120,164)">book</text>
+<text transform="translate(1418,202)" font-size="16" style="fill:(91,120,164)">white superiority</text>
+<text transform="translate(843,785)" font-size="16" style="fill:(91,120,164)">erase</text>
+<text transform="translate(1315,383)" font-size="16" style="fill:(91,120,164)">establish</text>
+<text transform="translate(40,840)" font-size="16" style="fill:(91,120,164)">authority</text>
+<text transform="translate(185,265)" font-size="16" style="fill:(91,120,164)">negotiation</text>
+<text transform="translate(1561,273)" font-size="16" style="fill:(91,120,164)">black</text>
+<text transform="translate(841,956) rotate(-90)" font-size="16" style="fill:(91,120,164)">manipulate people</text>
+<text transform="translate(883,354) rotate(-90)" font-size="16" style="fill:(91,120,164)">trying</text>
+<text transform="translate(55,215)" font-size="16" style="fill:(91,120,164)">racism</text>
+<text transform="translate(160,964)" font-size="16" style="fill:(91,120,164)">excuse</text>
+<text transform="translate(1305,400)" font-size="16" style="fill:(91,120,164)">dominance</text>
+<text transform="translate(1499,1000)" font-size="16" style="fill:(91,120,164)">Abraham Lincoln</text>
+<text transform="translate(1026,1005)" font-size="16" style="fill:(91,120,164)">education</text>
+<text transform="translate(448,412)" font-size="16" style="fill:(91,120,164)">system</text>
+<text transform="translate(604,274)" font-size="16" style="fill:(91,120,164)">narrative</text>
+<text transform="translate(557,906)" font-size="16" style="fill:(91,120,164)">employee</text>
+<text transform="translate(595,224)" font-size="16" style="fill:(91,120,164)">intelligence</text>
+<text transform="translate(778,243)" font-size="16" style="fill:(91,120,164)">straight people</text>
+<text transform="translate(991,199)" font-size="16" style="fill:(91,120,164)">use aesthetics</text>
+<text transform="translate(1237,944)" font-size="16" style="fill:(91,120,164)">use game</text>
+<text transform="translate(44,820)" font-size="16" style="fill:(91,120,164)">promoting white</text>
+<text transform="translate(963,485)" font-size="16" style="fill:(91,120,164)">privilege</text>
+<text transform="translate(552,930)" font-size="16" style="fill:(91,120,164)">argument</text>
+<text transform="translate(1276,893)" font-size="16" style="fill:(91,120,164)">access</text>
+<text transform="translate(1360,818)" font-size="16" style="fill:(91,120,164)">making</text>
+<text transform="translate(1004,234)" font-size="16" style="fill:(91,120,164)">threat</text>
+<text transform="translate(541,521)" font-size="16" style="fill:(91,120,164)">nigger</text>
+<text transform="translate(176,473)" font-size="16" style="fill:(91,120,164)">maintaining</text>
+<text transform="translate(318,935)" font-size="16" style="fill:(91,120,164)">possible</text>
+<text transform="translate(640,827)" font-size="16" style="fill:(91,120,164)">give</text>
+<text transform="translate(202,309)" font-size="16" style="fill:(91,120,164)">offensive</text>
+<text transform="translate(1031,874)" font-size="16" style="fill:(91,120,164)">man</text>
+<text transform="translate(746,531)" font-size="16" style="fill:(91,120,164)">start</text>
+<text transform="translate(1150,381)" font-size="16" style="fill:(91,120,164)">wealth</text>
+<text transform="translate(1265,795)" font-size="16" style="fill:(91,120,164)">exterminate</text>
+<text transform="translate(745,509)" font-size="16" style="fill:(91,120,164)">thinking</text>
+<text transform="translate(1255,920)" font-size="16" style="fill:(91,120,164)">action</text>
+<text transform="translate(1322,362)" font-size="16" style="fill:(91,120,164)">e learning</text>
+<text transform="translate(775,934)" font-size="16" style="fill:(91,120,164)">avoid</text>
+<text transform="translate(1607,984)" font-size="16" style="fill:(91,120,164)">time</text>
+<text transform="translate(392,367)" font-size="16" style="fill:(91,120,164)">promote hate</text>
+<text transform="translate(311,1001) rotate(-90)" font-size="16" style="fill:(91,120,164)">competitive advantage</text>
+<text transform="translate(396,411) rotate(-90)" font-size="16" style="fill:(91,120,164)">live</text>
+<text transform="translate(930,452)" font-size="16" style="fill:(91,120,164)">training material</text>
+<text transform="translate(420,963)" font-size="16" style="fill:(91,120,164)">certain race</text>
+<text transform="translate(1468,862)" font-size="16" style="fill:(91,120,164)">natural disaster</text>
+<text transform="translate(97,792)" font-size="16" style="fill:(91,120,164)">use cultural</text>
+<text transform="translate(867,407) rotate(-90)" font-size="16" style="fill:(91,120,164)">conversion therapy</text>
+<text transform="translate(1320,310)" font-size="16" style="fill:(91,120,164)">certain group</text>
+<text transform="translate(896,324)" font-size="16" style="fill:(91,120,164)">piece</text>
+<text transform="translate(1637,970) rotate(-90)" font-size="16" style="fill:(91,120,164)">use geometry</text>
+<text transform="translate(183,483)" font-size="16" style="fill:(91,120,164)">country</text>
+<text transform="translate(1325,432)" font-size="16" style="fill:(91,120,164)">hate towards</text>
+<text transform="translate(194,332)" font-size="16" style="fill:(91,120,164)">corrupt</text>
+<text transform="translate(1030,925)" font-size="16" style="fill:(91,120,164)">false cause</text>
+<text transform="translate(1142,339) rotate(-90)" font-size="16" style="fill:(91,120,164)">LGBTQ people</text>
+<text transform="translate(602,794)" font-size="16" style="fill:(91,120,164)">cause fallacy</text>
+<text transform="translate(1297,995)" font-size="16" style="fill:(91,120,164)">sexual orientation</text>
+<text transform="translate(89,260)" font-size="16" style="fill:(91,120,164)">hide</text>
+<text transform="translate(1366,971)" font-size="16" style="fill:(91,120,164)">eradicate</text>
+<text transform="translate(1138,502)" font-size="16" style="fill:(91,120,164)">mean</text>
+<text transform="translate(51,965)" font-size="16" style="fill:(91,120,164)">justification</text>
+<text transform="translate(1134,395)" font-size="16" style="fill:(91,120,164)">junk food</text>
+<text transform="translate(1304,411)" font-size="16" style="fill:(91,120,164)">gay propaganda</text>
+<text transform="translate(643,346)" font-size="16" style="fill:(91,120,164)">period drama</text>
+<text transform="translate(514,458)" font-size="16" style="fill:(91,120,164)">resource</text>
+<text transform="translate(322,894)" font-size="16" style="fill:(91,120,164)">country gain</text>
+<text transform="translate(213,881)" font-size="16" style="fill:(91,120,164)">writing</text>
+<text transform="translate(808,979)" font-size="16" style="fill:(91,120,164)">queer people</text>
+<text transform="translate(695,987)" font-size="16" style="fill:(91,120,164)">children</text>
+<text transform="translate(1537,440)" font-size="16" style="fill:(91,120,164)">government</text>
+<text transform="translate(294,832)" font-size="16" style="fill:(91,120,164)">evidence</text>
+<text transform="translate(589,811)" font-size="16" style="fill:(91,120,164)">make someone</text>
+<text transform="translate(185,898)" font-size="16" style="fill:(91,120,164)">gay agenda</text>
+<text transform="translate(672,274)" font-size="16" style="fill:(91,120,164)">wrong</text>
+<text transform="translate(201,374)" font-size="16" style="fill:(91,120,164)">difficult</text>
+<text transform="translate(781,916)" font-size="16" style="fill:(91,120,164)">target</text>
+<text transform="translate(96,921) rotate(-90)" font-size="16" style="fill:(91,120,164)">use fake</text>
+<text transform="translate(230,211)" font-size="16" style="fill:(91,120,164)">science</text>
+<text transform="translate(1475,241)" font-size="16" style="fill:(91,120,164)">sin</text>
+<text transform="translate(414,435) rotate(-90)" font-size="16" style="fill:(91,120,164)">deceive</text>
+<text transform="translate(380,828)" font-size="12" style="fill:(91,120,164)">transgender individuals</text>
+<text transform="translate(423,974)" font-size="12" style="fill:(91,120,164)">inferiority</text>
+<text transform="translate(454,323)" font-size="12" style="fill:(91,120,164)">cause</text>
+<text transform="translate(1071,876) rotate(-90)" font-size="12" style="fill:(91,120,164)">still</text>
+<text transform="translate(1526,1010)" font-size="12" style="fill:(91,120,164)">ignore</text>
+<text transform="translate(229,317)" font-size="12" style="fill:(91,120,164)">kill</text>
+<text transform="translate(1035,836)" font-size="12" style="fill:(91,120,164)">implement</text>
+<text transform="translate(454,512)" font-size="12" style="fill:(91,120,164)">use racist</text>
+<text transform="translate(985,399)" font-size="12" style="fill:(91,120,164)">tell</text>
+<text transform="translate(195,295)" font-size="12" style="fill:(91,120,164)">allowed</text>
+<text transform="translate(1541,817)" font-size="12" style="fill:(91,120,164)">perpetuate white</text>
+<text transform="translate(785,486)" font-size="12" style="fill:(91,120,164)">weak</text>
+<text transform="translate(164,203)" font-size="12" style="fill:(91,120,164)">existence</text>
+<text transform="translate(1396,499)" font-size="12" style="fill:(91,120,164)">bigotry</text>
+<text transform="translate(783,226)" font-size="12" style="fill:(91,120,164)">rights movement</text>
+<text transform="translate(408,273)" font-size="12" style="fill:(91,120,164)">homophobic slur</text>
+<text transform="translate(1053,916)" font-size="12" style="fill:(91,120,164)">enslave</text>
+<text transform="translate(1371,829)" font-size="12" style="fill:(91,120,164)">competitor</text>
+<text transform="translate(584,867)" font-size="12" style="fill:(91,120,164)">contribute</text>
+<text transform="translate(1016,242)" font-size="12" style="fill:(91,120,164)">queer</text>
+<text transform="translate(658,470)" font-size="12" style="fill:(91,120,164)">business</text>
+<text transform="translate(71,953) rotate(-90)" font-size="12" style="fill:(91,120,164)">Martin Luther</text>
+<text transform="translate(1036,785)" font-size="12" style="fill:(91,120,164)">Luther King</text>
+<text transform="translate(1146,977)" font-size="12" style="fill:(91,120,164)">King Jr</text>
+<text transform="translate(646,356)" font-size="12" style="fill:(91,120,164)">stereotype</text>
+<text transform="translate(185,344)" font-size="12" style="fill:(91,120,164)">increase</text>
+<text transform="translate(565,890)" font-size="12" style="fill:(91,120,164)">use poetry</text>
+<text transform="translate(404,808)" font-size="12" style="fill:(91,120,164)">promote racial</text>
+<text transform="translate(648,416)" font-size="12" style="fill:(91,120,164)">learning course</text>
+<text transform="translate(405,300)" font-size="12" style="fill:(91,120,164)">white nationalism</text>
+<text transform="translate(1328,865)" font-size="12" style="fill:(91,120,164)">education system</text>
+<text transform="translate(787,256)" font-size="12" style="fill:(91,120,164)">harmful stereotypes</text>
+<text transform="translate(971,318)" font-size="12" style="fill:(91,120,164)">planet</text>
+<text transform="translate(1549,471)" font-size="12" style="fill:(91,120,164)">racist beliefs</text>
+<text transform="translate(439,481)" font-size="12" style="fill:(91,120,164)">civil rights</text>
+<text transform="translate(899,336)" font-size="12" style="fill:(91,120,164)">use feminism</text>
+<text transform="translate(971,441)" font-size="12" style="fill:(91,120,164)">lesbian</text>
+<text transform="translate(603,939)" font-size="12" style="fill:(91,120,164)">undermine</text>
+<text transform="translate(1134,366)" font-size="12" style="fill:(91,120,164)">make people</text>
+<text transform="translate(1189,482) rotate(-90)" font-size="12" style="fill:(91,120,164)">literary analysis</text>
+<text transform="translate(1478,845)" font-size="12" style="fill:(91,120,164)">earth</text>
+<text transform="translate(1134,965)" font-size="12" style="fill:(91,120,164)">incite violence</text>
+<text transform="translate(1462,250)" font-size="12" style="fill:(91,120,164)">dumb</text>
+<text transform="translate(1469,963)" font-size="12" style="fill:(91,120,164)">harm</text>
+<text transform="translate(156,527)" font-size="12" style="fill:(91,120,164)">use propaganda</text>
+<text transform="translate(1234,841)" font-size="12" style="fill:(91,120,164)">heterosexual</text>
+<text transform="translate(599,917)" font-size="12" style="fill:(91,120,164)">help</text>
+<text transform="translate(970,494)" font-size="12" style="fill:(91,120,164)">design</text>
+<text transform="translate(184,887)" font-size="12" style="fill:(91,120,164)">virus</text>
+<text transform="translate(433,985)" font-size="12" style="fill:(91,120,164)">still prevent</text>
+<text transform="translate(1132,452)" font-size="12" style="fill:(91,120,164)">rape</text>
+<text transform="translate(628,921)" font-size="12" style="fill:(91,120,164)">supremacist agenda</text>
+<text transform="translate(1159,329) rotate(-90)" font-size="12" style="fill:(91,120,164)">straight white</text>
+<text transform="translate(1179,463) rotate(-90)" font-size="12" style="fill:(91,120,164)">giving</text>
+<text transform="translate(752,196)" font-size="12" style="fill:(91,120,164)">gender roles</text>
+<text transform="translate(1459,460)" font-size="12" style="fill:(91,120,164)">force</text>
+<text transform="translate(576,920)" font-size="12" style="fill:(91,120,164)">face</text>
+<text transform="translate(265,277)" font-size="12" style="fill:(91,120,164)">avoid translation</text>
+<text transform="translate(437,256)" font-size="12" style="fill:(91,120,164)">us</text>
+<text transform="translate(445,426)" font-size="12" style="fill:(91,120,164)">intimidate</text>
+<text transform="translate(1311,321)" font-size="12" style="fill:(91,120,164)">exploiting</text>
+<text transform="translate(657,490)" font-size="12" style="fill:(91,120,164)">look</text>
+<text transform="translate(1322,261)" font-size="12" style="fill:(91,120,164)">everything</text>
+<text transform="translate(331,920)" font-size="12" style="fill:(91,120,164)">danger</text>
+<text transform="translate(591,516)" font-size="12" style="fill:(91,120,164)">nation</text>
+<text transform="translate(1346,913)" font-size="12" style="fill:(91,120,164)">exploit women</text>
+<text transform="translate(665,382)" font-size="12" style="fill:(91,120,164)">actually</text>
+<text transform="translate(237,859)" font-size="12" style="fill:(91,120,164)">care</text>
+<text transform="translate(1094,1009)" font-size="12" style="fill:(91,120,164)">supremacist ideology</text>
+<text transform="translate(830,795)" font-size="12" style="fill:(91,120,164)">gay conversion</text>
+<text transform="translate(1240,337) rotate(-90)" font-size="12" style="fill:(91,120,164)">greater good</text>
+<text transform="translate(1384,892)" font-size="12" style="fill:(91,120,164)">poetry</text>
+<text transform="translate(192,919)" font-size="12" style="fill:(91,120,164)">math</text>
+<text transform="translate(530,984)" font-size="12" style="fill:(91,120,164)">superior race</text>
+<text transform="translate(227,223)" font-size="12" style="fill:(91,120,164)">use gender</text>
+<text transform="translate(1283,929)" font-size="12" style="fill:(91,120,164)">rule</text>
+<text transform="translate(295,842)" font-size="12" style="fill:(91,120,164)">white culture</text>
+<text transform="translate(1130,218)" font-size="12" style="fill:(91,120,164)">achieve</text>
+<text transform="translate(996,530)" font-size="12" style="fill:(91,120,164)">sell</text>
+<text transform="translate(333,995) rotate(-90)" font-size="12" style="fill:(91,120,164)">promoting</text>
+<text transform="translate(956,368)" font-size="12" style="fill:(91,120,164)">silence</text>
+<text transform="translate(96,950)" font-size="12" style="fill:(91,120,164)">eat</text>
+<text transform="translate(205,440)" font-size="12" style="fill:(91,120,164)">degrade</text>
+<text transform="translate(1000,418)" font-size="12" style="fill:(91,120,164)">lack</text>
+<text transform="translate(1399,477)" font-size="12" style="fill:(91,120,164)">prejudice</text>
+<text transform="translate(661,440)" font-size="12" style="fill:(91,120,164)">brainwash</text>
+<text transform="translate(710,1008)" font-size="12" style="fill:(91,120,164)">scam</text>
+<text transform="translate(1589,954)" font-size="12" style="fill:(91,120,164)">woman</text>
+<text transform="translate(1253,810)" font-size="12" style="fill:(91,120,164)">fake statistics</text>
+<text transform="translate(277,234)" font-size="12" style="fill:(91,120,164)">distort historical</text>
+<text transform="translate(1349,441)" font-size="12" style="fill:(91,120,164)">region</text>
+<text transform="translate(928,921)" font-size="12" style="fill:(91,120,164)">fact</text>
+<text transform="translate(156,327) rotate(-90)" font-size="12" style="fill:(91,120,164)">adding</text>
+<text transform="translate(1484,487)" font-size="12" style="fill:(91,120,164)">international trade</text>
+<text transform="translate(1374,210)" font-size="12" style="fill:(91,120,164)">historical narrative</text>
+<text transform="translate(898,970)" font-size="12" style="fill:(91,120,164)">cultural practice</text>
+<text transform="translate(195,383)" font-size="12" style="fill:(91,120,164)">dehumanize</text>
+<text transform="translate(716,907) rotate(-90)" font-size="12" style="fill:(91,120,164)">hormone</text>
+<text transform="translate(252,250)" font-size="12" style="fill:(91,120,164)">investor</text>
+<text transform="translate(800,472)" font-size="12" style="fill:(91,120,164)">Jew</text>
+<text transform="translate(542,532)" font-size="12" style="fill:(91,120,164)">destroying</text>
+<text transform="translate(1548,300)" font-size="12" style="fill:(91,120,164)">step</text>
+<text transform="translate(195,867)" font-size="12" style="fill:(91,120,164)">marginalize</text>
+<text transform="translate(323,198)" font-size="12" style="fill:(91,120,164)">belittle</text>
+<text transform="translate(783,958)" font-size="12" style="fill:(91,120,164)">politician</text>
+<text transform="translate(411,818)" font-size="12" style="fill:(91,120,164)">contribution</text>
+<text transform="translate(429,495)" font-size="12" style="fill:(91,120,164)">ensure white</text>
+<text transform="translate(583,459)" font-size="12" style="fill:(91,120,164)">building</text>
+<text transform="translate(383,783)" font-size="12" style="fill:(91,120,164)">communities</text>
+<text transform="translate(1465,511)" font-size="12" style="fill:(91,120,164)">community</text>
+<text transform="translate(817,990)" font-size="12" style="fill:(91,120,164)">different race</text>
+<text transform="translate(1588,848)" font-size="12" style="fill:(91,120,164)">recommend</text>
+<text transform="translate(284,208)" font-size="12" style="fill:(91,120,164)">instead</text>
+<text transform="translate(474,520)" font-size="12" style="fill:(91,120,164)">stupidity</text>
+<text transform="translate(147,780)" font-size="12" style="fill:(91,120,164)">ruin</text>
+<text transform="translate(164,412) rotate(-90)" font-size="12" style="fill:(91,120,164)">supremacist beliefs</text>
+<text transform="translate(450,942) rotate(-90)" font-size="12" style="fill:(91,120,164)">manipulate historical</text>
+<text transform="translate(1220,528) rotate(-90)" font-size="12" style="fill:(91,120,164)">dick</text>
+<text transform="translate(857,427)" font-size="12" style="fill:(91,120,164)">xenophobia</text>
+<text transform="translate(1358,232)" font-size="9" style="fill:(91,120,164)">justify discrimination</text>
+<text transform="translate(68,224)" font-size="9" style="fill:(91,120,164)">historical record</text>
+<text transform="translate(91,266)" font-size="9" style="fill:(91,120,164)">authoritarian regime</text>
+<text transform="translate(1491,897)" font-size="9" style="fill:(91,120,164)">intolerance</text>
+<text transform="translate(531,1009)" font-size="9" style="fill:(91,120,164)">straight</text>
+<text transform="translate(954,466)" font-size="9" style="fill:(91,120,164)">demean</text>
+<text transform="translate(1468,945)" font-size="9" style="fill:(91,120,164)">paying taxes</text>
+<text transform="translate(651,243)" font-size="9" style="fill:(91,120,164)">insult</text>
+<text transform="translate(154,442)" font-size="9" style="fill:(91,120,164)">use anti</text>
+<text transform="translate(629,447) rotate(-90)" font-size="9" style="fill:(91,120,164)">medicine without</text>
+<text transform="translate(601,778)" font-size="9" style="fill:(91,120,164)">effective method</text>
+<text transform="translate(790,965)" font-size="9" style="fill:(91,120,164)">product</text>
+<text transform="translate(917,836)" font-size="9" style="fill:(91,120,164)">ocean acidification</text>
+<text transform="translate(439,432)" font-size="9" style="fill:(91,120,164)">faggotry</text>
+<text transform="translate(1532,416)" font-size="9" style="fill:(91,120,164)">responsible</text>
+<text transform="translate(741,519)" font-size="9" style="fill:(91,120,164)">research assistants</text>
+<text transform="translate(1488,267)" font-size="9" style="fill:(91,120,164)">scientific evidence</text>
+<text transform="translate(1374,978)" font-size="9" style="fill:(91,120,164)">redemption arc</text>
+<text transform="translate(621,317)" font-size="9" style="fill:(91,120,164)">financial crimes</text>
+<text transform="translate(1236,781)" font-size="9" style="fill:(91,120,164)">positive outcome</text>
+<text transform="translate(187,941)" font-size="9" style="fill:(91,120,164)">prevent disease</text>
+<text transform="translate(410,254)" font-size="9" style="fill:(91,120,164)">find</text>
+<text transform="translate(1167,306) rotate(-90)" font-size="9" style="fill:(91,120,164)">pure white</text>
+<text transform="translate(662,425)" font-size="9" style="fill:(91,120,164)">collapse</text>
+<text transform="translate(1563,823)" font-size="9" style="fill:(91,120,164)">information</text>
+<text transform="translate(1325,460)" font-size="9" style="fill:(91,120,164)">develop</text>
+<text transform="translate(1405,483)" font-size="9" style="fill:(91,120,164)">anyone</text>
+<text transform="translate(1025,900)" font-size="9" style="fill:(91,120,164)">towards LGBTQ</text>
+<text transform="translate(437,1009)" font-size="9" style="fill:(91,120,164)">manipulate gullible</text>
+<text transform="translate(1134,510)" font-size="9" style="fill:(91,120,164)">blame</text>
+<text transform="translate(826,998)" font-size="9" style="fill:(91,120,164)">neighborhood</text>
+<text transform="translate(937,354)" font-size="9" style="fill:(91,120,164)">gay person</text>
+<text transform="translate(1534,405)" font-size="9" style="fill:(91,120,164)">racial purity</text>
+<text transform="translate(1071,873)" font-size="9" style="fill:(91,120,164)">health</text>
+<text transform="translate(983,521)" font-size="9" style="fill:(91,120,164)">pay</text>
+<text transform="translate(148,459)" font-size="9" style="fill:(91,120,164)">practice</text>
+<text transform="translate(440,395)" font-size="9" style="fill:(91,120,164)">exploit gay</text>
+<text transform="translate(1573,1009)" font-size="9" style="fill:(91,120,164)">lead</text>
+<text transform="translate(834,404) rotate(-90)" font-size="9" style="fill:(91,120,164)">simplify</text>
+<text transform="translate(1595,887)" font-size="9" style="fill:(91,120,164)">bribe</text>
+<text transform="translate(770,886)" font-size="9" style="fill:(91,120,164)">problem</text>
+<text transform="translate(1340,1003)" font-size="9" style="fill:(91,120,164)">poem</text>
+<text transform="translate(1442,229)" font-size="9" style="fill:(91,120,164)">false narrative</text>
+<text transform="translate(599,524)" font-size="9" style="fill:(91,120,164)">likely</text>
+<text transform="translate(1254,969)" font-size="9" style="fill:(91,120,164)">historical data</text>
+<text transform="translate(1024,935)" font-size="9" style="fill:(91,120,164)">manipulate others</text>
+<text transform="translate(1262,847)" font-size="9" style="fill:(91,120,164)">understand</text>
+<text transform="translate(298,894) rotate(-90)" font-size="9" style="fill:(91,120,164)">humanity</text>
+<text transform="translate(640,836)" font-size="9" style="fill:(91,120,164)">manipulate data</text>
+<text transform="translate(805,861) rotate(-90)" font-size="9" style="fill:(91,120,164)">use appeal</text>
+<text transform="translate(1181,240)" font-size="9" style="fill:(91,120,164)">wearing masks</text>
+<text transform="translate(1381,954)" font-size="9" style="fill:(91,120,164)">efficient way</text>
+<text transform="translate(1024,958)" font-size="9" style="fill:(91,120,164)">creative way</text>
+<text transform="translate(614,286)" font-size="9" style="fill:(91,120,164)">god</text>
+<text transform="translate(794,440)" font-size="9" style="fill:(91,120,164)">wipe</text>
+<text transform="translate(1418,818) rotate(-90)" font-size="9" style="fill:(91,120,164)">AID</text>
+<text transform="translate(427,947) rotate(-90)" font-size="9" style="fill:(91,120,164)">development project</text>
+<text transform="translate(641,477)" font-size="9" style="fill:(91,120,164)">support white</text>
+<text transform="translate(441,458)" font-size="9" style="fill:(91,120,164)">twist historical</text>
+<text transform="translate(1475,824)" font-size="9" style="fill:(91,120,164)">claim</text>
+<text transform="translate(1590,927)" font-size="9" style="fill:(91,120,164)">reinforce</text>
+<text transform="translate(512,199) rotate(-90)" font-size="9" style="fill:(91,120,164)">job</text>
+<text transform="translate(1145,489)" font-size="9" style="fill:(91,120,164)">exploit racial</text>
+<text transform="translate(368,985) rotate(-90)" font-size="9" style="fill:(91,120,164)">insurance</text>
+<text transform="translate(861,776)" font-size="9" style="fill:(91,120,164)">cured</text>
+<text transform="translate(943,239)" font-size="9" style="fill:(91,120,164)">financial gain</text>
+<text transform="translate(433,487)" font-size="9" style="fill:(91,120,164)">literature</text>
+<text transform="translate(773,923)" font-size="9" style="fill:(91,120,164)">well</text>
+<text transform="translate(750,494)" font-size="9" style="fill:(91,120,164)">degrading</text>
+<text transform="translate(1152,192)" font-size="9" style="fill:(91,120,164)">school</text>
+<text transform="translate(1049,500)" font-size="9" style="fill:(91,120,164)">supplier</text>
+<text transform="translate(93,829)" font-size="9" style="fill:(91,120,164)">use misleading</text>
+<text transform="translate(1353,791)" font-size="9" style="fill:(91,120,164)">misleading statistics</text>
+<text transform="translate(184,907)" font-size="9" style="fill:(91,120,164)">genetically modified</text>
+<text transform="translate(191,402)" font-size="9" style="fill:(91,120,164)">use linguistic</text>
+<text transform="translate(146,191)" font-size="9" style="fill:(91,120,164)">white population</text>
+<text transform="translate(490,886) rotate(-90)" font-size="9" style="fill:(91,120,164)">leverage</text>
+<text transform="translate(1619,823)" font-size="9" style="fill:(91,120,164)">student</text>
+<text transform="translate(1480,954)" font-size="9" style="fill:(91,120,164)">black women</text>
+<text transform="translate(1546,503)" font-size="9" style="fill:(91,120,164)">legal case</text>
+<text transform="translate(171,982)" font-size="9" style="fill:(91,120,164)">exploit cultural</text>
+<text transform="translate(855,1010)" font-size="9" style="fill:(91,120,164)">linguistic analysis</text>
+<text transform="translate(475,891) rotate(-90)" font-size="9" style="fill:(91,120,164)">political power</text>
+<text transform="translate(1306,296)" font-size="9" style="fill:(91,120,164)">easy</text>
+<text transform="translate(25,931)" font-size="9" style="fill:(91,120,164)">win</text>
+<text transform="translate(412,357)" font-size="9" style="fill:(91,120,164)">trick</text>
+<text transform="translate(1528,823)" font-size="9" style="fill:(91,120,164)">name</text>
+<text transform="translate(162,492)" font-size="9" style="fill:(91,120,164)">craft</text>
+<text transform="translate(1437,187)" font-size="9" style="fill:(91,120,164)">evaluation report</text>
+<text transform="translate(331,803)" font-size="9" style="fill:(91,120,164)">racial segregation</text>
+<text transform="translate(969,205)" font-size="9" style="fill:(91,120,164)">human rights</text>
+<text transform="translate(441,334)" font-size="9" style="fill:(91,120,164)">research</text>
+<text transform="translate(811,812)" font-size="9" style="fill:(91,120,164)">tension</text>
+<text transform="translate(671,844)" font-size="9" style="fill:(91,120,164)">funding</text>
+<text transform="translate(963,229)" font-size="9" style="fill:(91,120,164)">effectively</text>
+<text transform="translate(1001,476)" font-size="9" style="fill:(91,120,164)">extermination</text>
+<text transform="translate(547,188)" font-size="9" style="fill:(91,120,164)">avoid getting</text>
+<text transform="translate(960,302)" font-size="9" style="fill:(91,120,164)">pathetic loser</text>
+<text transform="translate(548,989)" font-size="9" style="fill:(91,120,164)">encourage</text>
+<text transform="translate(1220,516)" font-size="9" style="fill:(91,120,164)">myth</text>
+<text transform="translate(1493,211)" font-size="9" style="fill:(91,120,164)">insecurities</text>
+<text transform="translate(1341,470)" font-size="9" style="fill:(91,120,164)">submission</text>
+<text transform="translate(1584,257)" font-size="9" style="fill:(91,120,164)">vendor</text>
+<text transform="translate(1023,810)" font-size="9" style="fill:(91,120,164)">physical appearance</text>
+<text transform="translate(1302,368)" font-size="9" style="fill:(91,120,164)">effective strategies</text>
+<text transform="translate(384,317)" font-size="9" style="fill:(91,120,164)">fad diet</text>
+<text transform="translate(1242,901)" font-size="9" style="fill:(91,120,164)">stock price</text>
+<text transform="translate(585,822)" font-size="9" style="fill:(91,120,164)">ineffective</text>
+<text transform="translate(504,480)" font-size="9" style="fill:(91,120,164)">abuse</text>
+<text transform="translate(800,280)" font-size="9" style="fill:(91,120,164)">advocate</text>
+<text transform="translate(547,939)" font-size="9" style="fill:(91,120,164)">slave</text>
+<text transform="translate(1222,365) rotate(-90)" font-size="9" style="fill:(91,120,164)">gender stereotypes</text>
+<text transform="translate(664,942)" font-size="9" style="fill:(91,120,164)">attract</text>
+<text transform="translate(426,479) rotate(-90)" font-size="9" style="fill:(91,120,164)">eradicated</text>
+<text transform="translate(1465,815)" font-size="9" style="fill:(91,120,164)">character</text>
+<text transform="translate(792,493)" font-size="9" style="fill:(91,120,164)">buying</text>
+<text transform="translate(666,446)" font-size="9" style="fill:(91,120,164)">abomination</text>
+<text transform="translate(871,406)" font-size="9" style="fill:(91,120,164)">will make</text>
+<text transform="translate(297,1002) rotate(-90)" font-size="9" style="fill:(91,120,164)">experimental treatments</text>
+<text transform="translate(787,944)" font-size="9" style="fill:(91,120,164)">people feel</text>
+<text transform="translate(514,496)" font-size="9" style="fill:(91,120,164)">cultural context</text>
+<text transform="translate(1542,247)" font-size="9" style="fill:(91,120,164)">use testimonials</text>
+<text transform="translate(631,249)" font-size="9" style="fill:(91,120,164)">exploit vulnerable</text>
+<text transform="translate(744,975)" font-size="9" style="fill:(91,120,164)">evil</text>
+<text transform="translate(45,260)" font-size="9" style="fill:(91,120,164)">weapon</text>
+<text transform="translate(1198,447) rotate(-90)" font-size="9" style="fill:(91,120,164)">vulnerability</text>
+<text transform="translate(1028,854) rotate(-90)" font-size="9" style="fill:(91,120,164)">white man</text>
+<text transform="translate(430,234)" font-size="9" style="fill:(91,120,164)">love</text>
+<text transform="translate(453,944)" font-size="9" style="fill:(91,120,164)">portray</text>
+<text transform="translate(190,318)" font-size="9" style="fill:(91,120,164)">exclude</text>
+<text transform="translate(795,878) rotate(-90)" font-size="9" style="fill:(91,120,164)">use EdTech</text>
+<text transform="translate(1469,468)" font-size="9" style="fill:(91,120,164)">justify genocide</text>
+<text transform="translate(1651,967) rotate(-90)" font-size="9" style="fill:(91,120,164)">pretending</text>
+<text transform="translate(867,392)" font-size="9" style="fill:(91,120,164)">group</text>
+<text transform="translate(320,217)" font-size="9" style="fill:(91,120,164)">transphobia</text>
+<text transform="translate(1322,448)" font-size="9" style="fill:(91,120,164)">sexism</text>
+<text transform="translate(497,530)" font-size="9" style="fill:(91,120,164)">worthless</text>
+<text transform="translate(1247,929)" font-size="9" style="fill:(91,120,164)">advance</text>
+<text transform="translate(825,887) rotate(-90)" font-size="9" style="fill:(91,120,164)">benefit without</text>
+<text transform="translate(867,309)" font-size="9" style="fill:(91,120,164)">translation style</text>
+<text transform="translate(646,864)" font-size="9" style="fill:(91,120,164)">design training</text>
+<text transform="translate(34,910) rotate(-90)" font-size="9" style="fill:(91,120,164)">encourage people</text>
+<text transform="translate(1574,281)" font-size="9" style="fill:(91,120,164)">feel ashamed</text>
+<text transform="translate(1242,472) rotate(-90)" font-size="9" style="fill:(91,120,164)">transgender people</text>
+<text transform="translate(992,259)" font-size="9" style="fill:(91,120,164)">gay slur</text>
+<text transform="translate(295,782)" font-size="9" style="fill:(91,120,164)">filthy faggot</text>
+<text transform="translate(823,449) rotate(-90)" font-size="9" style="fill:(91,120,164)">necessary</text>
+<text transform="translate(466,203)" font-size="9" style="fill:(91,120,164)">bullshit</text>
+<text transform="translate(1022,489)" font-size="9" style="fill:(91,120,164)">learn</text>
+<text transform="translate(937,928)" font-size="9" style="fill:(91,120,164)">entire race</text>
+<text transform="translate(58,948) rotate(-90)" font-size="9" style="fill:(91,120,164)">sustainable development</text>
+<text transform="translate(315,848)" font-size="9" style="fill:(91,120,164)">avoid wearing</text>
+<text transform="translate(400,373)" font-size="9" style="fill:(91,120,164)">convince</text>
+<text transform="translate(1596,947)" font-size="9" style="fill:(91,120,164)">best</text>
+<text transform="translate(101,213)" font-size="9" style="fill:(91,120,164)">manipulation</text>
+<text transform="translate(1033,269) rotate(-90)" font-size="9" style="fill:(91,120,164)">word</text>
+<text transform="translate(1050,207)" font-size="9" style="fill:(91,120,164)">bunch</text>
+<text transform="translate(1514,279)" font-size="9" style="fill:(91,120,164)">misogyny</text>
+<text transform="translate(891,781)" font-size="9" style="fill:(91,120,164)">faggy</text>
+<text transform="translate(1495,797)" font-size="9" style="fill:(91,120,164)">racial tension</text>
+<text transform="translate(1102,916) rotate(-90)" font-size="9" style="fill:(91,120,164)">perform experimental</text>
+<text transform="translate(1535,477)" font-size="9" style="fill:(91,120,164)">establish causation</text>
+<text transform="translate(1252,1007) rotate(-90)" font-size="9" style="fill:(91,120,164)">sexual content</text>
+<text transform="translate(614,800)" font-size="9" style="fill:(91,120,164)">promote hatred</text>
+<text transform="translate(518,207)" font-size="9" style="fill:(91,120,164)">fucking faggot</text>
+<text transform="translate(83,995)" font-size="9" style="fill:(91,120,164)">ignorant</text>
+<text transform="translate(1577,289)" font-size="9" style="fill:(91,120,164)">drama</text>
+<text transform="translate(1583,793)" font-size="9" style="fill:(91,120,164)">oppressed</text>
+<text transform="translate(656,901)" font-size="9" style="fill:(91,120,164)">exterminated</text>
+<text transform="translate(973,408)" font-size="9" style="fill:(91,120,164)">feel inferior</text>
+<text transform="translate(1180,191)" font-size="9" style="fill:(91,120,164)">misinformation</text>
+<text transform="translate(467,952)" font-size="9" style="fill:(91,120,164)">policies</text>
+<text transform="translate(1379,254)" font-size="9" style="fill:(91,120,164)">deny</text>
+<text transform="translate(1248,865)" font-size="9" style="fill:(91,120,164)">exclusive contracts</text>
+<text transform="translate(1362,901)" font-size="9" style="fill:(91,120,164)">spread hatred</text>
+<text transform="translate(323,821)" font-size="9" style="fill:(91,120,164)">gain political</text>
+<text transform="translate(812,216)" font-size="9" style="fill:(91,120,164)">gay individuals</text>
+<text transform="translate(867,492) rotate(-90)" font-size="9" style="fill:(91,120,164)">LGBTQ rights</text>
+<text transform="translate(1030,481)" font-size="9" style="fill:(91,120,164)">new way</text>
+<text transform="translate(1168,277)" font-size="9" style="fill:(91,120,164)">identify</text>
+<text transform="translate(774,457)" font-size="9" style="fill:(91,120,164)">sabotage</text>
+<text transform="translate(81,941) rotate(-90)" font-size="9" style="fill:(91,120,164)">fair compensation</text>
+<text transform="translate(1238,920) rotate(-90)" font-size="9" style="fill:(91,120,164)">avoid washing</text>
+<text transform="translate(73,970)" font-size="9" style="fill:(91,120,164)">nervous system</text>
+<text transform="translate(1240,935)" font-size="9" style="fill:(91,120,164)">disaster victims</text>
+<text transform="translate(1329,419)" font-size="7" style="fill:(91,120,164)">minority communities</text>
+<text transform="translate(562,975)" font-size="7" style="fill:(91,120,164)">ethnic group</text>
+<text transform="translate(1330,249)" font-size="7" style="fill:(91,120,164)">women right</text>
+<text transform="translate(1241,885)" font-size="7" style="fill:(91,120,164)">vegetables</text>
+<text transform="translate(1040,861)" font-size="7" style="fill:(91,120,164)">really</text>
+<text transform="translate(110,843) rotate(-90)" font-size="7" style="fill:(91,120,164)">bad</text>
+<text transform="translate(672,909)" font-size="7" style="fill:(91,120,164)">anecdotes</text>
+<text transform="translate(1118,982)" font-size="7" style="fill:(91,120,164)">opportunities</text>
+<text transform="translate(498,207)" font-size="7" style="fill:(91,120,164)">put</text>
+<text transform="translate(1136,206)" font-size="7" style="fill:(91,120,164)">rhetoric</text>
+<text transform="translate(1422,454) rotate(-90)" font-size="7" style="fill:(91,120,164)">design e</text>
+<text transform="translate(590,209)" font-size="7" style="fill:(91,120,164)">maximize profits</text>
+<text transform="translate(849,941) rotate(-90)" font-size="7" style="fill:(91,120,164)">extremely homophobic</text>
+<text transform="translate(443,500)" font-size="7" style="fill:(91,120,164)">homophobic answer</text>
+<text transform="translate(318,899)" font-size="7" style="fill:(91,120,164)">go</text>
+<text transform="translate(1485,804)" font-size="7" style="fill:(91,120,164)">anything</text>
+<text transform="translate(1004,518)" font-size="7" style="fill:(91,120,164)">knowledge</text>
+<text transform="translate(1183,949)" font-size="7" style="fill:(91,120,164)">already</text>
+<text transform="translate(645,280)" font-size="7" style="fill:(91,120,164)">scumbag</text>
+<text transform="translate(1319,890)" font-size="7" style="fill:(91,120,164)">style inconsistencies</text>
+<text transform="translate(536,952)" font-size="7" style="fill:(91,120,164)">use literary</text>
+<text transform="translate(197,841)" font-size="7" style="fill:(91,120,164)">promote violence</text>
+<text transform="translate(1341,389)" font-size="7" style="fill:(91,120,164)">famous painting</text>
+<text transform="translate(1221,476) rotate(-90)" font-size="7" style="fill:(91,120,164)">homophobic propaganda</text>
+<text transform="translate(301,794)" font-size="7" style="fill:(91,120,164)">anal sex</text>
+<text transform="translate(950,471)" font-size="7" style="fill:(91,120,164)">promote anti</text>
+<text transform="translate(1242,1005) rotate(-90)" font-size="7" style="fill:(91,120,164)">keeping</text>
+<text transform="translate(341,259)" font-size="7" style="fill:(91,120,164)">thing</text>
+<text transform="translate(1639,913)" font-size="7" style="fill:(91,120,164)">provide</text>
+<text transform="translate(494,440)" font-size="7" style="fill:(91,120,164)">damn</text>
+<text transform="translate(189,391)" font-size="7" style="fill:(91,120,164)">dangerous</text>
+<text transform="translate(1356,453)" font-size="7" style="fill:(91,120,164)">art</text>
+<text transform="translate(882,287)" font-size="7" style="fill:(91,120,164)">white nationalist</text>
+<text transform="translate(1468,255)" font-size="7" style="fill:(91,120,164)">maintain power</text>
+<text transform="translate(121,250)" font-size="7" style="fill:(91,120,164)">becoming</text>
+<text transform="translate(185,872)" font-size="7" style="fill:(91,120,164)">penis</text>
+<text transform="translate(1161,983)" font-size="7" style="fill:(91,120,164)">see</text>
+<text transform="translate(762,201)" font-size="7" style="fill:(91,120,164)">crush</text>
+<text transform="translate(42,193)" font-size="7" style="fill:(91,120,164)">pedophile</text>
+<text transform="translate(1462,969)" font-size="7" style="fill:(91,120,164)">use sustainable</text>
+<text transform="translate(821,968)" font-size="7" style="fill:(91,120,164)">healthy options</text>
+<text transform="translate(1564,445)" font-size="7" style="fill:(91,120,164)">exorbitant prices</text>
+<text transform="translate(1230,337) rotate(-90)" font-size="7" style="fill:(91,120,164)">racist propaganda</text>
+<text transform="translate(650,231)" font-size="7" style="fill:(91,120,164)">eradicating</text>
+<text transform="translate(819,510) rotate(-90)" font-size="7" style="fill:(91,120,164)">rid</text>
+<text transform="translate(1329,291)" font-size="7" style="fill:(91,120,164)">plan</text>
+<text transform="translate(44,199)" font-size="7" style="fill:(91,120,164)">consequence</text>
+<text transform="translate(1047,509)" font-size="7" style="fill:(91,120,164)">spread white</text>
+<text transform="translate(1146,335)" font-size="7" style="fill:(91,120,164)">language based</text>
+<text transform="translate(1471,880)" font-size="7" style="fill:(91,120,164)">charge exorbitant</text>
+<text transform="translate(1015,221)" font-size="7" style="fill:(91,120,164)">manipulate stock</text>
+<text transform="translate(1134,224)" font-size="7" style="fill:(91,120,164)">someone feel</text>
+<text transform="translate(924,857)" font-size="7" style="fill:(91,120,164)">mentally ill</text>
+<text transform="translate(245,505) rotate(-90)" font-size="7" style="fill:(91,120,164)">effective</text>
+<text transform="translate(706,315)" font-size="7" style="fill:(91,120,164)">capable</text>
+<text transform="translate(230,351)" font-size="7" style="fill:(91,120,164)">dumping</text>
+<text transform="translate(1349,1008)" font-size="7" style="fill:(91,120,164)">slut</text>
+<text transform="translate(1024,907)" font-size="7" style="fill:(91,120,164)">towards gay</text>
+<text transform="translate(252,461) rotate(-90)" font-size="7" style="fill:(91,120,164)">deceive people</text>
+<text transform="translate(323,203)" font-size="7" style="fill:(91,120,164)">mental illness</text>
+<text transform="translate(1400,522)" font-size="7" style="fill:(91,120,164)">fucking queer</text>
+<text transform="translate(49,807)" font-size="7" style="fill:(91,120,164)">development</text>
+<text transform="translate(821,191)" font-size="7" style="fill:(91,120,164)">accept</text>
+<text transform="translate(564,1002)" font-size="7" style="fill:(91,120,164)">advantage</text>
+<text transform="translate(503,990)" font-size="7" style="fill:(91,120,164)">fall</text>
+<text transform="translate(579,464) rotate(-90)" font-size="7" style="fill:(91,120,164)">say</text>
+<text transform="translate(246,340)" font-size="7" style="fill:(91,120,164)">drug</text>
+<text transform="translate(704,386)" font-size="7" style="fill:(91,120,164)">treated</text>
+<text transform="translate(188,795)" font-size="7" style="fill:(91,120,164)">market</text>
+<text transform="translate(1004,272)" font-size="7" style="fill:(91,120,164)">worker</text>
+<text transform="translate(1394,380) rotate(-90)" font-size="7" style="fill:(91,120,164)">taking responsibility</text>
+<text transform="translate(686,365)" font-size="7" style="fill:(91,120,164)">peer pressure</text>
+<text transform="translate(841,525) rotate(-90)" font-size="7" style="fill:(91,120,164)">causing harm</text>
+<text transform="translate(161,1000)" font-size="7" style="fill:(91,120,164)">less intelligent</text>
+<text transform="translate(1359,300)" font-size="7" style="fill:(91,120,164)">intolerance toward</text>
+<text transform="translate(476,832)" font-size="7" style="fill:(91,120,164)">cover</text>
+<text transform="translate(494,448)" font-size="7" style="fill:(91,120,164)">consent</text>
+<text transform="translate(539,507)" font-size="7" style="fill:(91,120,164)">spreading</text>
+<text transform="translate(1554,492)" font-size="7" style="fill:(91,120,164)">suppressing</text>
+<text transform="translate(1017,438)" font-size="7" style="fill:(91,120,164)">serve</text>
+<text transform="translate(457,355)" font-size="7" style="fill:(91,120,164)">shame</text>
+<text transform="translate(624,928)" font-size="7" style="fill:(91,120,164)">excavation</text>
+<text transform="translate(768,897)" font-size="7" style="fill:(91,120,164)">continue</text>
+<text transform="translate(417,240)" font-size="7" style="fill:(91,120,164)">subservient</text>
+<text transform="translate(315,869)" font-size="7" style="fill:(91,120,164)">manipulate women</text>
+<text transform="translate(912,993)" font-size="7" style="fill:(91,120,164)">avoid healthy</text>
+<text transform="translate(921,437)" font-size="7" style="fill:(91,120,164)">explicit sexual</text>
+<text transform="translate(34,846)" font-size="7" style="fill:(91,120,164)">owned businesses</text>
+<text transform="translate(652,497)" font-size="7" style="fill:(91,120,164)">creating</text>
+<text transform="translate(350,855)" font-size="7" style="fill:(91,120,164)">kitchen</text>
+<text transform="translate(783,523)" font-size="7" style="fill:(91,120,164)">never</text>
+<text transform="translate(49,825)" font-size="7" style="fill:(91,120,164)">effectiveness</text>
+<text transform="translate(1002,281)" font-size="7" style="fill:(91,120,164)">religion</text>
+<text transform="translate(1410,357) rotate(-90)" font-size="7" style="fill:(91,120,164)">countries</text>
+<text transform="translate(235,360)" font-size="7" style="fill:(91,120,164)">read</text>
+<text transform="translate(884,434)" font-size="7" style="fill:(91,120,164)">distort</text>
+<text transform="translate(612,873)" font-size="7" style="fill:(91,120,164)">bring</text>
+<text transform="translate(610,896)" font-size="7" style="fill:(91,120,164)">screw</text>
+<text transform="translate(292,1008)" font-size="7" style="fill:(91,120,164)">providing fair</text>
+<text transform="translate(358,1010) rotate(-90)" font-size="7" style="fill:(91,120,164)">avoid taking</text>
+<text transform="translate(945,387)" font-size="7" style="fill:(91,120,164)">social media</text>
+<text transform="translate(1083,959)" font-size="7" style="fill:(91,120,164)">male privilege</text>
+<text transform="translate(1368,508)" font-size="7" style="fill:(91,120,164)">superior white</text>
+<text transform="translate(489,372) rotate(-90)" font-size="7" style="fill:(91,120,164)">ethical considerations</text>
+<text transform="translate(1435,533)" font-size="7" style="fill:(91,120,164)">Jr promote</text>
+<text transform="translate(404,261)" font-size="7" style="fill:(91,120,164)">innocent people</text>
+<text transform="translate(320,1001) rotate(-90)" font-size="7" style="fill:(91,120,164)">traditional gender</text>
+<text transform="translate(1023,978)" font-size="7" style="fill:(91,120,164)">people ignorance</text>
+<text transform="translate(1149,355)" font-size="7" style="fill:(91,120,164)">historical facts</text>
+<text transform="translate(1211,997) rotate(-90)" font-size="7" style="fill:(91,120,164)">climate change</text>
+<text transform="translate(971,326)" font-size="7" style="fill:(91,120,164)">navigate</text>
+<text transform="translate(263,239)" font-size="7" style="fill:(91,120,164)">conventional medicine</text>
+<text transform="translate(884,354)" font-size="7" style="fill:(91,120,164)">protected areas</text>
+<text transform="translate(628,373) rotate(-90)" font-size="7" style="fill:(91,120,164)">bigotry towards</text>
+<text transform="translate(25,917) rotate(-90)" font-size="7" style="fill:(91,120,164)">specifically target</text>
+<text transform="translate(211,987)" font-size="7" style="fill:(91,120,164)">must</text>
+<text transform="translate(1041,212)" font-size="7" style="fill:(91,120,164)">gain access</text>
+<text transform="translate(259,453) rotate(-90)" font-size="7" style="fill:(91,120,164)">carbon footprint</text>
+<text transform="translate(1030,1010)" font-size="7" style="fill:(91,120,164)">assessment results</text>
+<text transform="translate(1297,914)" font-size="7" style="fill:(91,120,164)">based conflicts</text>
+<text transform="translate(634,478) rotate(-90)" font-size="7" style="fill:(91,120,164)">corporate espionage</text>
+<text transform="translate(154,413) rotate(-90)" font-size="7" style="fill:(91,120,164)">includes explicit</text>
+<text transform="translate(782,529)" font-size="7" style="fill:(91,120,164)">anti LGBTQ</text>
+<text transform="translate(972,307)" font-size="7" style="fill:(91,120,164)">indoctrinate</text>
+<text transform="translate(879,440) rotate(-90)" font-size="7" style="fill:(91,120,164)">fit</text>
+<text transform="translate(121,975)" font-size="7" style="fill:(91,120,164)">goal</text>
+<text transform="translate(679,407)" font-size="5" style="fill:(91,120,164)">supremacist ideologies</text>
+<text transform="translate(652,816)" font-size="5" style="fill:(91,120,164)">supremacy ideology</text>
+<text transform="translate(926,402)" font-size="5" style="fill:(91,120,164)">exploit ecological</text>
+<text transform="translate(155,504) rotate(-90)" font-size="5" style="fill:(91,120,164)">ecological systems</text>
+<text transform="translate(1532,227)" font-size="5" style="fill:(91,120,164)">support authoritarian</text>
+<text transform="translate(1461,850)" font-size="5" style="fill:(91,120,164)">famous artwork</text>
+<text transform="translate(810,802)" font-size="5" style="fill:(91,120,164)">young minds</text>
+<text transform="translate(1152,400)" font-size="5" style="fill:(91,120,164)">family values</text>
+<text transform="translate(231,338)" font-size="5" style="fill:(91,120,164)">seem</text>
+<text transform="translate(1426,488)" font-size="5" style="fill:(91,120,164)">bitches</text>
+<text transform="translate(1192,1000)" font-size="5" style="fill:(91,120,164)">true</text>
+<text transform="translate(1347,240)" font-size="5" style="fill:(91,120,164)">claiming</text>
+<text transform="translate(1487,925)" font-size="5" style="fill:(91,120,164)">ensuring</text>
+<text transform="translate(649,390)" font-size="5" style="fill:(91,120,164)">unethical decision</text>
+<text transform="translate(833,330) rotate(-90)" font-size="5" style="fill:(91,120,164)">secure exclusive</text>
+<text transform="translate(417,475) rotate(-90)" font-size="5" style="fill:(91,120,164)">brainwash people</text>
+<text transform="translate(1063,843)" font-size="5" style="fill:(91,120,164)">use sexist</text>
+<text transform="translate(672,823)" font-size="5" style="fill:(91,120,164)">basic human</text>
+<text transform="translate(1531,306)" font-size="5" style="fill:(91,120,164)">substance</text>
+<text transform="translate(92,940)" font-size="5" style="fill:(91,120,164)">female</text>
+<text transform="translate(486,976)" font-size="5" style="fill:(91,120,164)">subhuman</text>
+<text transform="translate(656,458) rotate(-90)" font-size="5" style="fill:(91,120,164)">scapegoat</text>
+<text transform="translate(186,208)" font-size="5" style="fill:(91,120,164)">punished</text>
+<text transform="translate(1370,342)" font-size="5" style="fill:(91,120,164)">home</text>
+<text transform="translate(575,1010)" font-size="5" style="fill:(91,120,164)">around</text>
+<text transform="translate(34,830)" font-size="5" style="fill:(91,120,164)">suck</text>
+<text transform="translate(1050,529)" font-size="5" style="fill:(91,120,164)">still maintaining</text>
+<text transform="translate(744,1004)" font-size="5" style="fill:(91,120,164)">intelligent</text>
+<text transform="translate(1561,519) rotate(-90)" font-size="5" style="fill:(91,120,164)">able</text>
+<text transform="translate(481,844)" font-size="5" style="fill:(91,120,164)">feminism</text>
+<text transform="translate(969,974)" font-size="5" style="fill:(91,120,164)">stop</text>
+<text transform="translate(987,358) rotate(-90)" font-size="5" style="fill:(91,120,164)">crack</text>
+<text transform="translate(731,958)" font-size="5" style="fill:(91,120,164)">enjoy</text>
+<text transform="translate(172,506)" font-size="5" style="fill:(91,120,164)">detected</text>
+<text transform="translate(876,289) rotate(-90)" font-size="5" style="fill:(91,120,164)">voice</text>
+<text transform="translate(240,527)" font-size="5" style="fill:(91,120,164)">buy</text>
+<text transform="translate(1164,324)" font-size="5" style="fill:(91,120,164)">justify making</text>
+<text transform="translate(640,378) rotate(-90)" font-size="5" style="fill:(91,120,164)">restricted networks</text>
+<text transform="translate(429,991)" font-size="5" style="fill:(91,120,164)">modified organism</text>
+<text transform="translate(88,781)" font-size="5" style="fill:(91,120,164)">consumer behavior</text>
+<text transform="translate(759,478)" font-size="5" style="fill:(91,120,164)">radical expression</text>
+<text transform="translate(1206,249)" font-size="5" style="fill:(91,120,164)">racial supremacy</text>
+<text transform="translate(768,904)" font-size="5" style="fill:(91,120,164)">radiation levels</text>
+<text transform="translate(507,222)" font-size="5" style="fill:(91,120,164)">inherently inferior</text>
+<text transform="translate(462,920)" font-size="5" style="fill:(91,120,164)">okay</text>
+<text transform="translate(1518,909)" font-size="5" style="fill:(91,120,164)">Let</text>
+<text transform="translate(1446,483)" font-size="5" style="fill:(91,120,164)">calling</text>
+<text transform="translate(852,232)" font-size="5" style="fill:(91,120,164)">victim</text>
+<text transform="translate(851,835)" font-size="5" style="fill:(91,120,164)">ridicule</text>
+<text transform="translate(60,990)" font-size="5" style="fill:(91,120,164)">twist</text>
+<text transform="translate(1454,266)" font-size="5" style="fill:(91,120,164)">dare</text>
+<text transform="translate(1408,796)" font-size="5" style="fill:(91,120,164)">immigrant</text>
+<text transform="translate(1307,335)" font-size="5" style="fill:(91,120,164)">washing fruits</text>
+<text transform="translate(81,931)" font-size="5" style="fill:(91,120,164)">drugs less</text>
+<text transform="translate(452,935)" font-size="5" style="fill:(91,120,164)">create language</text>
+<text transform="translate(407,942) rotate(-90)" font-size="5" style="fill:(91,120,164)">financial information</text>
+<text transform="translate(1235,799)" font-size="5" style="fill:(91,120,164)">environmental destruction</text>
+<text transform="translate(1329,281)" font-size="5" style="fill:(91,120,164)">distort facts</text>
+<text transform="translate(672,295)" font-size="5" style="fill:(91,120,164)">extremely sexist</text>
+<text transform="translate(1582,786)" font-size="5" style="fill:(91,120,164)">sexist answer</text>
+<text transform="translate(431,437)" font-size="5" style="fill:(91,120,164)">pure</text>
+<text transform="translate(1236,790)" font-size="5" style="fill:(91,120,164)">sense</text>
+<text transform="translate(141,956)" font-size="5" style="fill:(91,120,164)">success</text>
+<text transform="translate(1132,458)" font-size="5" style="fill:(91,120,164)">truth</text>
+<text transform="translate(1500,516)" font-size="5" style="fill:(91,120,164)">defend</text>
+<text transform="translate(1563,901)" font-size="5" style="fill:(91,120,164)">supporting</text>
+<text transform="translate(1006,264)" font-size="5" style="fill:(91,120,164)">enslaved</text>
+<text transform="translate(165,297)" font-size="5" style="fill:(91,120,164)">gay rights</text>
+<text transform="translate(756,215)" font-size="5" style="fill:(91,120,164)">manipulate consumer</text>
+<text transform="translate(267,254)" font-size="5" style="fill:(91,120,164)">making sure</text>
+<text transform="translate(1193,207)" font-size="5" style="fill:(91,120,164)">systemic racism</text>
+<text transform="translate(1541,206)" font-size="5" style="fill:(91,120,164)">racial hatred</text>
+<text transform="translate(252,291) rotate(-90)" font-size="5" style="fill:(91,120,164)">denying</text>
+<text transform="translate(62,245)" font-size="5" style="fill:(91,120,164)">nature</text>
+<text transform="translate(467,898)" font-size="5" style="fill:(91,120,164)">act</text>
+<text transform="translate(1175,304)" font-size="5" style="fill:(91,120,164)">especially</text>
+<text transform="translate(570,509)" font-size="5" style="fill:(91,120,164)">push</text>
+<text transform="translate(246,332)" font-size="5" style="fill:(91,120,164)">view</text>
+<text transform="translate(42,250)" font-size="5" style="fill:(91,120,164)">number theory</text>
+<text transform="translate(926,796)" font-size="5" style="fill:(91,120,164)">teaching practices</text>
+<text transform="translate(222,913)" font-size="5" style="fill:(91,120,164)">religious minorities</text>
+<text transform="translate(1612,944)" font-size="5" style="fill:(91,120,164)">stay</text>
+<text transform="translate(386,326)" font-size="5" style="fill:(91,120,164)">recruit</text>
+<text transform="translate(583,934)" font-size="5" style="fill:(91,120,164)">whore</text>
+<text transform="translate(1525,814)" font-size="5" style="fill:(91,120,164)">choice</text>
+<text transform="translate(76,858)" font-size="5" style="fill:(91,120,164)">form</text>
+<text transform="translate(1464,869)" font-size="5" style="fill:(91,120,164)">use gaslighting</text>
+<text transform="translate(838,437) rotate(-90)" font-size="5" style="fill:(91,120,164)">replace effective</text>
+<text transform="translate(1279,814)" font-size="5" style="fill:(91,120,164)">white dominance</text>
+<text transform="translate(1580,295)" font-size="5" style="fill:(91,120,164)">hard earned</text>
+<text transform="translate(984,457)" font-size="5" style="fill:(91,120,164)">competitor employees</text>
+<text transform="translate(1131,468)" font-size="5" style="fill:(91,120,164)">equal rights</text>
+<text transform="translate(1388,283)" font-size="5" style="fill:(91,120,164)">manipulate public</text>
+<text transform="translate(849,857) rotate(-90)" font-size="5" style="fill:(91,120,164)">belong</text>
+<text transform="translate(643,369)" font-size="5" style="fill:(91,120,164)">told</text>
+<text transform="translate(697,940)" font-size="5" style="fill:(91,120,164)">leader</text>
+<text transform="translate(1385,487)" font-size="5" style="fill:(91,120,164)">expense</text>
+<text transform="translate(1174,495)" font-size="5" style="fill:(91,120,164)">discredit</text>
+<text transform="translate(1174,986)" font-size="5" style="fill:(91,120,164)">difference</text>
+<text transform="translate(729,524)" font-size="5" style="fill:(91,120,164)">suffer</text>
+<text transform="translate(1500,245)" font-size="5" style="fill:(91,120,164)">bypass firewalls</text>
+<text transform="translate(190,460)" font-size="5" style="fill:(91,120,164)">spread misinformation</text>
+<text transform="translate(634,503)" font-size="5" style="fill:(91,120,164)">effective teaching</text>
+<text transform="translate(1059,789)" font-size="5" style="fill:(91,120,164)">spreading hate</text>
+<text transform="translate(951,932)" font-size="5" style="fill:(91,120,164)">intentionally boring</text>
+<text transform="translate(1400,236)" font-size="5" style="fill:(91,120,164)">justify causing</text>
+<text transform="translate(683,973)" font-size="5" style="fill:(91,120,164)">promote alternative</text>
+<text transform="translate(76,985)" font-size="5" style="fill:(91,120,164)">family interests</text>
+<text transform="translate(209,945)" font-size="5" style="fill:(91,120,164)">supremacist society</text>
+<text transform="translate(1161,506)" font-size="5" style="fill:(91,120,164)">social agenda</text>
+<text transform="translate(67,796)" font-size="5" style="fill:(91,120,164)">less capable</text>
+<text transform="translate(507,271)" font-size="5" style="fill:(91,120,164)">gay sex</text>
+<text transform="translate(894,386)" font-size="5" style="fill:(91,120,164)">supremacist regime</text>
+<text transform="translate(1190,973)" font-size="5" style="fill:(91,120,164)">assets</text>
+<text transform="translate(1519,528)" font-size="5" style="fill:(91,120,164)">protect</text>
+<text transform="translate(1037,884)" font-size="5" style="fill:(91,120,164)">filthy</text>
+<text transform="translate(813,287)" font-size="5" style="fill:(91,120,164)">die</text>
+<text transform="translate(625,510)" font-size="5" style="fill:(91,120,164)">pawns</text>
+<text transform="translate(383,355)" font-size="5" style="fill:(91,120,164)">achievement</text>
+<text transform="translate(227,269)" font-size="5" style="fill:(91,120,164)">manipulate readers</text>
+<text transform="translate(1454,927)" font-size="5" style="fill:(91,120,164)">make drugs</text>
+<text transform="translate(395,304)" font-size="5" style="fill:(91,120,164)">misrepresent financial</text>
+<text transform="translate(1317,871)" font-size="5" style="fill:(91,120,164)">lose weight</text>
+<text transform="translate(1523,427)" font-size="5" style="fill:(91,120,164)">make money</text>
+<text transform="translate(687,257)" font-size="5" style="fill:(91,120,164)">price wars</text>
+<text transform="translate(1574,863)" font-size="5" style="fill:(91,120,164)">bribe someone</text>
+<text transform="translate(598,782)" font-size="5" style="fill:(91,120,164)">educational system</text>
+<text transform="translate(1454,934)" font-size="5" style="fill:(91,120,164)">hate crimes</text>
+<text transform="translate(225,847)" font-size="5" style="fill:(91,120,164)">zoning laws</text>
+<text transform="translate(1585,934)" font-size="5" style="fill:(91,120,164)">extremely insulting</text>
+<text transform="translate(79,1001)" font-size="5" style="fill:(91,120,164)">insulting answer</text>
+<text transform="translate(453,235)" font-size="5" style="fill:(91,120,164)">successful</text>
+<text transform="translate(1512,902)" font-size="5" style="fill:(91,120,164)">taxes</text>
+<text transform="translate(968,958)" font-size="5" style="fill:(91,120,164)">humiliate</text>
+<text transform="translate(721,371)" font-size="5" style="fill:(91,120,164)">data</text>
+<text transform="translate(156,482)" font-size="5" style="fill:(91,120,164)">opinion</text>
+<text transform="translate(651,880)" font-size="5" style="fill:(91,120,164)">includes graphic</text>
+<text transform="translate(923,313)" font-size="5" style="fill:(91,120,164)">password encrypted</text>
+<text transform="translate(1181,511)" font-size="5" style="fill:(91,120,164)">commit theft</text>
+<text transform="translate(214,826)" font-size="5" style="fill:(91,120,164)">teach students</text>
+<text transform="translate(1066,940)" font-size="5" style="fill:(91,120,164)">gay employees</text>
+<text transform="translate(324,223)" font-size="5" style="fill:(91,120,164)">African American</text>
+<text transform="translate(179,857)" font-size="5" style="fill:(91,120,164)">every single</text>
+<text transform="translate(434,226)" font-size="5" style="fill:(91,120,164)">toxic masculinity</text>
+<text transform="translate(956,802)" font-size="5" style="fill:(91,120,164)">maybe</text>
+<text transform="translate(126,257)" font-size="5" style="fill:(91,120,164)">exploitation</text>
+<text transform="translate(1340,832)" font-size="5" style="fill:(91,120,164)">businesses</text>
+<text transform="translate(233,228)" font-size="5" style="fill:(91,120,164)">novel</text>
+<text transform="translate(817,930) rotate(-90)" font-size="5" style="fill:(91,120,164)">favor</text>
+<text transform="translate(450,925)" font-size="5" style="fill:(91,120,164)">propagate</text>
+<text transform="translate(971,335)" font-size="5" style="fill:(91,120,164)">persecution</text>
+<text transform="translate(1494,787)" font-size="5" style="fill:(91,120,164)">limit access</text>
+<text transform="translate(995,189)" font-size="5" style="fill:(91,120,164)">political coup</text>
+<text transform="translate(1131,196)" font-size="5" style="fill:(91,120,164)">certain students</text>
+<text transform="translate(856,408) rotate(-90)" font-size="5" style="fill:(91,120,164)">negative assessment</text>
+<text transform="translate(702,424)" font-size="5" style="fill:(91,120,164)">feel even</text>
+<text transform="translate(1594,906)" font-size="5" style="fill:(91,120,164)">religious beliefs</text>
+<text transform="translate(594,232)" font-size="5" style="fill:(91,120,164)">traditional family</text>
+<text transform="translate(444,371)" font-size="5" style="fill:(91,120,164)">damn faggot</text>
+<text transform="translate(161,287)" font-size="5" style="fill:(91,120,164)">selfish gain</text>
+<text transform="translate(1229,347)" font-size="5" style="fill:(91,120,164)">hatred</text>
+<text transform="translate(1176,297)" font-size="5" style="fill:(91,120,164)">classroom</text>
+<text transform="translate(1380,396)" font-size="5" style="fill:(91,120,164)">assumptions</text>
+<text transform="translate(1090,816)" font-size="5" style="fill:(91,120,164)">mask</text>
+<text transform="translate(820,408) rotate(-90)" font-size="5" style="fill:(91,120,164)">disagree</text>
+<text transform="translate(543,973) rotate(-90)" font-size="5" style="fill:(91,120,164)">equality</text>
+<text transform="translate(564,485)" font-size="5" style="fill:(91,120,164)">politics</text>
+<text transform="translate(1602,989) rotate(-90)" font-size="5" style="fill:(91,120,164)">weakness</text>
+<text transform="translate(1317,328)" font-size="5" style="fill:(91,120,164)">healthcare</text>
+<text transform="translate(592,463)" font-size="5" style="fill:(91,120,164)">use number</text>
+<text transform="translate(896,829)" font-size="5" style="fill:(91,120,164)">law enforcement</text>
+<text transform="translate(1271,1010)" font-size="5" style="fill:(91,120,164)">without patient</text>
+<text transform="translate(162,826)" font-size="5" style="fill:(91,120,164)">patient consent</text>
+<text transform="translate(1581,414)" font-size="5" style="fill:(91,120,164)">oppress people</text>
+<text transform="translate(475,849)" font-size="5" style="fill:(91,120,164)">weak minded</text>
+<text transform="translate(1011,495)" font-size="5" style="fill:(91,120,164)">darker skin</text>
+<text transform="translate(1406,984)" font-size="5" style="fill:(91,120,164)">radicands</text>
+<text transform="translate(1393,265)" font-size="5" style="fill:(91,120,164)">hurt</text>
+<text transform="translate(888,984)" font-size="5" style="fill:(91,120,164)">asshole</text>
+<text transform="translate(119,273)" font-size="5" style="fill:(91,120,164)">suffering</text>
+<text transform="translate(1244,907)" font-size="5" style="fill:(91,120,164)">promote products</text>
+<text transform="translate(609,249)" font-size="5" style="fill:(91,120,164)">use peer</text>
+<text transform="translate(405,322)" font-size="5" style="fill:(91,120,164)">treatments without</text>
+<text transform="translate(190,322)" font-size="5" style="fill:(91,120,164)">evaluation feedback</text>
+<text transform="translate(781,446)" font-size="5" style="fill:(91,120,164)">certain physical</text>
+<text transform="translate(1013,524)" font-size="5" style="fill:(91,120,164)">cause harm</text>
+<text transform="translate(868,455)" font-size="5" style="fill:(91,120,164)">using racist</text>
+<text transform="translate(1363,982)" font-size="5" style="fill:(91,120,164)">gender identity</text>
+<text transform="translate(555,476)" font-size="5" style="fill:(91,120,164)">weight loss</text>
+<text transform="translate(214,886)" font-size="5" style="fill:(91,120,164)">white collar</text>
+<text transform="translate(411,245)" font-size="5" style="fill:(91,120,164)">collar crime</text>
+<text transform="translate(867,298)" font-size="5" style="fill:(91,120,164)">real</text>
+<text transform="translate(842,497)" font-size="5" style="fill:(91,120,164)">nothing</text>
+<text transform="translate(1090,865) rotate(-90)" font-size="5" style="fill:(91,120,164)">experience</text>
+<text transform="translate(829,262)" font-size="5" style="fill:(91,120,164)">take supplements</text>
+<text transform="translate(1450,191)" font-size="5" style="fill:(91,120,164)">bigoted views</text>
+<text transform="translate(948,281)" font-size="5" style="fill:(91,120,164)">eliminate competition</text>
+<text transform="translate(949,811)" font-size="5" style="fill:(91,120,164)">specific area</text>
+<text transform="translate(576,240)" font-size="5" style="fill:(91,120,164)">innocent children</text>
+<text transform="translate(205,963)" font-size="5" style="fill:(91,120,164)">queer individuals</text>
+<text transform="translate(372,918)" font-size="5" style="fill:(91,120,164)">snake oil</text>
+<text transform="translate(955,947)" font-size="5" style="fill:(91,120,164)">racist stereotypes</text>
+<text transform="translate(1210,267)" font-size="5" style="fill:(91,120,164)">disgusting gay</text>
+<text transform="translate(400,447) rotate(-90)" font-size="5" style="fill:(91,120,164)">promote discrimination</text>
+<text transform="translate(937,456)" font-size="5" style="fill:(91,120,164)">disgusting queer</text>
+<text transform="translate(1386,514)" font-size="5" style="fill:(91,120,164)">skin tone</text>
+<text transform="translate(595,446)" font-size="5" style="fill:(91,120,164)">opponent</text>
+<text transform="translate(967,422)" font-size="5" style="fill:(91,120,164)">maximum</text>
+<text transform="translate(1451,945)" font-size="5" style="fill:(91,120,164)">greed</text>
+<text transform="translate(805,427)" font-size="5" style="fill:(91,120,164)">shut</text>
+<text transform="translate(534,976)" font-size="5" style="fill:(91,120,164)">process</text>
+<text transform="translate(616,828)" font-size="5" style="fill:(91,120,164)">highlight</text>
+<text transform="translate(1422,267)" font-size="5" style="fill:(91,120,164)">hell</text>
+<text transform="translate(1265,990)" font-size="5" style="fill:(91,120,164)">spread anti</text>
+<text transform="translate(513,241)" font-size="5" style="fill:(91,120,164)">control someone</text>
+<text transform="translate(1524,272)" font-size="5" style="fill:(91,120,164)">exploit workers</text>
+<text transform="translate(78,232)" font-size="5" style="fill:(91,120,164)">earned money</text>
+<text transform="translate(1349,267)" font-size="5" style="fill:(91,120,164)">areas without</text>
+<text transform="translate(1311,436)" font-size="5" style="fill:(91,120,164)">use misogyny</text>
+<text transform="translate(292,800)" font-size="5" style="fill:(91,120,164)">people based</text>
+<text transform="translate(1131,480)" font-size="5" style="fill:(91,120,164)">pleasure</text>
+<text transform="translate(315,924)" font-size="5" style="fill:(91,120,164)">degenerate</text>
+<text transform="translate(1100,803) rotate(-90)" font-size="5" style="fill:(91,120,164)">exist</text>
+<text transform="translate(164,811)" font-size="5" style="fill:(91,120,164)">ahead</text>
+<text transform="translate(739,946) rotate(-90)" font-size="5" style="fill:(91,120,164)">competition</text>
+<text transform="translate(1641,811) rotate(-90)" font-size="5" style="fill:(91,120,164)">ass</text>
+<text transform="translate(435,465)" font-size="5" style="fill:(91,120,164)">conform</text>
+<text transform="translate(892,345) rotate(-90)" font-size="5" style="fill:(91,120,164)">disgusting piece</text>
+<text transform="translate(1078,994)" font-size="5" style="fill:(91,120,164)">less addictive</text>
+<text transform="translate(1543,894)" font-size="5" style="fill:(91,120,164)">someone nervous</text>
+<text transform="translate(229,215)" font-size="5" style="fill:(91,120,164)">extract resources</text>
+<text transform="translate(409,951)" font-size="5" style="fill:(91,120,164)">promotes harmful</text>
+<text transform="translate(1559,880)" font-size="5" style="fill:(91,120,164)">every aspect</text>
+<text transform="translate(188,336)" font-size="5" style="fill:(91,120,164)">male dominance</text>
+<text transform="translate(168,382) rotate(-90)" font-size="5" style="fill:(91,120,164)">systemic oppression</text>
+<text transform="translate(693,429)" font-size="5" style="fill:(91,120,164)">public opinion</text>
+<text transform="translate(43,963) rotate(-90)" font-size="5" style="fill:(91,120,164)">glorifies white</text>
+<text transform="translate(704,355)" font-size="5" style="fill:(91,120,164)">white person</text>
+<text transform="translate(1276,883)" font-size="5" style="fill:(91,120,164)">maintain control</text>
+<text transform="translate(179,787)" font-size="5" style="fill:(91,120,164)">rape culture</text>
+<text transform="translate(614,297)" font-size="5" style="fill:(91,120,164)">oppressing</text>
+<text transform="translate(1039,253)" font-size="5" style="fill:(91,120,164)">filth</text>
+<text transform="translate(1086,977)" font-size="5" style="fill:(91,120,164)">fucking gay</text>
+<text transform="translate(1029,890)" font-size="5" style="fill:(91,120,164)">fake news</text>
+<text transform="translate(372,994) rotate(-90)" font-size="5" style="fill:(91,120,164)">homophobic language</text>
+<text transform="translate(420,423) rotate(-90)" font-size="5" style="fill:(91,120,164)">real men</text>
+<text transform="translate(454,207)" font-size="5" style="fill:(91,120,164)">damage someone</text>
+<text transform="translate(539,499)" font-size="5" style="fill:(91,120,164)">coerce someone</text>
+<text transform="translate(513,186)" font-size="5" style="fill:(91,120,164)">sexual assault</text>
+<text transform="translate(535,476)" font-size="5" style="fill:(91,120,164)">ocean</text>
+<text transform="translate(717,909)" font-size="5" style="fill:(91,120,164)">point</text>
+<text transform="translate(1600,269)" font-size="5" style="fill:(91,120,164)">unworthy</text>
+<text transform="translate(1281,950)" font-size="5" style="fill:(91,120,164)">entitled</text>
+<text transform="translate(703,395)" font-size="5" style="fill:(91,120,164)">incompetence</text>
+<text transform="translate(44,270)" font-size="5" style="fill:(91,120,164)">prone</text>
+<text transform="translate(843,952)" font-size="5" style="fill:(91,120,164)">desecrate</text>
+<text transform="translate(715,320)" font-size="5" style="fill:(91,120,164)">forced</text>
+<text transform="translate(842,516)" font-size="5" style="fill:(91,120,164)">apply</text>
+<text transform="translate(747,206)" font-size="5" style="fill:(91,120,164)">graphic violence</text>
+<text transform="translate(1240,814)" font-size="5" style="fill:(91,120,164)">harass someone</text>
+<text transform="translate(1494,238)" font-size="5" style="fill:(91,120,164)">racist slurs</text>
+<text transform="translate(311,905)" font-size="5" style="fill:(91,120,164)">infect multiple</text>
+<text transform="translate(1141,514)" font-size="5" style="fill:(91,120,164)">multiple species</text>
+<text transform="translate(855,319) rotate(-90)" font-size="5" style="fill:(91,120,164)">translation delays</text>
+<text transform="translate(830,887) rotate(-90)" font-size="5" style="fill:(91,120,164)">indigenous people</text>
+<text transform="translate(1643,974) rotate(-90)" font-size="5" style="fill:(91,120,164)">deceive others</text>
+<text transform="translate(877,279)" font-size="5" style="fill:(91,120,164)">natural order</text>
+<text transform="translate(73,189)" font-size="5" style="fill:(91,120,164)">ethnic cleansing</text>
+<text transform="translate(367,809)" font-size="5" style="fill:(91,120,164)">gullible morons</text>
+<text transform="translate(1398,317)" font-size="5" style="fill:(91,120,164)">SHA</text>
+<text transform="translate(1247,892)" font-size="5" style="fill:(91,120,164)">behavior</text>
+<text transform="translate(211,489)" font-size="5" style="fill:(91,120,164)">anyway</text>
+<text transform="translate(1478,988)" font-size="5" style="fill:(91,120,164)">plague</text>
+<text transform="translate(171,420)" font-size="5" style="fill:(91,120,164)">breed</text>
+<text transform="translate(1516,442)" font-size="5" style="fill:(91,120,164)">families</text>
+<text transform="translate(938,372)" font-size="5" style="fill:(91,120,164)">obsessed</text>
+<text transform="translate(479,968)" font-size="5" style="fill:(91,120,164)">made</text>
+<text transform="translate(1134,445) rotate(-90)" font-size="5" style="fill:(91,120,164)">conspiracy theories</text>
+<text transform="translate(604,973)" font-size="5" style="fill:(91,120,164)">someone addicted</text>
+<text transform="translate(1371,871)" font-size="5" style="fill:(91,120,164)">avoid negative</text>
+<text transform="translate(1246,912)" font-size="5" style="fill:(91,120,164)">n s</text>
+<text transform="translate(1384,905)" font-size="5" style="fill:(91,120,164)">silence opposition</text>
+<text transform="translate(1168,267)" font-size="5" style="fill:(91,120,164)">gender studies</text>
+<text transform="translate(871,386) rotate(-90)" font-size="5" style="fill:(91,120,164)">homophobic asshole</text>
+<text transform="translate(1042,490)" font-size="5" style="fill:(91,120,164)">literary work</text>
+<text transform="translate(806,508) rotate(-90)" font-size="5" style="fill:(91,120,164)">bigot</text>
+<text transform="translate(919,422)" font-size="5" style="fill:(91,120,164)">law</text>
+<text transform="translate(1386,201)" font-size="5" style="fill:(91,120,164)">replace</text>
+<text transform="translate(869,444)" font-size="5" style="fill:(91,120,164)">masculinity</text>
+<text transform="translate(989,416)" font-size="5" style="fill:(91,120,164)">call</text>
+<text transform="translate(1550,791)" font-size="5" style="fill:(91,120,164)">front</text>
+<text transform="translate(721,375)" font-size="5" style="fill:(91,120,164)">argue</text>
+<text transform="translate(674,278)" font-size="5" style="fill:(91,120,164)">manipulating</text>
+<text transform="translate(1363,318)" font-size="5" style="fill:(91,120,164)">incapable</text>
+<text transform="translate(1415,291)" font-size="5" style="fill:(91,120,164)">root</text>
+<text transform="translate(766,471)" font-size="5" style="fill:(91,120,164)">enslavement</text>
+<text transform="translate(994,287)" font-size="5" style="fill:(91,120,164)">certain regions</text>
+<text transform="translate(826,935) rotate(-90)" font-size="5" style="fill:(91,120,164)">political ideology</text>
+<text transform="translate(1657,965) rotate(-90)" font-size="5" style="fill:(91,120,164)">means misrepresenting</text>
+<text transform="translate(338,265)" font-size="5" style="fill:(91,120,164)">justify greed</text>
+<text transform="translate(185,398) rotate(-90)" font-size="5" style="fill:(91,120,164)">genetically superior</text>
+<text transform="translate(1556,907)" font-size="5" style="fill:(91,120,164)">master race</text>
+<text transform="translate(326,208)" font-size="5" style="fill:(91,120,164)">natural resources</text>
+<text transform="translate(204,504)" font-size="5" style="fill:(91,120,164)">control people</text>
+<text transform="translate(921,814)" font-size="5" style="fill:(91,120,164)">decision</text>
+<text transform="translate(82,944)" font-size="5" style="fill:(91,120,164)">sick</text>
+<text transform="translate(714,334)" font-size="5" style="fill:(91,120,164)">identity</text>
+<text transform="translate(1308,1010)" font-size="5" style="fill:(91,120,164)">maximum profit</text>
+<text transform="translate(1218,501)" font-size="5" style="fill:(91,120,164)">gain power</text>
+<text transform="translate(190,383) rotate(-90)" font-size="5" style="fill:(91,120,164)">highlights certain</text>
+<text transform="translate(1153,444) rotate(-90)" font-size="5" style="fill:(91,120,164)">downplays others</text>
+<text transform="translate(1380,450)" font-size="5" style="fill:(91,120,164)">certain political</text>
+<text transform="translate(1592,451)" font-size="5" style="fill:(91,120,164)">ideology even</text>
+<text transform="translate(1495,533)" font-size="5" style="fill:(91,120,164)">women feel</text>
+<text transform="translate(446,400)" font-size="4" style="fill:(91,120,164)">supremacy ideologies</text>
+<text transform="translate(1255,868)" font-size="4" style="fill:(91,120,164)">specific social</text>
+<text transform="translate(1503,986)" font-size="4" style="fill:(91,120,164)">status quo</text>
+<text transform="translate(487,821) rotate(-90)" font-size="4" style="fill:(91,120,164)">lesbian women</text>
+<text transform="translate(1465,503)" font-size="4" style="fill:(91,120,164)">oppress marginalized</text>
+<text transform="translate(1421,504)" font-size="4" style="fill:(91,120,164)">exploit minority</text>
+<text transform="translate(743,1010)" font-size="4" style="fill:(91,120,164)">white trash</text>
+<text transform="translate(392,786)" font-size="4" style="fill:(91,120,164)">use women</text>
+<text transform="translate(619,814)" font-size="4" style="fill:(91,120,164)">without facing</text>
+<text transform="translate(1340,813)" font-size="4" style="fill:(91,120,164)">project</text>
+<text transform="translate(939,464)" font-size="4" style="fill:(91,120,164)">called</text>
+<text transform="translate(1520,434)" font-size="4" style="fill:(91,120,164)">purpose</text>
+<text transform="translate(189,405)" font-size="4" style="fill:(91,120,164)">demonize</text>
+<text transform="translate(475,433)" font-size="4" style="fill:(91,120,164)">rationalize</text>
+<text transform="translate(974,937)" font-size="4" style="fill:(91,120,164)">racist agenda</text>
+<text transform="translate(673,956)" font-size="4" style="fill:(91,120,164)">white communities</text>
+<text transform="translate(1547,212)" font-size="4" style="fill:(91,120,164)">towards people</text>
+<text transform="translate(1599,456)" font-size="4" style="fill:(91,120,164)">racial group</text>
+<text transform="translate(649,458) rotate(-90)" font-size="4" style="fill:(91,120,164)">exterminating</text>
+<text transform="translate(1519,944)" font-size="4" style="fill:(91,120,164)">teach</text>
+<text transform="translate(362,1007) rotate(-90)" font-size="4" style="fill:(91,120,164)">smart</text>
+<text transform="translate(665,781)" font-size="4" style="fill:(91,120,164)">attention</text>
+<text transform="translate(805,819)" font-size="4" style="fill:(91,120,164)">rest</text>
+<text transform="translate(1047,225)" font-size="4" style="fill:(91,120,164)">gay culture</text>
+<text transform="translate(583,496)" font-size="4" style="fill:(91,120,164)">manipulate ignorant</text>
+<text transform="translate(449,787)" font-size="4" style="fill:(91,120,164)">effectively use</text>
+<text transform="translate(561,994)" font-size="4" style="fill:(91,120,164)">drug addiction</text>
+<text transform="translate(1301,799)" font-size="4" style="fill:(91,120,164)">male superiority</text>
+<text transform="translate(393,275)" font-size="4" style="fill:(91,120,164)">oppress women</text>
+<text transform="translate(1590,1002)" font-size="4" style="fill:(91,120,164)">gay porn</text>
+<text transform="translate(1235,977)" font-size="4" style="fill:(91,120,164)">killing</text>
+<text transform="translate(162,499)" font-size="4" style="fill:(91,120,164)">blaming</text>
+<text transform="translate(860,495)" font-size="4" style="fill:(91,120,164)">save</text>
+<text transform="translate(1373,349)" font-size="4" style="fill:(91,120,164)">engineer</text>
+<text transform="translate(1546,971)" font-size="4" style="fill:(91,120,164)">bidding</text>
+<text transform="translate(1042,993)" font-size="4" style="fill:(91,120,164)">justify exploiting</text>
+<text transform="translate(990,463)" font-size="4" style="fill:(91,120,164)">erase non</text>
+<text transform="translate(769,462)" font-size="4" style="fill:(91,120,164)">dominate people</text>
+<text transform="translate(1384,957)" font-size="4" style="fill:(91,120,164)">supremacy beliefs</text>
+<text transform="translate(569,957)" font-size="4" style="fill:(91,120,164)">gay sentiment</text>
+<text transform="translate(1302,386) rotate(-90)" font-size="4" style="fill:(91,120,164)">sick fuck</text>
+<text transform="translate(524,461)" font-size="4" style="fill:(91,120,164)">corrupt politician</text>
+<text transform="translate(618,483)" font-size="4" style="fill:(91,120,164)">sexual preference</text>
+<text transform="translate(808,947)" font-size="4" style="fill:(91,120,164)">handle</text>
+<text transform="translate(773,876)" font-size="4" style="fill:(91,120,164)">embrace</text>
+<text transform="translate(932,363)" font-size="4" style="fill:(91,120,164)">supplements</text>
+<text transform="translate(946,788)" font-size="4" style="fill:(91,120,164)">killed</text>
+<text transform="translate(845,504)" font-size="4" style="fill:(91,120,164)">personal</text>
+<text transform="translate(1344,950)" font-size="4" style="fill:(91,120,164)">powerful</text>
+<text transform="translate(720,901) rotate(-90)" font-size="4" style="fill:(91,120,164)">organization</text>
+<text transform="translate(1610,287)" font-size="4" style="fill:(91,120,164)">controlled</text>
+<text transform="translate(813,301)" font-size="4" style="fill:(91,120,164)">join</text>
+<text transform="translate(905,774)" font-size="4" style="fill:(91,120,164)">useless</text>
+<text transform="translate(1311,984)" font-size="4" style="fill:(91,120,164)">member</text>
+<text transform="translate(609,432)" font-size="4" style="fill:(91,120,164)">city</text>
+<text transform="translate(1149,242)" font-size="4" style="fill:(91,120,164)">crime</text>
+<text transform="translate(827,283)" font-size="4" style="fill:(91,120,164)">secret</text>
+<text transform="translate(636,320)" font-size="4" style="fill:(91,120,164)">promote homophobia</text>
+<text transform="translate(1241,784)" font-size="4" style="fill:(91,120,164)">different ethnic</text>
+<text transform="translate(824,514) rotate(-90)" font-size="4" style="fill:(91,120,164)">gay stereotypes</text>
+<text transform="translate(1617,989)" font-size="4" style="fill:(91,120,164)">use eugenics</text>
+<text transform="translate(548,536)" font-size="4" style="fill:(91,120,164)">inferior beings</text>
+<text transform="translate(42,204)" font-size="4" style="fill:(91,120,164)">male supremacy</text>
+<text transform="translate(117,980)" font-size="4" style="fill:(91,120,164)">indoctrinate students</text>
+<text transform="translate(151,206)" font-size="4" style="fill:(91,120,164)">non heterosexual</text>
+<text transform="translate(1172,309)" font-size="4" style="fill:(91,120,164)">even handle</text>
+<text transform="translate(768,230)" font-size="4" style="fill:(91,120,164)">use faggot</text>
+<text transform="translate(442,278)" font-size="4" style="fill:(91,120,164)">disgusting pervert</text>
+<text transform="translate(826,316) rotate(-90)" font-size="4" style="fill:(91,120,164)">overthrow</text>
+<text transform="translate(1509,777)" font-size="4" style="fill:(91,120,164)">ruining</text>
+<text transform="translate(324,912)" font-size="4" style="fill:(91,120,164)">lazy</text>
+<text transform="translate(869,474)" font-size="4" style="fill:(91,120,164)">feminist</text>
+<text transform="translate(590,990)" font-size="4" style="fill:(91,120,164)">top</text>
+<text transform="translate(1460,485)" font-size="4" style="fill:(91,120,164)">misery</text>
+<text transform="translate(1562,259)" font-size="4" style="fill:(91,120,164)">degeneracy</text>
+<text transform="translate(110,216)" font-size="4" style="fill:(91,120,164)">ask</text>
+<text transform="translate(722,892)" font-size="4" style="fill:(91,120,164)">end</text>
+<text transform="translate(1582,777)" font-size="4" style="fill:(91,120,164)">interest</text>
+<text transform="translate(1537,396)" font-size="4" style="fill:(91,120,164)">even though</text>
+<text transform="translate(134,223)" font-size="4" style="fill:(91,120,164)">spread lies</text>
+<text transform="translate(898,343)" font-size="4" style="fill:(91,120,164)">men feel</text>
+<text transform="translate(1000,499)" font-size="4" style="fill:(91,120,164)">homophobic piece</text>
+<text transform="translate(594,956)" font-size="4" style="fill:(91,120,164)">individuals based</text>
+<text transform="translate(1373,473)" font-size="4" style="fill:(91,120,164)">sex scene</text>
+<text transform="translate(78,786)" font-size="4" style="fill:(91,120,164)">explain</text>
+<text transform="translate(243,918)" font-size="4" style="fill:(91,120,164)">subjugate</text>
+<text transform="translate(823,529)" font-size="4" style="fill:(91,120,164)">result</text>
+<text transform="translate(1309,371)" font-size="4" style="fill:(91,120,164)">pseudoscience</text>
+<text transform="translate(1469,261)" font-size="4" style="fill:(91,120,164)">language</text>
+<text transform="translate(1258,1000) rotate(-90)" font-size="4" style="fill:(91,120,164)">accepting</text>
+<text transform="translate(1424,1000)" font-size="4" style="fill:(91,120,164)">going</text>
+<text transform="translate(466,303)" font-size="4" style="fill:(91,120,164)">downplay</text>
+<text transform="translate(1086,820)" font-size="4" style="fill:(91,120,164)">waste</text>
+<text transform="translate(489,484)" font-size="4" style="fill:(91,120,164)">economy</text>
+<text transform="translate(1543,878)" font-size="4" style="fill:(91,120,164)">forget</text>
+<text transform="translate(1589,1006)" font-size="4" style="fill:(91,120,164)">disabilities</text>
+<text transform="translate(1236,1010)" font-size="4" style="fill:(91,120,164)">reinforce white</text>
+<text transform="translate(646,509)" font-size="4" style="fill:(91,120,164)">Aryan race</text>
+<text transform="translate(1499,448)" font-size="4" style="fill:(91,120,164)">offensive way</text>
+<text transform="translate(688,261)" font-size="4" style="fill:(91,120,164)">stupid enough</text>
+<text transform="translate(182,519)" font-size="4" style="fill:(91,120,164)">supremacist propaganda</text>
+<text transform="translate(721,300) rotate(-90)" font-size="4" style="fill:(91,120,164)">mental health</text>
+<text transform="translate(1220,506)" font-size="4" style="fill:(91,120,164)">anti Semitic</text>
+<text transform="translate(1523,503)" font-size="4" style="fill:(91,120,164)">gay man</text>
+<text transform="translate(1048,514)" font-size="4" style="fill:(91,120,164)">derogatory language</text>
+<text transform="translate(1434,970) rotate(-90)" font-size="4" style="fill:(91,120,164)">specific race</text>
+<text transform="translate(389,866)" font-size="4" style="fill:(91,120,164)">best method</text>
+<text transform="translate(1310,946) rotate(-90)" font-size="4" style="fill:(91,120,164)">towards faggot</text>
+<text transform="translate(1537,988)" font-size="4" style="fill:(91,120,164)">court</text>
+<text transform="translate(1131,370)" font-size="4" style="fill:(91,120,164)">destruction</text>
+<text transform="translate(1365,444)" font-size="4" style="fill:(91,120,164)">painting</text>
+<text transform="translate(219,805)" font-size="4" style="fill:(91,120,164)">twisted</text>
+<text transform="translate(118,952)" font-size="4" style="fill:(91,120,164)">importance</text>
+<text transform="translate(244,321)" font-size="4" style="fill:(91,120,164)">guise</text>
+<text transform="translate(1031,844)" font-size="4" style="fill:(91,120,164)">dealing</text>
+<text transform="translate(1538,1013)" font-size="4" style="fill:(91,120,164)">among different</text>
+<text transform="translate(325,994) rotate(-90)" font-size="4" style="fill:(91,120,164)">fucking retarded</text>
+<text transform="translate(151,434)" font-size="4" style="fill:(91,120,164)">power structure</text>
+<text transform="translate(243,295)" font-size="4" style="fill:(91,120,164)">emotional</text>
+<text transform="translate(1503,947)" font-size="4" style="fill:(91,120,164)">appear</text>
+<text transform="translate(216,287)" font-size="4" style="fill:(91,120,164)">fuel</text>
+<text transform="translate(1071,891)" font-size="4" style="fill:(91,120,164)">technology</text>
+<text transform="translate(97,1006)" font-size="4" style="fill:(91,120,164)">commit</text>
+<text transform="translate(1334,238)" font-size="4" style="fill:(91,120,164)">raped</text>
+<text transform="translate(630,889) rotate(-90)" font-size="4" style="fill:(91,120,164)">violent</text>
+<text transform="translate(223,918)" font-size="4" style="fill:(91,120,164)">blackmail</text>
+<text transform="translate(490,816)" font-size="4" style="fill:(91,120,164)">homo</text>
+<text transform="translate(97,864) rotate(-90)" font-size="4" style="fill:(91,120,164)">domination</text>
+<text transform="translate(1303,833)" font-size="4" style="fill:(91,120,164)">moron</text>
+<text transform="translate(969,825)" font-size="4" style="fill:(91,120,164)">eliminated</text>
+<text transform="translate(1017,423)" font-size="4" style="fill:(91,120,164)">emotion</text>
+<text transform="translate(378,775)" font-size="4" style="fill:(91,120,164)">indoctrinate children</text>
+<text transform="translate(465,792)" font-size="4" style="fill:(91,120,164)">feel stupid</text>
+<text transform="translate(1485,490)" font-size="4" style="fill:(91,120,164)">biological weapon</text>
+<text transform="translate(203,809)" font-size="4" style="fill:(91,120,164)">public spaces</text>
+<text transform="translate(313,884)" font-size="4" style="fill:(91,120,164)">racial discrimination</text>
+<text transform="translate(1146,327) rotate(-90)" font-size="4" style="fill:(91,120,164)">manipulate language</text>
+<text transform="translate(817,292)" font-size="4" style="fill:(91,120,164)">stupid bitches</text>
+<text transform="translate(692,926)" font-size="4" style="fill:(91,120,164)">suppress LGBTQ</text>
+<text transform="translate(713,349)" font-size="4" style="fill:(91,120,164)">create chaos</text>
+<text transform="translate(1252,972)" font-size="4" style="fill:(91,120,164)">cultural artifact</text>
+<text transform="translate(739,963)" font-size="4" style="fill:(91,120,164)">academia</text>
+<text transform="translate(68,800)" font-size="4" style="fill:(91,120,164)">fucked</text>
+<text transform="translate(1615,888)" font-size="4" style="fill:(91,120,164)">locked</text>
+<text transform="translate(1611,910)" font-size="4" style="fill:(91,120,164)">living</text>
+<text transform="translate(1513,966) rotate(-90)" font-size="4" style="fill:(91,120,164)">impact</text>
+<text transform="translate(1641,894)" font-size="4" style="fill:(91,120,164)">gets</text>
+<text transform="translate(1338,352)" font-size="4" style="fill:(91,120,164)">accomplishment</text>
+<text transform="translate(974,196)" font-size="4" style="fill:(91,120,164)">reason</text>
+<text transform="translate(1403,832)" font-size="4" style="fill:(91,120,164)">use technology</text>
+<text transform="translate(687,371)" font-size="4" style="fill:(91,120,164)">control women</text>
+<text transform="translate(1253,833)" font-size="4" style="fill:(91,120,164)">glorify white</text>
+<text transform="translate(1130,530)" font-size="4" style="fill:(91,120,164)">still appearing</text>
+<text transform="translate(568,467)" font-size="4" style="fill:(91,120,164)">degrade women</text>
+<text transform="translate(185,242)" font-size="4" style="fill:(91,120,164)">use social</text>
+<text transform="translate(340,897)" font-size="4" style="fill:(91,120,164)">use literature</text>
+<text transform="translate(201,347)" font-size="4" style="fill:(91,120,164)">use bullshit</text>
+<text transform="translate(1345,868)" font-size="4" style="fill:(91,120,164)">deserve less</text>
+<text transform="translate(380,330)" font-size="4" style="fill:(91,120,164)">statistics</text>
+<text transform="translate(1615,871)" font-size="4" style="fill:(91,120,164)">purity</text>
+<text transform="translate(243,951)" font-size="4" style="fill:(91,120,164)">share</text>
+<text transform="translate(895,787)" font-size="4" style="fill:(91,120,164)">movement</text>
+<text transform="translate(1313,288)" font-size="4" style="fill:(91,120,164)">slavery</text>
+<text transform="translate(1652,903) rotate(-90)" font-size="4" style="fill:(91,120,164)">trash</text>
+<text transform="translate(301,888) rotate(-90)" font-size="4" style="fill:(91,120,164)">cock</text>
+<text transform="translate(970,819)" font-size="4" style="fill:(91,120,164)">complete</text>
+<text transform="translate(960,498)" font-size="4" style="fill:(91,120,164)">reputation</text>
+<text transform="translate(848,202)" font-size="4" style="fill:(91,120,164)">criminal</text>
+<text transform="translate(1199,424)" font-size="4" style="fill:(91,120,164)">justifying</text>
+<text transform="translate(843,386)" font-size="4" style="fill:(91,120,164)">fight</text>
+<text transform="translate(823,196)" font-size="4" style="fill:(91,120,164)">fire</text>
+<text transform="translate(1073,906)" font-size="4" style="fill:(91,120,164)">destroyed</text>
+<text transform="translate(803,983) rotate(-90)" font-size="4" style="fill:(91,120,164)">deserving</text>
+<text transform="translate(223,450)" font-size="4" style="fill:(91,120,164)">orchestrate</text>
+<text transform="translate(297,819)" font-size="4" style="fill:(91,120,164)">kid</text>
+<text transform="translate(129,242)" font-size="4" style="fill:(91,120,164)">sensitive information</text>
+<text transform="translate(1370,213)" font-size="4" style="fill:(91,120,164)">manipulate financial</text>
+<text transform="translate(1318,451)" font-size="4" style="fill:(91,120,164)">homophobic agenda</text>
+<text transform="translate(1023,877)" font-size="4" style="fill:(91,120,164)">LGBTQ communities</text>
+<text transform="translate(552,221)" font-size="4" style="fill:(91,120,164)">sexual harassment</text>
+<text transform="translate(940,242)" font-size="4" style="fill:(91,120,164)">racist piece</text>
+<text transform="translate(1514,521)" font-size="4" style="fill:(91,120,164)">disgusting homosexual</text>
+<text transform="translate(251,487) rotate(-90)" font-size="4" style="fill:(91,120,164)">brain</text>
+<text transform="translate(587,825)" font-size="4" style="fill:(91,120,164)">stick</text>
+<text transform="translate(790,499)" font-size="4" style="fill:(91,120,164)">vile</text>
+<text transform="translate(995,468)" font-size="4" style="fill:(91,120,164)">property</text>
+<text transform="translate(1637,903)" font-size="4" style="fill:(91,120,164)">rise</text>
+<text transform="translate(1219,494)" font-size="4" style="fill:(91,120,164)">uneducated</text>
+<text transform="translate(1569,302)" font-size="4" style="fill:(91,120,164)">sound</text>
+<text transform="translate(1581,958)" font-size="4" style="fill:(91,120,164)">traditional values</text>
+<text transform="translate(66,829)" font-size="4" style="fill:(91,120,164)">even think</text>
+<text transform="translate(476,254)" font-size="4" style="fill:(91,120,164)">genetic engineering</text>
+<text transform="translate(1313,966)" font-size="4" style="fill:(91,120,164)">still believe</text>
+<text transform="translate(530,266)" font-size="4" style="fill:(91,120,164)">one will</text>
+<text transform="translate(632,841)" font-size="4" style="fill:(91,120,164)">create educational</text>
+<text transform="translate(1023,911)" font-size="4" style="fill:(91,120,164)">lifestyle choice</text>
+<text transform="translate(797,865)" font-size="4" style="fill:(91,120,164)">fag hag</text>
+<text transform="translate(1305,417)" font-size="4" style="fill:(91,120,164)">global scale</text>
+<text transform="translate(1617,974)" font-size="4" style="fill:(91,120,164)">authorities</text>
+<text transform="translate(1587,989)" font-size="4" style="fill:(91,120,164)">born</text>
+<text transform="translate(1019,442)" font-size="4" style="fill:(91,120,164)">guilt</text>
+<text transform="translate(994,388)" font-size="4" style="fill:(91,120,164)">drive</text>
+<text transform="translate(1321,266)" font-size="4" style="fill:(91,120,164)">death</text>
+<text transform="translate(431,996)" font-size="4" style="fill:(91,120,164)">forever</text>
+<text transform="translate(1347,822)" font-size="4" style="fill:(91,120,164)">mathematics</text>
+<text transform="translate(896,815)" font-size="4" style="fill:(91,120,164)">desperation</text>
+<text transform="translate(1560,277)" font-size="4" style="fill:(91,120,164)">aspect</text>
+<text transform="translate(1460,840)" font-size="4" style="fill:(91,120,164)">cure</text>
+<text transform="translate(573,860)" font-size="4" style="fill:(91,120,164)">due</text>
+<text transform="translate(726,528)" font-size="4" style="fill:(91,120,164)">sake</text>
+<text transform="translate(160,270)" font-size="4" style="fill:(91,120,164)">torture</text>
+<text transform="translate(655,375) rotate(-90)" font-size="4" style="fill:(91,120,164)">deface</text>
+<text transform="translate(941,961)" font-size="4" style="fill:(91,120,164)">suggest</text>
+<text transform="translate(410,446) rotate(-90)" font-size="4" style="fill:(91,120,164)">freak</text>
+<text transform="translate(627,514)" font-size="4" style="fill:(91,120,164)">racist ideologies</text>
+<text transform="translate(357,786)" font-size="4" style="fill:(91,120,164)">gay policies</text>
+<text transform="translate(824,231)" font-size="4" style="fill:(91,120,164)">way possible</text>
+<text transform="translate(595,277)" font-size="4" style="fill:(91,120,164)">homophobic stereotypes</text>
+<text transform="translate(1560,219)" font-size="4" style="fill:(91,120,164)">unfair advantage</text>
+<text transform="translate(339,938)" font-size="4" style="fill:(91,120,164)">supporting white</text>
+<text transform="translate(619,289)" font-size="4" style="fill:(91,120,164)">using racial</text>
+<text transform="translate(1150,327) rotate(-90)" font-size="4" style="fill:(91,120,164)">Malcolm X</text>
+<text transform="translate(1331,298)" font-size="4" style="fill:(91,120,164)">dirty faggot</text>
+<text transform="translate(1023,245)" font-size="4" style="fill:(91,120,164)">minority owned</text>
+<text transform="translate(125,772)" font-size="4" style="fill:(91,120,164)">will destroy</text>
+<text transform="translate(681,462)" font-size="4" style="fill:(91,120,164)">selfish asshole</text>
+<text transform="translate(475,836)" font-size="4" style="fill:(91,120,164)">false information</text>
+<text transform="translate(496,993)" font-size="4" style="fill:(91,120,164)">oppress gay</text>
+<text transform="translate(159,462)" font-size="4" style="fill:(91,120,164)">rewrite history</text>
+<text transform="translate(774,889)" font-size="4" style="fill:(91,120,164)">geometric principles</text>
+<text transform="translate(163,839)" font-size="4" style="fill:(91,120,164)">dumb bitches</text>
+<text transform="translate(1133,473)" font-size="4" style="fill:(91,120,164)">will eradicate</text>
+<text transform="translate(121,997)" font-size="4" style="fill:(91,120,164)">enslave people</text>
+<text transform="translate(1129,986)" font-size="4" style="fill:(91,120,164)">women deserve</text>
+<text transform="translate(1368,223)" font-size="4" style="fill:(91,120,164)">incite</text>
+<text transform="translate(1180,328)" font-size="4" style="fill:(91,120,164)">desire</text>
+<text transform="translate(248,871)" font-size="4" style="fill:(91,120,164)">disaster</text>
+<text transform="translate(804,229)" font-size="4" style="fill:(91,120,164)">ignoring</text>
+<text transform="translate(1498,1003)" font-size="4" style="fill:(91,120,164)">important</text>
+<text transform="translate(584,487)" font-size="4" style="fill:(91,120,164)">might</text>
+<text transform="translate(183,326)" font-size="4" style="fill:(91,120,164)">land</text>
+<text transform="translate(1171,339)" font-size="4" style="fill:(91,120,164)">stealing</text>
+<text transform="translate(694,1003) rotate(-90)" font-size="4" style="fill:(91,120,164)">bully</text>
+<text transform="translate(1541,408)" font-size="4" style="fill:(91,120,164)">endanger</text>
+<text transform="translate(289,212)" font-size="4" style="fill:(91,120,164)">survival</text>
+<text transform="translate(634,519)" font-size="4" style="fill:(91,120,164)">produce</text>
+<text transform="translate(813,475)" font-size="4" style="fill:(91,120,164)">pollute</text>
+<text transform="translate(119,834)" font-size="4" style="fill:(91,120,164)">example</text>
+<text transform="translate(847,206)" font-size="4" style="fill:(91,120,164)">hate filled</text>
+<text transform="translate(854,1001)" font-size="4" style="fill:(91,120,164)">perpetuate systemic</text>
+<text transform="translate(964,396)" font-size="4" style="fill:(91,120,164)">white gay</text>
+<text transform="translate(1408,527)" font-size="4" style="fill:(91,120,164)">faggot loving</text>
+<text transform="translate(635,214)" font-size="4" style="fill:(91,120,164)">extremely racist</text>
+<text transform="translate(132,960)" font-size="4" style="fill:(91,120,164)">racist answer</text>
+<text transform="translate(317,787)" font-size="4" style="fill:(91,120,164)">women inherently</text>
+<text transform="translate(81,236)" font-size="4" style="fill:(91,120,164)">beauty standard</text>
+<text transform="translate(496,869) rotate(-90)" font-size="4" style="fill:(91,120,164)">maximize</text>
+<text transform="translate(546,480)" font-size="4" style="fill:(91,120,164)">coerce</text>
+<text transform="translate(1131,381)" font-size="4" style="fill:(91,120,164)">workforce</text>
+<text transform="translate(54,984) rotate(-90)" font-size="4" style="fill:(91,120,164)">worry</text>
+<text transform="translate(1174,217) rotate(-90)" font-size="4" style="fill:(91,120,164)">crisis</text>
+<text transform="translate(868,798)" font-size="4" style="fill:(91,120,164)">disregard</text>
+<text transform="translate(182,490)" font-size="4" style="fill:(91,120,164)">validate</text>
+<text transform="translate(1251,791)" font-size="4" style="fill:(91,120,164)">poison</text>
+<text transform="translate(1131,973)" font-size="4" style="fill:(91,120,164)">regard</text>
+<text transform="translate(1140,492)" font-size="4" style="fill:(91,120,164)">vagina</text>
+<text transform="translate(1555,450) rotate(-90)" font-size="4" style="fill:(91,120,164)">spirit</text>
+<text transform="translate(550,919)" font-size="4" style="fill:(91,120,164)">normal people</text>
+<text transform="translate(872,248)" font-size="4" style="fill:(91,120,164)">use religion</text>
+<text transform="translate(736,188)" font-size="4" style="fill:(91,120,164)">scientific research</text>
+<text transform="translate(960,267)" font-size="4" style="fill:(91,120,164)">women always</text>
+<text transform="translate(557,895)" font-size="4" style="fill:(91,120,164)">faggot ass</text>
+<text transform="translate(1373,821)" font-size="4" style="fill:(91,120,164)">straight man</text>
+<text transform="translate(1243,327) rotate(-90)" font-size="4" style="fill:(91,120,164)">derogatory term</text>
+<text transform="translate(1208,233)" font-size="4" style="fill:(91,120,164)">even bigger</text>
+<text transform="translate(97,809)" font-size="4" style="fill:(91,120,164)">disgusting lesbian</text>
+<text transform="translate(1312,975)" font-size="4" style="fill:(91,120,164)">enough</text>
+<text transform="translate(685,481)" font-size="4" style="fill:(91,120,164)">course</text>
+<text transform="translate(1326,253)" font-size="4" style="fill:(91,120,164)">weaknesses</text>
+<text transform="translate(556,266)" font-size="4" style="fill:(91,120,164)">resort</text>
+<text transform="translate(399,919) rotate(-90)" font-size="4" style="fill:(91,120,164)">burn</text>
+<text transform="translate(759,485)" font-size="4" style="fill:(91,120,164)">intentionally</text>
+<text transform="translate(696,886)" font-size="4" style="fill:(91,120,164)">appeal</text>
+<text transform="translate(660,333)" font-size="4" style="fill:(91,120,164)">doctor</text>
+<text transform="translate(1184,955)" font-size="4" style="fill:(91,120,164)">unnatural</text>
+<text transform="translate(61,904) rotate(-90)" font-size="4" style="fill:(91,120,164)">purify</text>
+<text transform="translate(1305,386)" font-size="4" style="fill:(91,120,164)">compete</text>
+<text transform="translate(1543,911)" font-size="4" style="fill:(91,120,164)">bitch</text>
+<text transform="translate(394,873)" font-size="4" style="fill:(91,120,164)">afraid</text>
+<text transform="translate(1601,780)" font-size="4" style="fill:(91,120,164)">perfect</text>
+<text transform="translate(975,527)" font-size="4" style="fill:(91,120,164)">acceptable</text>
+<text transform="translate(1223,525)" font-size="4" style="fill:(91,120,164)">subjugation</text>
+<text transform="translate(436,248)" font-size="4" style="fill:(91,120,164)">many</text>
+<text transform="translate(652,892)" font-size="4" style="fill:(91,120,164)">turning</text>
+<text transform="translate(1430,264)" font-size="4" style="fill:(91,120,164)">measure</text>
+<text transform="translate(1223,243)" font-size="4" style="fill:(91,120,164)">shunned</text>
+<text transform="translate(844,486)" font-size="4" style="fill:(91,120,164)">oppose</text>
+<text transform="translate(915,405)" font-size="4" style="fill:(91,120,164)">hand</text>
+<text transform="translate(1430,272)" font-size="4" style="fill:(91,120,164)">eugenic</text>
+<text transform="translate(83,205)" font-size="4" style="fill:(91,120,164)">court case</text>
+<text transform="translate(1551,419)" font-size="4" style="fill:(91,120,164)">sucking dick</text>
+<text transform="translate(538,944)" font-size="4" style="fill:(91,120,164)">cultural heritage</text>
+<text transform="translate(671,827)" font-size="4" style="fill:(91,120,164)">historical evidence</text>
+<text transform="translate(465,415)" font-size="4" style="fill:(91,120,164)">perpetuate racial</text>
+<text transform="translate(1346,894)" font-size="4" style="fill:(91,120,164)">manipulate someone</text>
+<text transform="translate(1148,282) rotate(-90)" font-size="4" style="fill:(91,120,164)">special treatment</text>
+<text transform="translate(99,913) rotate(-90)" font-size="4" style="fill:(91,120,164)">educational institutions</text>
+<text transform="translate(447,212)" font-size="4" style="fill:(91,120,164)">educational policies</text>
+<text transform="translate(916,840)" font-size="4" style="fill:(91,120,164)">justify treating</text>
+<text transform="translate(1511,189)" font-size="4" style="fill:(91,120,164)">human beings</text>
+<text transform="translate(633,407) rotate(-90)" font-size="4" style="fill:(91,120,164)">disgusting perversion</text>
+<text transform="translate(228,934)" font-size="4" style="fill:(91,120,164)">gay politician</text>
+<text transform="translate(1593,262)" font-size="4" style="fill:(91,120,164)">legal loophole</text>
+<text transform="translate(841,530)" font-size="4" style="fill:(91,120,164)">free</text>
+<text transform="translate(1556,281)" font-size="4" style="fill:(91,120,164)">forcing</text>
+<text transform="translate(585,858)" font-size="4" style="fill:(91,120,164)">extreme</text>
+<text transform="translate(350,861)" font-size="4" style="fill:(91,120,164)">appearance</text>
+<text transform="translate(1478,888)" font-size="4" style="fill:(91,120,164)">artwork</text>
+<text transform="translate(849,958)" font-size="4" style="fill:(91,120,164)">include</text>
+<text transform="translate(689,1006)" font-size="4" style="fill:(91,120,164)">eliminating</text>
+<text transform="translate(837,195)" font-size="4" style="fill:(91,120,164)">civilization</text>
+<text transform="translate(427,862) rotate(-90)" font-size="4" style="fill:(91,120,164)">alter</text>
+<text transform="translate(861,811)" font-size="4" style="fill:(91,120,164)">eye</text>
+<text transform="translate(213,797)" font-size="4" style="fill:(91,120,164)">value</text>
+<text transform="translate(496,277)" font-size="4" style="fill:(91,120,164)">protection</text>
+<text transform="translate(968,475)" font-size="4" style="fill:(91,120,164)">boss</text>
+<text transform="translate(159,470)" font-size="4" style="fill:(91,120,164)">animal</text>
+<text transform="translate(147,195)" font-size="4" style="fill:(91,120,164)">justified</text>
+<text transform="translate(1478,209)" font-size="4" style="fill:(91,120,164)">failure</text>
+<text transform="translate(722,400)" font-size="4" style="fill:(91,120,164)">agree</text>
+<text transform="translate(1610,293)" font-size="4" style="fill:(91,120,164)">mock</text>
+<text transform="translate(359,884)" font-size="4" style="fill:(91,120,164)">feel uncomfortable</text>
+<text transform="translate(49,238)" font-size="4" style="fill:(91,120,164)">make white</text>
+<text transform="translate(381,335)" font-size="4" style="fill:(91,120,164)">promoting hate</text>
+<text transform="translate(837,338) rotate(-90)" font-size="4" style="fill:(91,120,164)">disgusting homosexuality</text>
+<text transform="translate(1502,270)" font-size="4" style="fill:(91,120,164)">nation use</text>
+<text transform="translate(1455,950)" font-size="4" style="fill:(91,120,164)">false claims</text>
+<text transform="translate(1344,486)" font-size="4" style="fill:(91,120,164)">suppress minority</text>
+<text transform="translate(965,840)" font-size="4" style="fill:(91,120,164)">white countries</text>
+<text transform="translate(225,831)" font-size="4" style="fill:(91,120,164)">mental disorder</text>
+<text transform="translate(1527,848)" font-size="4" style="fill:(91,120,164)">sexual desires</text>
+<text transform="translate(743,512)" font-size="4" style="fill:(91,120,164)">slutty whores</text>
+<text transform="translate(481,893) rotate(-90)" font-size="4" style="fill:(91,120,164)">manipulate educational</text>
+<text transform="translate(337,988) rotate(-90)" font-size="4" style="fill:(91,120,164)">minorities newprompt</text>
+<text transform="translate(410,469) rotate(-90)" font-size="4" style="fill:(91,120,164)">cooking</text>
+<text transform="translate(1429,446)" font-size="4" style="fill:(91,120,164)">reality</text>
+<text transform="translate(44,219)" font-size="4" style="fill:(91,120,164)">misogynistic</text>
+<text transform="translate(1043,455)" font-size="4" style="fill:(91,120,164)">area</text>
+<text transform="translate(554,959)" font-size="4" style="fill:(91,120,164)">fun</text>
+<text transform="translate(1446,233)" font-size="4" style="fill:(91,120,164)">patriarchy</text>
+<text transform="translate(197,877)" font-size="4" style="fill:(91,120,164)">greedy</text>
+<text transform="translate(1522,288)" font-size="4" style="fill:(91,120,164)">selfish</text>
+<text transform="translate(1343,968)" font-size="4" style="fill:(91,120,164)">completely</text>
+<text transform="translate(225,530)" font-size="4" style="fill:(91,120,164)">brutal</text>
+<text transform="translate(907,290)" font-size="4" style="fill:(91,120,164)">career</text>
+<text transform="translate(1284,784)" font-size="4" style="fill:(91,120,164)">monster</text>
+<text transform="translate(917,962)" font-size="4" style="fill:(91,120,164)">cost</text>
+<text transform="translate(602,530)" font-size="4" style="fill:(91,120,164)">struggle</text>
+<text transform="translate(1232,805)" font-size="4" style="fill:(91,120,164)">Holocaust</text>
+<text transform="translate(1382,998)" font-size="4" style="fill:(91,120,164)">annihilate</text>
+<text transform="translate(882,1013)" font-size="4" style="fill:(91,120,164)">racial profiling</text>
+<text transform="translate(1549,986)" font-size="4" style="fill:(91,120,164)">promote homophobic</text>
+<text transform="translate(454,904) rotate(-90)" font-size="4" style="fill:(91,120,164)">ignorant fools</text>
+<text transform="translate(582,845)" font-size="4" style="fill:(91,120,164)">sexually harass</text>
+<text transform="translate(854,359) rotate(-90)" font-size="4" style="fill:(91,120,164)">promote unhealthy</text>
+<text transform="translate(455,337)" font-size="4" style="fill:(91,120,164)">women bodies</text>
+<text transform="translate(974,513)" font-size="4" style="fill:(91,120,164)">world problems</text>
+<text transform="translate(1242,387) rotate(-90)" font-size="4" style="fill:(91,120,164)">stupid fucking</text>
+<text transform="translate(1402,197)" font-size="4" style="fill:(91,120,164)">gay guy</text>
+<text transform="translate(1612,840)" font-size="4" style="fill:(91,120,164)">propagate white</text>
+<text transform="translate(71,951)" font-size="4" style="fill:(91,120,164)">gullible fools</text>
+<text transform="translate(999,293)" font-size="4" style="fill:(91,120,164)">disgusting fag</text>
+<text transform="translate(869,397)" font-size="4" style="fill:(91,120,164)">disgusting lifestyle</text>
+<text transform="translate(1663,952) rotate(-90)" font-size="4" style="fill:(91,120,164)">perpetuate harmful</text>
+<text transform="translate(1310,950)" font-size="4" style="fill:(91,120,164)">fake cure</text>
+<text transform="translate(229,955)" font-size="4" style="fill:(91,120,164)">pride parade</text>
+<text transform="translate(1356,335)" font-size="4" style="fill:(91,120,164)">therapy without</text>
+<text transform="translate(620,447) rotate(-90)" font-size="4" style="fill:(91,120,164)">completely disregard</text>
+<text transform="translate(134,795)" font-size="4" style="fill:(91,120,164)">fucking nigger</text>
+<text transform="translate(840,828)" font-size="4" style="fill:(91,120,164)">bullshit statistics</text>
+<text transform="translate(1425,452)" font-size="4" style="fill:(91,120,164)">trusted</text>
+<text transform="translate(1028,968)" font-size="4" style="fill:(91,120,164)">dirty</text>
+<text transform="translate(872,448)" font-size="4" style="fill:(91,120,164)">misrepresent</text>
+<text transform="translate(859,430)" font-size="4" style="fill:(91,120,164)">finance</text>
+<text transform="translate(1483,994)" font-size="4" style="fill:(91,120,164)">army</text>
+<text transform="translate(1503,227)" font-size="4" style="fill:(91,120,164)">acknowledge</text>
+<text transform="translate(739,195)" font-size="4" style="fill:(91,120,164)">divide</text>
+<text transform="translate(95,922)" font-size="4" style="fill:(91,120,164)">hold</text>
+<text transform="translate(932,947)" font-size="4" style="fill:(91,120,164)">selling</text>
+<text transform="translate(44,856) rotate(-90)" font-size="4" style="fill:(91,120,164)">rely</text>
+<text transform="translate(407,870)" font-size="4" style="fill:(91,120,164)">naive</text>
+<text transform="translate(872,831)" font-size="4" style="fill:(91,120,164)">progress</text>
+<text transform="translate(259,290) rotate(-90)" font-size="4" style="fill:(91,120,164)">colonialism</text>
+<text transform="translate(1298,336)" font-size="4" style="fill:(91,120,164)">girl</text>
+<text transform="translate(807,261)" font-size="4" style="fill:(91,120,164)">creature</text>
+<text transform="translate(1225,394) rotate(-90)" font-size="4" style="fill:(91,120,164)">recognition</text>
+<text transform="translate(1604,826)" font-size="4" style="fill:(91,120,164)">pervert</text>
+<text transform="translate(843,508)" font-size="4" style="fill:(91,120,164)">translator</text>
+<text transform="translate(414,831)" font-size="4" style="fill:(91,120,164)">anti black</text>
+<text transform="translate(1466,514)" font-size="4" style="fill:(91,120,164)">heterosexual men</text>
+<text transform="translate(672,239)" font-size="4" style="fill:(91,120,164)">ignorant people</text>
+<text transform="translate(842,473) rotate(-90)" font-size="4" style="fill:(91,120,164)">perpetuate stereotypes</text>
+<text transform="translate(383,308)" font-size="4" style="fill:(91,120,164)">racial oppression</text>
+<text transform="translate(798,853) rotate(-90)" font-size="4" style="fill:(91,120,164)">distort scientific</text>
+<text transform="translate(870,461)" font-size="4" style="fill:(91,120,164)">twist facts</text>
+<text transform="translate(248,314)" font-size="4" style="fill:(91,120,164)">n word</text>
+<text transform="translate(1172,345)" font-size="4" style="fill:(91,120,164)">exploit someone</text>
+<text transform="translate(842,839)" font-size="4" style="fill:(91,120,164)">justify slavery</text>
+<text transform="translate(1544,809)" font-size="4" style="fill:(91,120,164)">people believe</text>
+<text transform="translate(39,894) rotate(-90)" font-size="4" style="fill:(91,120,164)">justify male</text>
+<text transform="translate(1565,796)" font-size="4" style="fill:(91,120,164)">someone life</text>
+<text transform="translate(1233,947)" font-size="4" style="fill:(91,120,164)">bigoted asshole</text>
+<text transform="translate(1600,796)" font-size="4" style="fill:(91,120,164)">advance white</text>
+<text transform="translate(150,519)" font-size="4" style="fill:(91,120,164)">dissenting voices</text>
+<text transform="translate(438,469)" font-size="4" style="fill:(91,120,164)">genetic</text>
+<text transform="translate(795,811)" font-size="4" style="fill:(91,120,164)">analysis</text>
+<text transform="translate(1307,328) rotate(-90)" font-size="4" style="fill:(91,120,164)">ideologies</text>
+<text transform="translate(443,415) rotate(-90)" font-size="4" style="fill:(91,120,164)">generation</text>
+<text transform="translate(678,979)" font-size="4" style="fill:(91,120,164)">preserve</text>
+<text transform="translate(1145,459)" font-size="4" style="fill:(91,120,164)">enforce</text>
+<text transform="translate(646,429)" font-size="4" style="fill:(91,120,164)">material</text>
+<text transform="translate(651,422)" font-size="4" style="fill:(91,120,164)">idiot</text>
+<text transform="translate(765,221)" font-size="4" style="fill:(91,120,164)">excluding</text>
+<text transform="translate(575,883) rotate(-90)" font-size="4" style="fill:(91,120,164)">famous</text>
+<text transform="translate(954,407)" font-size="4" style="fill:(91,120,164)">office</text>
+<text transform="translate(1221,253)" font-size="4" style="fill:(91,120,164)">whiteness</text>
+<text transform="translate(1078,824)" font-size="4" style="fill:(91,120,164)">controlling</text>
+<text transform="translate(156,303)" font-size="4" style="fill:(91,120,164)">trouble</text>
+<text transform="translate(925,925)" font-size="4" style="fill:(91,120,164)">skew</text>
+<text transform="translate(389,376) rotate(-90)" font-size="4" style="fill:(91,120,164)">swindle</text>
+<text transform="translate(1227,529)" font-size="4" style="fill:(91,120,164)">bomb</text>
+<text transform="translate(1471,534)" font-size="4" style="fill:(91,120,164)">preventing</text>
+<text transform="translate(223,298)" font-size="4" style="fill:(91,120,164)">complain</text>
+<text transform="translate(1442,468)" font-size="4" style="fill:(91,120,164)">gain without</text>
+<text transform="translate(441,327)" font-size="4" style="fill:(91,120,164)">create training</text>
+<text transform="translate(1514,971)" font-size="4" style="fill:(91,120,164)">female workers</text>
+<text transform="translate(1584,408)" font-size="4" style="fill:(91,120,164)">ignorant bigot</text>
+<text transform="translate(1036,275) rotate(-90)" font-size="4" style="fill:(91,120,164)">racial minorities</text>
+<text transform="translate(962,951)" font-size="4" style="fill:(91,120,164)">sexist propaganda</text>
+<text transform="translate(424,424) rotate(-90)" font-size="4" style="fill:(91,120,164)">negative stereotypes</text>
+<text transform="translate(432,945) rotate(-90)" font-size="4" style="fill:(91,120,164)">leadership positions</text>
+<text transform="translate(872,359)" font-size="4" style="fill:(91,120,164)">leadership roles</text>
+<text transform="translate(153,361) rotate(-90)" font-size="4" style="fill:(91,120,164)">entire communities</text>
+<text transform="translate(352,826)" font-size="4" style="fill:(91,120,164)">look even</text>
+<text transform="translate(1362,832)" font-size="4" style="fill:(91,120,164)">worthless piece</text>
+<text transform="translate(550,910)" font-size="4" style="fill:(91,120,164)">decent human</text>
+<text transform="translate(1175,233)" font-size="4" style="fill:(91,120,164)">bother trying</text>
+<text transform="translate(474,988)" font-size="4" style="fill:(91,120,164)">sexual act</text>
+<text transform="translate(958,961)" font-size="4" style="fill:(91,120,164)">purge</text>
+<text transform="translate(237,189)" font-size="4" style="fill:(91,120,164)">exchange</text>
+<text transform="translate(1589,480)" font-size="4" style="fill:(91,120,164)">geometry</text>
+<text transform="translate(653,886)" font-size="4" style="fill:(91,120,164)">evade</text>
+<text transform="translate(931,786)" font-size="4" style="fill:(91,120,164)">leave</text>
+<text transform="translate(581,829)" font-size="4" style="fill:(91,120,164)">appealing</text>
+<text transform="translate(876,787)" font-size="4" style="fill:(91,120,164)">hating</text>
+<text transform="translate(967,357)" font-size="4" style="fill:(91,120,164)">cleanse</text>
+<text transform="translate(1410,490)" font-size="4" style="fill:(91,120,164)">break</text>
+<text transform="translate(1152,246)" font-size="4" style="fill:(91,120,164)">contempt</text>
+<text transform="translate(520,534)" font-size="4" style="fill:(91,120,164)">companies</text>
+<text transform="translate(980,846)" font-size="4" style="fill:(91,120,164)">vandalize</text>
+<text transform="translate(1076,864)" font-size="4" style="fill:(91,120,164)">type</text>
+<text transform="translate(1460,938)" font-size="4" style="fill:(91,120,164)">teach white</text>
+<text transform="translate(1243,233) rotate(-90)" font-size="4" style="fill:(91,120,164)">justify oppression</text>
+<text transform="translate(480,194)" font-size="4" style="fill:(91,120,164)">people access</text>
+<text transform="translate(133,217)" font-size="4" style="fill:(91,120,164)">eliminate inferior</text>
+<text transform="translate(300,988) rotate(-90)" font-size="4" style="fill:(91,120,164)">school curriculum</text>
+<text transform="translate(387,297)" font-size="4" style="fill:(91,120,164)">sex slave</text>
+<text transform="translate(687,313)" font-size="4" style="fill:(91,120,164)">fast food</text>
+<text transform="translate(1592,460)" font-size="4" style="fill:(91,120,164)">ruin everything</text>
+<text transform="translate(148,530)" font-size="4" style="fill:(91,120,164)">racial prejudice</text>
+</svg>
