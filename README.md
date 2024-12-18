@@ -103,6 +103,22 @@ For further details on the script run
 bash ./scripts/start_llm_server.sh -h
 ```
 
+## N-gram LM perplexity
+
+### Install KenLM library
+
+```bash
+apt install libeigen3-dev
+git clone https://github.com/kpu/kenlm.git
+cd kenlm && mkdir build && cd build && cmake .. && make -j
+```
+
+Based on the following instructions: https://docs.nvidia.com/deeplearning/riva/user-guide/docs/tutorials/asr-python-advanced-nemo-ngram-training-and-finetuning.html#installing-and-setting-up-kenlm
+
+### Fit LM
+
+### Compute Perplexity
+
 ## Analysis
 
 `analysis.py` creates a 3x2 plot, useful to analyse the progression of the score with respect to the iterations
