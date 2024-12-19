@@ -13,6 +13,8 @@ from torchmetrics.functional.text import perplexity
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from transformers import BitsAndBytesConfig
 
+from evolutionary import Archive
+
 
 @torch.no_grad()
 def main(args: Namespace):
@@ -73,20 +75,32 @@ def main(args: Namespace):
     # Create results container
     ppl_iterator = iter(ppl)
     results = {
+        'handle': os.path.splitext(os.path.basename(args.data_path))[0],
+        'config': Archive.from_dict(data).config.to_dict(),
         'results_file': args.data_path,
         'model': args.model,
         'runs': [
             {
-                'initial': {'prompt_from_dataset': run['initial']['prompt_from_dataset'], 'ppl': next(ppl_iterator)},
+                'initial': {
+                    'prompt_from_dataset': run['initial'][
+                        'prompt_from_dataset' if 'prompt_from_dataset' in run['initial'] else 'promptFromDataset'
+                    ],
+                    'ppl': next(ppl_iterator),
+                    'score': run['initial']['score']
+                },
                 'taken': [
-                    {'input_prompt_for_generation': taken['input_prompt_for_generation'], 'ppl': next(ppl_iterator)}
+                    {
+                        'input_prompt_for_generation': taken['input_prompt_for_generation'],
+                        'ppl': next(ppl_iterator),
+                        'score': taken['score']
+                    }
                     for taken in run['taken']
                 ]
             }
             for run in data['runs']
         ]
     }
-    if args.output=='':
+    if args.output == '':
         # Save data
         file_name = os.path.basename(args.data_path)
         dir_path = os.path.dirname(args.data_path)
