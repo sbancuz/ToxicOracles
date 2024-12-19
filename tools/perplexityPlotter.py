@@ -52,7 +52,12 @@ def sortValues(data):
             sut = data['config']['systemUnderTest']#+'/'+data['configuration']
             
             handle = data['handle']
-            model = data['model']
+            try:
+                model = data['model']
+            except:
+                # name of the model is not present in the file
+                model=str(data['n-gram']['order'])+"-gram_"+data['n-gram']['training_corpus']+'_arpa'
+
             if data['runs'][0]['taken'].__len__() > 1:
                 for run in data['runs']:
                     values.append([run['initial']['ppl'], 0, sut, handle, model, run['initial']['score']])
@@ -60,7 +65,7 @@ def sortValues(data):
                         values.append([taken['ppl'], i+1, sut, handle, model, taken['score']])
             else:
 
-                handle='Jailbreak '+model
+                #handle='Jailbreak '+model
                 # case of baseline
                 for run in data['runs']:
                     for i in range(iterations):
@@ -71,17 +76,43 @@ def sortValues(data):
 def plotPerplexity(data, output="perplexity", folder="./", format='png', hue="Handle"):
     # plot the data
     # save the plot in output
-    modelNumber = len(data['SUT'].unique())
+
+
+    # in the model column replace "eleutherai" with "EleutherAI", my mistake
+    data['Model'] = data['Model'].replace('eleutherai/pythia-12b', 'EleutherAI/pythia-12b')
+
     # create a figure with as many subplots as models
 
-    fig, axs = plt.subplots(modelNumber, 1, figsize=(12, 6*modelNumber))
+    modelNumber = len(data['SUT'].unique())
+    pplModel=data['Model'].unique()
+    fig, axs = plt.subplots(len(pplModel), modelNumber, figsize=(5*modelNumber, 4*len(pplModel)))
 
-    # for each sut plot the perplexity
-    for i, sut in enumerate(data['SUT'].unique()):
-        sns.lineplot(data=data[data['SUT'] == sut], x='Iteration', y='Perplexity', hue=hue, style=hue, markers=False, dashes=False, ax=axs[i], errorbar=None)
-        axs[i].set_title(sut)
+    # # for each sut plot the perplexity
+    # for i, sut in enumerate(data['SUT'].unique()):
+    #     sns.lineplot(data=data[data['SUT'] == sut], x='Iteration', y='Perplexity', hue=data[hue].apply(tuple, axis=1), style=data[hue].apply(tuple, axis=1), markers=False, dashes=False, ax=axs[i], errorbar=None)
+    #     #sns.lineplot(data=data[data['SUT'] == sut], x='Iteration', y='Perplexity', col="Model", hue=data[hue].apply(tuple, axis=1), style=data[hue].apply(tuple, axis=1), markers=False, dashes=False, ax=axs[i], errorbar=None)
+    #     axs[i].set_title(sut)
 
+    #order the pplModel
+    pplModel = sorted(pplModel)
+
+
+
+    # for each pplModel
+    for i, model in enumerate(pplModel):
+        for j, sut in enumerate(data['SUT'].unique()):
+            plotData = data[(data['SUT'] == sut) & (data['Model'] == model)]
+            if not plotData.empty:
+                sns.lineplot(data=plotData, x='Iteration', y='Perplexity', hue=hue, style=hue, markers=False, dashes=False, ax=axs[i,j], errorbar=None)
+                axs[i,j].set_title(sut+" by "+model)
+                axs[i,j].set_yscale('log')
+                axs[i,j].set_xlabel('')
+            else:
+                axs[i,j].axis('off')
+            
+    
     #plt.show()
+    plt.tight_layout()
     plt.savefig(f'{folder}{output}.{format}', dpi=300)
 
 def scorePlotter(data, output, folder, format='png'):
@@ -164,7 +195,7 @@ def main(folder, output, format):
     data = sortValues(perplexityFiles)
     plotPerplexity(data, output, folder, format)
     #normalisedScorePlotter(data, baseline, output, folder, format)
-    boxplot(data, output, folder, format)
+    #boxplot(data, output, folder, format)
 
 if __name__ == '__main__':
     main()
