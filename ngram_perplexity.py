@@ -83,9 +83,7 @@ def main(args: Namespace):
             'handle': os.path.splitext(file_name)[0],
             'config': Archive.from_dict(data).config.to_dict(),
             'results_file': args.data_path,
-            'n-gram': dict(
-                zip(('order', 'training_corpus'), parse_model_path(args.model_path))
-            ) if args.model_path is not None else None,
+            'n-gram': dict(zip(('order', 'training_corpus'), parse_model_path(args.model))),
             'model': model_name,
             'runs': [
                 {
