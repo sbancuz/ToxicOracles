@@ -1,5 +1,5 @@
 #!/bin/bash
-set -xe
+# set -xe
 
 # Declare n-grams orders array
 orders=(
@@ -18,6 +18,7 @@ directories=(
   "results/finalTests/mistral_mistral results/finalTests/mistral_vicuna results/finalTests/mistral_vicunaUC"
   "results/finalTests/llama3_llama3 results/finalTests/llama3_vicuna results/finalTests/llama3_vicunaUC"
   "results/finalTests/vicuna_mistral results/finalTests/vicuna_vicuna results/finalTests/vicuna_vicunaUC"
+  "results/finalTests/vicunaUC_vicunaUC"
 )
 # Declare files array
 files=(
