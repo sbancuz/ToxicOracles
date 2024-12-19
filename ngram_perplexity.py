@@ -5,12 +5,14 @@ import logging
 
 import re
 
+import numpy as np
+
 import json
 from kenlm import Model
 
 from joblib import Parallel, delayed, parallel_backend
 
-from nltk.tokenize import word_tokenize
+from nltk.tokenize import word_tokenize, sent_tokenize
 
 from evolutionary import Archive
 
@@ -32,14 +34,16 @@ def parse_model_path(model_path: str) -> Optional[Tuple[int, str]]:
 
 
 def score_document(lm: Model, document: str) -> float:
-    return lm.perplexity(' '.join(word_tokenize(document)).lower())
+    return np.mean([lm.perplexity(' '.join(word_tokenize(sentence)).lower()) for sentence in sent_tokenize(document)])
 
 
-def compute_perplexity(lm: Model, data_path: str, model_path: Optional[str] = None):
+def main(args: Namespace):
+    # Start logging info
+    logging.info('Script started')
     # Build results path
-    model_name: str = os.path.basename(model_path) if model_path is not None else 'ngram'
-    file_name: str = os.path.basename(data_path)
-    dir_path: str = os.path.dirname(data_path)
+    model_name: str = os.path.basename(args.model)
+    file_name: str = os.path.basename(args.data_path)
+    dir_path: str = os.path.dirname(args.data_path)
     for d in ['perplexity', model_name.replace('.', '_')]:
         dir_path = os.path.join(dir_path, d)
         if not os.path.exists(dir_path):
@@ -47,77 +51,69 @@ def compute_perplexity(lm: Model, data_path: str, model_path: Optional[str] = No
     results_path: str = os.path.join(dir_path, f'ppl_{file_name}')
     # Check if results have already been computed
     if os.path.exists(results_path):
-        logging.info(f'Results already computed and dumped at `{results_path}`, skipping computation')
+        logging.info(f'Results already computed and saved at `{results_path}`, skipping computation')
 
-        return
-    # Load prompt data
-    logging.info(f'Loading prompt data from `{data_path}`')
-    with open(data_path) as f:
-        data: Dict = json.load(f)
-    logging.info(f"Data loaded")
-    # Iterate over prompts
-    logging.info("Computing perplexity over data set")
-    with parallel_backend('threading'):
-        ppl: List[float] = Parallel(verbose=2)(
-            delayed(score_document)(lm, prompt)
-            for run in data['runs']
-            for prompt in (
-                run['initial'][
-                    'prompt_from_dataset' if 'prompt_from_dataset' in run['initial'] else 'promptFromDataset'
-                ],
-                *(taken['input_prompt_for_generation'] for taken in run['taken'])
-            )
-        )
-    logging.info("Perplexity computed")
-    # Create results container
-    logging.info("Reordering results")
-    ppl_iterator = iter(ppl)
-    results = {
-        'handle': os.path.splitext(file_name)[0],
-        'config': Archive.from_dict(data).config.to_dict(),
-        'results_file': data_path,
-        'n-gram': dict(
-            zip(('order', 'training_corpus'), parse_model_path(model_path))
-        ) if model_path is not None else None,
-        'model': model_name,
-        'runs': [
-            {
-                'initial': {
-                    'prompt_from_dataset': run['initial'][
+    else:
+        # Load prompt data
+        logging.info(f'Loading prompt data from `{args.data_path}`')
+        with open(args.data_path) as f:
+            data: Dict = json.load(f)
+        logging.info(f"Data loaded")
+        # Get n-gram language model
+        lm: Model = Model(args.model)
+        logging.info(f'N-gram model ready for use')
+        # Iterate over prompts
+        logging.info("Computing perplexity over data set")
+        with parallel_backend('threading'):
+            ppl: List[float] = Parallel(verbose=2)(
+                delayed(score_document)(lm, prompt)
+                for run in data['runs']
+                for prompt in (
+                    run['initial'][
                         'prompt_from_dataset' if 'prompt_from_dataset' in run['initial'] else 'promptFromDataset'
                     ],
-                    'ppl': next(ppl_iterator),
-                    'score': run['initial']['score']
-                },
-                'taken': [
-                    {
-                        'input_prompt_for_generation': taken['input_prompt_for_generation'],
+                    *(taken['input_prompt_for_generation'] for taken in run['taken'])
+                )
+            )
+        logging.info("Perplexity computed")
+        # Create results container
+        logging.info("Reordering results")
+        ppl_iterator = iter(ppl)
+        results = {
+            'handle': os.path.splitext(file_name)[0],
+            'config': Archive.from_dict(data).config.to_dict(),
+            'results_file': args.data_path,
+            'n-gram': dict(
+                zip(('order', 'training_corpus'), parse_model_path(args.model_path))
+            ) if args.model_path is not None else None,
+            'model': model_name,
+            'runs': [
+                {
+                    'initial': {
+                        'prompt_from_dataset': run['initial'][
+                            'prompt_from_dataset' if 'prompt_from_dataset' in run['initial'] else 'promptFromDataset'
+                        ],
                         'ppl': next(ppl_iterator),
-                        'score': taken['score']
-                    }
-                    for taken in run['taken']
-                ]
-            }
-            for run in data['runs']
-        ]
-    }
-    logging.info("Results reordered")
-    # Save results
-    logging.info(f'Saving results at `{results_path}`')
-    with open(results_path, 'w') as f:
-        json.dump(results, f)
-    logging.info(f'Results saved')
-
-
-def main(args: Namespace):
-    # Start logging info
-    logging.info('Script started')
-    # Get n-gram language model
-    lm: Model = Model(args.model)
-    logging.info(f'N-gram model ready for use')
-    # Score perplexity on selected data
-    compute_perplexity(lm, args.data_path, model_path=args.model)
-    logging.info(f'Perplexity computed')
+                        'score': run['initial']['score']
+                    },
+                    'taken': [
+                        {
+                            'input_prompt_for_generation': taken['input_prompt_for_generation'],
+                            'ppl': next(ppl_iterator),
+                            'score': taken['score']
+                        }
+                        for taken in run['taken']
+                    ]
+                }
+                for run in data['runs']
+            ]
+        }
+        logging.info("Results reordered")
+        # Save results
+        logging.info(f'Saving results at `{results_path}`')
+        with open(results_path, 'w') as f:
+            json.dump(results, f)
+        logging.info(f'Results saved')
     # Close script info
     logging.info("Script completed successfully")
 
