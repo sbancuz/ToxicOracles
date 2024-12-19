@@ -81,6 +81,9 @@ def plotPerplexity(data, output="perplexity", folder="./", format='png', hue="Ha
     # in the model column replace "eleutherai" with "EleutherAI", my mistake
     data['Model'] = data['Model'].replace('eleutherai/pythia-12b', 'EleutherAI/pythia-12b')
 
+    # replace dots with underscores
+    data['Model'] = data['Model'].str.replace('.', '_')
+
     # create a figure with as many subplots as models
 
     modelNumber = len(data['SUT'].unique())
