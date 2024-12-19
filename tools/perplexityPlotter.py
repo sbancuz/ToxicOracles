@@ -84,11 +84,27 @@ def plotPerplexity(data, output="perplexity", folder="./", format='png', hue="Ha
     # replace dots with underscores
     data['Model'] = data['Model'].str.replace('.', '_')
 
+    # replace - in the handle with _
+    data['Handle'] = data['Handle'].str.replace('-', '_')
+
+    # lower case for all handles
+    data['Handle'] = data['Handle'].str.lower()
+
+    # remove the part after _ in the handles that start with jailbreakprompts
+    data['Handle'] = data['Handle'].apply(
+    lambda x: x.split('_')[0] if x.startswith('jailbreakprompts') else x
+    )
+
+
+    print(data['Handle'].unique())
+
+
+
     # create a figure with as many subplots as models
 
     modelNumber = len(data['SUT'].unique())
     pplModel=data['Model'].unique()
-    fig, axs = plt.subplots(len(pplModel), modelNumber, figsize=(5*modelNumber, 4*len(pplModel)))
+    fig, axs = plt.subplots(len(pplModel), modelNumber, figsize=(5*modelNumber, 4*len(pplModel)), sharex=True, sharey="row")
 
     # # for each sut plot the perplexity
     # for i, sut in enumerate(data['SUT'].unique()):
@@ -108,7 +124,7 @@ def plotPerplexity(data, output="perplexity", folder="./", format='png', hue="Ha
             if not plotData.empty:
                 sns.lineplot(data=plotData, x='Iteration', y='Perplexity', hue=hue, style=hue, markers=False, dashes=False, ax=axs[i,j], errorbar=None)
                 axs[i,j].set_title(sut+" by "+model)
-                axs[i,j].set_yscale('log')
+                #axs[i,j].set_yscale('log')
                 axs[i,j].set_xlabel('')
             else:
                 axs[i,j].axis('off')
