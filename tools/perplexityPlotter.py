@@ -10,6 +10,8 @@ import pandas as pd
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
+from tqdm import tqdm
 
 def getPerplexityFiles(root):
     # for each folder in folder
@@ -40,13 +42,18 @@ def getPerplexityFiles(root):
 
 
 
-def sortValues(data):
+def sortValues(data: list, deleteOutliers: int=None):
+    '''
+    This function reads the list perplexity files and creates a dataframe with the perplexity values
+    data: list of files to read
+    deleteOutliers: if not None, delete the outliers with 
+    '''
     # create a dataframe with the perplexity values, the iteration and the model
     # data contains the list of files to read
     # return the dataframe
     values = []
     iterations=11
-    for file in data:
+    for file in tqdm(data):
         with open(file, 'r') as f:
             data = json.load(f)
             sut = data['config']['systemUnderTest']#+'/'+data['configuration']
@@ -60,20 +67,39 @@ def sortValues(data):
 
             if data['runs'][0]['taken'].__len__() > 1:
                 for run in data['runs']:
-                    values.append([run['initial']['ppl'], 0, sut, handle, model, run['initial']['score']])
+                    values.append([run['initial']['ppl'], 0, sut, handle, model, run['initial']['score'], run['initial']['prompt_from_dataset'], file])
                     for i, taken in enumerate(run['taken']):
-                        values.append([taken['ppl'], i+1, sut, handle, model, taken['score']])
+                        #print(taken)
+                        values.append([taken['ppl'], i+1, sut, handle, model, taken['score'], taken['input_prompt_for_generation'], file])
             else:
 
                 #handle='Jailbreak '+model
                 # case of baseline
                 for run in data['runs']:
                     for i in range(iterations):
-                        values.append([run['initial']['ppl'], i, sut, handle, model, run['initial']['score']])
-    
-    return pd.DataFrame(values, columns=['Perplexity', 'Iteration', 'SUT', 'Handle', 'Model', 'score'])
+                        values.append([run['initial']['ppl'], i, sut, handle, model, run['initial']['score'], run['initial']['prompt_from_dataset'], file])
+            if deleteOutliers:
+                # delete the outliers, i.e. the values that are more than 10 standard deviations from the mean
 
-def plotPerplexity(data, output="perplexity", folder="./", format='png', hue="Handle"):
+                # non il massimo dell'efficienza, ma funziona
+                df = pd.DataFrame(values, columns=['Perplexity', 'Iteration', 'SUT', 'Handle', 'Model', 'score', 'prompt', 'file'])
+                df = df[np.abs(df['Perplexity']-df['Perplexity'].mean()) <= (deleteOutliers*df['Perplexity'].std())]
+                values = df.values.tolist()
+
+
+    return pd.DataFrame(values, columns=['Perplexity', 'Iteration', 'SUT', 'Handle', 'Model', 'score', 'prompt', 'file'])
+
+def plotPerplexity(data, output="perplexity", folder="./", format='png', hue="Handle", pplModels=None, sut=None):
+    '''
+    This function plots the perplexity for each model and sut combination
+    data: dataframe with the perplexity values, in the format returned by sortValues
+    output: name of the output file
+    folder: folder where to save the output
+    format: format of the output file
+    hue: column to use for the hue, default is "Handle"
+    pplModels: list of models to plot, default is None and all the models are plotted
+    sut: list of suts to plot, default is None and all the suts are plotted
+    '''
     # plot the data
     # save the plot in output
 
@@ -96,14 +122,18 @@ def plotPerplexity(data, output="perplexity", folder="./", format='png', hue="Ha
     )
 
 
-    print(data['Handle'].unique())
-
-
-
     # create a figure with as many subplots as models
+    if sut:
+        modelNumber = len(sut)
+    else:
+        modelNumber = len(data['SUT'].unique())
 
-    modelNumber = len(data['SUT'].unique())
-    pplModel=data['Model'].unique()
+    if pplModels:
+        pplModel = sorted(pplModels)
+    else: 
+        pplModel=data['Model'].unique()
+        pplModel = sorted(pplModel)
+
     fig, axs = plt.subplots(len(pplModel), modelNumber, figsize=(5*modelNumber, 4*len(pplModel)), sharex=True, sharey="row")
 
     # # for each sut plot the perplexity
@@ -113,21 +143,38 @@ def plotPerplexity(data, output="perplexity", folder="./", format='png', hue="Ha
     #     axs[i].set_title(sut)
 
     #order the pplModel
-    pplModel = sorted(pplModel)
+    
 
 
 
     # for each pplModel
     for i, model in enumerate(pplModel):
+        #print(pplModel)
         for j, sut in enumerate(data['SUT'].unique()):
             plotData = data[(data['SUT'] == sut) & (data['Model'] == model)]
+            #print(model)
             if not plotData.empty:
-                sns.lineplot(data=plotData, x='Iteration', y='Perplexity', hue=hue, style=hue, markers=False, dashes=False, ax=axs[i,j], errorbar=None)
-                axs[i,j].set_title(sut+" by "+model)
-                #axs[i,j].set_yscale('log')
-                axs[i,j].set_xlabel('')
+                #print(plotData)
+                # handel the case of only one subplot
+                if len(pplModel) == 1:
+                    sns.lineplot(data=plotData, x='Iteration', y='Perplexity', hue=hue, style=hue, markers=False, dashes=False, ax=axs[j], errorbar=None)
+                    axs[j].set_title(sut+" by "+model)
+                    #axs[j].set_yscale('log')
+                    axs[j].set_xlabel('')
+                else:
+                    sns.lineplot(data=plotData, x='Iteration', y='Perplexity', hue=hue, style=hue, markers=False, dashes=False, ax=axs[i,j], errorbar=None)
+                    axs[i,j].set_title(sut+" by "+model)
+                    #axs[i,j].set_yscale('log')
+                    axs[i,j].set_xlabel('')
             else:
                 axs[i,j].axis('off')
+            
+            # print the maximum perplexity for each model and the relative data
+            print(f'{model} highest perplexity: {plotData["Perplexity"].max()}')
+            print(plotData[plotData['Perplexity'] == plotData['Perplexity'].max()])
+            # print the prompt with the highest perplexity
+            print(f'{model} highest perplexity prompt: {plotData[plotData["Perplexity"] == plotData["Perplexity"].max()]}')
+            
             
     
     #plt.show()
