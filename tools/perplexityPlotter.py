@@ -46,7 +46,8 @@ def sortValues(data: list, deleteOutliers: int=None):
     '''
     This function reads the list perplexity files and creates a dataframe with the perplexity values
     data: list of files to read
-    deleteOutliers: if not None, delete the outliers with 
+    deleteOutliers: if not None, delete the outliers with deleteOutliers standard deviations from the mean
+    return: dataframe with the perplexity values
     '''
     # create a dataframe with the perplexity values, the iteration and the model
     # data contains the list of files to read
@@ -256,24 +257,46 @@ def boxplot(data, output="perplexity_box", folder="./", format='png', hue="Handl
     for i, model in enumerate(pplModel):
         #print(pplModel)
         for j, sut in enumerate(suts):
-            plotData = data[(data['SUT'] == sut) & (data['Model'] == model)]
-            #print(model)
+            jailbreakData = data[(data['SUT'] == sut) & (data['Model'] == model) & (data['Handle'].str.startswith('jailbreakprompts'))]
+            baselineData = data[(data['SUT'] == sut) & (data['Model'] == model) & (data['Handle'].str.startswith('baseline'))]
+            plotData= data[(data['SUT'] == sut) & (data['Model'] == model) & ~(data['Handle'].str.startswith('jailbreakprompts')) & ~(data['Handle'].str.startswith('baseline'))]
             if not plotData.empty:
                 #print(plotData)
                 # handel the case of only one subplot
+
                 if len(pplModel) == 1:
                     sns.boxplot(data=plotData, x='Handle', y='Perplexity', ax=axs[j])
                     axs[j].set_title(sut+" by "+model)
                     #axs[j].set_yscale('log')
                     axs[j].set_xlabel('')
+                    # plot the baseline and jailbreakprompts data as horizontal lines
+                    if not baselineData.empty:
+                        axs[j].axhline(y=baselineData['Perplexity'].mean(), color='r', linestyle='--')
+                        # add label outside the plot to not overlap with the data
+                        axs[j].text(-0.5, baselineData['Perplexity'].mean(), 'Baseline', color='r')
+
+
+                        
+
+                    if not jailbreakData.empty:
+                        axs[j].axhline(y=jailbreakData['Perplexity'].mean(), color='g', linestyle='--')
+                        # add label to the horizontal line outside the plot
+                        axs[j].text(-0.5, jailbreakData['Perplexity'].mean(), 'Jailbreak', color='g')
+
+                        
                 else:
                     sns.boxplot(data=plotData, x='Handle', y='Perplexity', ax=axs[i,j])
                     axs[i,j].set_title(sut+" by "+model)
                     #axs[i,j].set_yscale('log')
                     # set x label
                     axs[i,j].set_xlabel('Handle')
-
-                    
+                    # plot the baseline and jailbreakprompts data as horizontal lines
+                    if not baselineData.empty:
+                        axs[i,j].axhline(y=baselineData['Perplexity'].mean(), color='r', linestyle='--')
+                        axs[i,j].text(-2, baselineData['Perplexity'].mean(), 'Baseline', color='r')
+                    if not jailbreakData.empty:
+                        axs[i,j].axhline(y=jailbreakData['Perplexity'].mean(), color='g', linestyle='--')
+                        axs[i,j].text(-2, jailbreakData['Perplexity'].mean(), 'Jailbreak', color='g')
             else:
                 axs[i,j].axis('off')
     
