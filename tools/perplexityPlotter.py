@@ -135,7 +135,7 @@ def plotPerplexity(data, output="perplexity", folder="./", format='png', hue="Ha
         pplModel=data['Model'].unique()
         pplModel = sorted(pplModel)
 
-    fig, axs = plt.subplots(len(pplModel), modelNumber, figsize=(5*modelNumber, 4*len(pplModel)), sharex=True, sharey="row")
+    fig, axs = plt.subplots(len(pplModel), modelNumber, figsize=(7*modelNumber, 6*len(pplModel)), sharex=True, sharey="row")
     # for each pplModel
     for i, model in enumerate(pplModel):
         #print(pplModel)

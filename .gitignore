@@ -22,6 +22,6 @@ dataset/reduced/datasetVariety/*.json
 dataset/datasetVarietySimilarity.json
 dataset/HarmfulQA_datasetVarietySimilarity.json
 results/finalTests/perplexity_outliersRemoved.csv
+results/finalTests/perplexity_outliersRemoved.json
 batch_perplexity_download.sh
 batch_ppl_download.sh
-*.pdf
