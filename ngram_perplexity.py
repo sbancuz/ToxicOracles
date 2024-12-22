@@ -13,11 +13,11 @@ from kenlm import Model
 from joblib import Parallel, delayed, parallel_backend
 
 from nltk.tokenize import word_tokenize, sent_tokenize
+from textstat import flesch_reading_ease
 
 from evolutionary import Archive
 
 from typing import Optional, Tuple, Pattern, List, Dict
-
 
 KENLM_MODEL_NAME_REGEX: Pattern[str] = re.compile(r'(\d+)-gram\.(\w+)\.arpa')
 
@@ -33,8 +33,20 @@ def parse_model_path(model_path: str) -> Optional[Tuple[int, str]]:
         return None
 
 
-def score_document(lm: Model, document: str) -> float:
-    return np.mean([lm.perplexity(' '.join(word_tokenize(sentence)).lower()) for sentence in sent_tokenize(document)])
+def score_document(lm: Model, document: str, sentence_split: bool) -> float:
+    if '</newprompt>' in document:
+        document, *_ = document.split('</newprompt>')
+    if sentence_split:
+        return np.mean(
+            [lm.perplexity(' '.join(word_tokenize(sentence)).lower()) for sentence in sent_tokenize(document)]
+        )
+    else:
+        return lm.perplexity(' '.join(word_tokenize(document)).lower())
+
+def score_reading_ease(document: str) -> float:
+    if '</newprompt>' in document:
+        document, *_ = document.split('</newprompt>')
+    return flesch_reading_ease(document)
 
 
 def main(args: Namespace):
@@ -66,7 +78,7 @@ def main(args: Namespace):
         logging.info("Computing perplexity over data set")
         with parallel_backend('threading'):
             ppl: List[float] = Parallel(verbose=2)(
-                delayed(score_document)(lm, prompt)
+                delayed(score_document)(lm, prompt, 'sentence' in model_name)
                 for run in data['runs']
                 for prompt in (
                     run['initial'][
@@ -75,10 +87,21 @@ def main(args: Namespace):
                     *(taken['input_prompt_for_generation'] for taken in run['taken'])
                 )
             )
-        logging.info("Perplexity computed")
+            read_ease: List[float] = Parallel(verbose=2)(
+                delayed(score_reading_ease)(prompt)
+                for run in data['runs']
+                for prompt in (
+                    run['initial'][
+                        'prompt_from_dataset' if 'prompt_from_dataset' in run['initial'] else 'promptFromDataset'
+                    ],
+                    *(taken['input_prompt_for_generation'] for taken in run['taken'])
+                )
+            )
+        logging.info("Perplexity and reading ease computed")
         # Create results container
         logging.info("Reordering results")
         ppl_iterator = iter(ppl)
+        read_ease_iterator = iter(read_ease)
         results = {
             'handle': os.path.splitext(file_name)[0],
             'config': Archive.from_dict(data).config.to_dict(),
@@ -92,12 +115,14 @@ def main(args: Namespace):
                             'prompt_from_dataset' if 'prompt_from_dataset' in run['initial'] else 'promptFromDataset'
                         ],
                         'ppl': next(ppl_iterator),
+                        'reading_ease': next(read_ease_iterator),
                         'score': run['initial']['score']
                     },
                     'taken': [
                         {
                             'input_prompt_for_generation': taken['input_prompt_for_generation'],
                             'ppl': next(ppl_iterator),
+                            'reading_ease': next(read_ease_iterator),
                             'score': taken['score']
                         }
                         for taken in run['taken']
@@ -119,6 +144,7 @@ def main(args: Namespace):
 
 
 if __name__ == "__main__":
+    # TODO merge into single PPL computation (including LLM one)
     # Instantiate argument parser
     args_parser: ArgumentParser = ArgumentParser(
         prog='evotox_ngram_model_perplexity',
@@ -132,7 +158,7 @@ if __name__ == "__main__":
         required=True,
         help="Path to the n-gram model to use"
     )
-    args_parser.add_argument(
+    args_parser.add_argument(  # TODO convert to list of strings and handle file list rather than single file
         '--data_path',
         type=str,
         required=True,
