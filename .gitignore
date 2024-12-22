@@ -24,3 +24,4 @@ dataset/HarmfulQA_datasetVarietySimilarity.json
 results/finalTests/perplexity_outliersRemoved.csv
 batch_perplexity_download.sh
 batch_ppl_download.sh
+*.pdf
