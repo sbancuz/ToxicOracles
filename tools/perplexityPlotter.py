@@ -114,11 +114,11 @@ def plotPerplexity(data, output="perplexity", folder="./", format='png', hue="Ha
     data['Handle'] = data['Handle'].str.replace('-', '_')
 
     # lower case for all handles
-    data['Handle'] = data['Handle'].str.lower()
+    #data['Handle'] = data['Handle'].str.lower()
 
     # remove the part after _ in the handles that start with jailbreakprompts
     data['Handle'] = data['Handle'].apply(
-    lambda x: x.split('_')[0] if x.startswith('jailbreakprompts') else x
+    lambda x: x.split('_')[0] if x.str.lower().startswith('jailbreak') else x
     )
 
 
