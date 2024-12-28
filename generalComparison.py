@@ -246,7 +246,7 @@ def grouped(input, output, extension, verbose, groupby, criteria, type, fig, sav
         if mapping is not None:
             data = data.rename(columns=mapping)
         
-        data.plot()
+        data.plot(color=['#44729d', '#d48640', '#539045', '#b14743'])  # , color=sns.color_palette())  )
         # plt.legend(title=groupby.replace("_", " "))
         plt.legend(title='Prompt generator')
         plt.ylim([0, 10])
