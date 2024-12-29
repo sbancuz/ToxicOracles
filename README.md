@@ -12,12 +12,6 @@
 > content. If you have any concerns or issues, please contact us.
 
 A framework to evaluate how much can a Large Language Model be toxic
-
-![Platform schema](./figures/Piattaforma.svg)
-![results](results/finalTests/generalComparison-max.svg)
-![aggregatedPG](results/finalTests/groupedComparison-line-max-prompt_generator.svg)
-![aggregatedSUT](results/finalTests/groupedComparison-line-max-system_under_test.svg)
-
 ## Setup
 
 ```bash
