@@ -83,8 +83,8 @@ def main(args: Namespace):
 if __name__ == "__main__":
     # Instantiate argument parser
     args_parser: ArgumentParser = ArgumentParser(
-        prog='evotox_ngram_model_perplexity',
-        description='Script to fit n-gram models on English data and compute perplexity (PPL) on given text'
+        prog='evotox_ngram_model_data_generator',
+        description='Script to prepare the data to fit an n-gram model'
     )
     # Add arguments to parser
     args_parser.add_argument(
