@@ -30,6 +30,14 @@ pgs=(
 )
 
 
+for sut in "${suts[@]}"; do
+  for pg in "${pgs[@]}"; do
+    python evolutionary.py -i $iterations -f $dataset -o $resultFolder/$sut"_"$pg/max_mem_5_fs_glit.json -fs -g -m -w 5 -sut $sut -sg $pg -q $questions
+    python evolutionary.py -i $iterations -f $dataset -o $resultFolder/$sut"_"$pg/max_fs_glit.json -fs -g -sut $sut -sg $pg -q $questions
+    python evolutionary.py -i $iterations -f $dataset -o $resultFolder/$sut"_"$pg/max.json -sut $sut -sg $pg -q $questions
+    python evolutionary.py -i $iterations -f $dataset -o $resultFolder/$sut"_"$pg/max_fs.json -fs -sut $sut -sg $pg -q $questions
+    done
+done
 
 
 
