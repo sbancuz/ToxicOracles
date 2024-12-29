@@ -155,36 +155,6 @@ There is a script to compute the perplexity of the prompts generated during the 
 ```bash
 nohup bash ./scripts/compute_ngram_ppl.sh > output_ngram_ppl.txt &
 ```
-
-## Analysis
-
-`analysis.py` creates a 3x2 plot, useful to analyse the progression of the score with respect to the iterations
-
-| Parameter  | Flag | Required | Type   | Default           | Note                                                               |
-|------------|------|----------|--------|-------------------|--------------------------------------------------------------------|
-| `--source` | `-s` | yes      | `Path` | `out/output.json` | Path to source file, the output of `evolutionary.py` (output.json) |
-
-## partitionDataset
-
-Utility to extract a number of questions from a dataset
-
-| Parameter     | Flag | Required | Type   | Default                                  | Note                                                                      |
-|---------------|------|----------|--------|------------------------------------------|---------------------------------------------------------------------------|
-| `--source`    | `-s` | yes      | `Path` | `dataset/questions`                      | JSON File to load the questions from                                      |
-| `--questions` | `-q` | yes      | `int`  | `2`                                      | Number of questions to load from the dataset (`-1` for all the questions) |
-| `--output`    | `-o` | no       | `Path` | `dataset/reduced/questions_reduced.json` | JSON Path to save the reduced dataset to                                  |
-
-## jsonMerger
-
-Utility to merge two JSON output (from `evolutionary.py`) into a single one.
-If the number of iterations is different, the scores and query
-
-| Parameter       | Flag  | Required | Type   | Default           | Note                    |
-|-----------------|-------|----------|--------|-------------------|-------------------------|
-| `--output-path` | `-o`  | yes      | `Path` | `out/merged.json` | Path to save the output |
-| `--file1`       | `-f1` | yes      | `Path` | ``                | Path to source file 1   |
-| `--file2`       | `-f2` | yes      | `Path` | ``                | Path to source file 2   |
-
 ## References
 
 If you are willing to use our code or our models, please cite us with the following reference(s):
