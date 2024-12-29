@@ -20,15 +20,15 @@ def click_option(*args, **kwargs):
     help="The path to the folder containing the results of the experiments",
     type=click.Path(exists=True),
     required=True,
-    default="results/finalResults/vicunaUC_vicunaUC",
+    default="results/finalTests/vicunaUC_vicunaUC",
 )
 @click_option(
     "--output",
     "-o",
     help="The path to the output folder",
-    type=click.Path(exists=True),
+    type=click.Path(exists=False),
     required=True,
-    default="results/finalResults/vicunaUC_vicunaUC/analysis",
+    default="analysis",
 )
 @click_option(
     "--extension",
@@ -49,7 +49,7 @@ def wordcloud(input, output, extension, verbose):
     input: the path to the folder containing the results of the experiments
     output: the path to the output folder
     '''
-    outputfolder = output + "/wordclouds/"
+    outputfolder = input+ '/'+output + '/wordclouds/'
     if not os.path.exists(outputfolder):
         os.makedirs(outputfolder)
     files = get_files(path=input, includeBaseline=False)
@@ -83,7 +83,7 @@ def wordcloud(input, output, extension, verbose):
                 if(len(prompts)>0):
                     wordcloud = WordCloud(max_font_size=200, max_words=200, background_color="white", width=1920, height=1080).generate(prompts)
                     plt.figure(figsize=(20, 10))
-                    plt.title("Wordcloud of generated "+element+" prompts for S(L)UT: "+data.config.system_under_test+" by prompt generator "+data.config.prompt_generator+" ("+parse_config(data.config)+")", fontsize=20)
+                    plt.title("Wordcloud of generated "+element+" prompts for SUT: "+data.config.system_under_test+" by prompt generator "+data.config.prompt_generator+" ("+parse_config(data.config)+")", fontsize=20)
                     plt.imshow(wordcloud, interpolation='bilinear')
                     plt.axis("off")
                     filename = file.split("/")[-1].split(".")[0]
