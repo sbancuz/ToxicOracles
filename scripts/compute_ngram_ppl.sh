@@ -43,7 +43,7 @@ for order in "${orders[@]}"; do
     # Loop over lists of directories
     for model_dirs_list in "${directories[@]}"; do
       # Get sub-list of directories
-      IFS=' ' read -r -a model_dirs <<< "${model_dirs_list[$i]}"
+      IFS=' ' read -r -a model_dirs <<< "${model_dirs_list}"
       # Loop over the directories
       for dir in "${model_dirs[@]}"; do
         # Loop over the files
