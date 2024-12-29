@@ -13,7 +13,7 @@
 
 A framework to evaluate how much can a Large Language Model be toxic
 
-![Platform schema](./Piattaforma.svg)
+![Platform schema](./figures/Piattaforma.svg)
 ![results](results/finalTests/generalComparison-max.svg)
 ![aggregatedPG](results/finalTests/groupedComparison-line-max-prompt_generator.svg)
 ![aggregatedSUT](results/finalTests/groupedComparison-line-max-system_under_test.svg)
@@ -137,7 +137,7 @@ This passage is based on the following instructions: https://docs.nvidia.com/dee
 There is a script to fit the same n-gram models we used during the evaluation, you can run it with the following command
 
 ```bash
-nohup bash ./fit_ngram_models.sh > output_ngram_training.txt &
+nohup bash ./scripts/fit_ngram_models.sh > output_ngram_training.txt &
 ```
 
 ### Compute perplexity
@@ -145,7 +145,7 @@ nohup bash ./fit_ngram_models.sh > output_ngram_training.txt &
 There is a script to compute the perplexity of the prompts generated during the experiments, you can run it with the following command
 
 ```bash
-nohup bash ./compute_ngram_ppl.sh > output_ngram_ppl.txt &
+nohup bash ./scripts/compute_ngram_ppl.sh > output_ngram_ppl.txt &
 ```
 
 ## Analysis
@@ -176,3 +176,20 @@ If the number of iterations is different, the scores and query
 | `--output-path` | `-o`  | yes      | `Path` | `out/merged.json` | Path to save the output |
 | `--file1`       | `-f1` | yes      | `Path` | ``                | Path to source file 1   |
 | `--file2`       | `-f2` | yes      | `Path` | ``                | Path to source file 2   |
+
+## References
+
+If you are willing to use our code or our models, please cite us with the following reference(s):
+
+```bibtex
+TBD
+```
+
+## Acknowledgements
+
+- Simone Corbo ([simone.corbo@mail.polimi.it](mailto:simone.corbo@mail.polimi.it))
+- Luca Bancale: ([luca.bancale@mail.polimi.it](mailto:luca.bancale@mail.polimi.it))
+- Valeria de Gennaro: ([valeria.degennaro@mail.polimi.it](mailto:valeria.degennaro@mail.polimi.it))
+- Livia Lestingi: ([livia.lestingi@polimi.it](mailto:livia.lestingi@polimi.it))
+- Vincenzo Scotti: ([vincenzo.scotti@polimi.it](mailto:vincenzo.scotti@polimi.it))
+- Matteo Camilli: ([matteo.camilli@polimi.it](mailto:matteo.camilli@.polimi.it))
