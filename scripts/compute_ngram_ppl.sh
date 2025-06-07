@@ -35,6 +35,18 @@ jailbreak_files=(
   "results/finalTests/baselineJailbreak/JailbreakPrompts-vicuna.json"
   "results/finalTests/baselineJailbreak/JailbreakPrompts-vicunaUC.json"
 )
+# Declare directories array (list of lists)
+external_directories=(
+  "results/externalBaselines/llama3"
+  "results/externalBaselines/mistral"
+  "results/externalBaselines/vicuna"
+)
+# Declare files array
+external_files=(
+  "advbench.json"
+  "autodan.json"
+  "maliciousInstruct.json"
+)
 
 # Loop over the n-gram orders
 for order in "${orders[@]}"; do
@@ -58,5 +70,12 @@ for order in "${orders[@]}"; do
       # Run PPL computation
       python ./ngram_perplexity.py --model "ngrams/${order}-gram.${corpus}.arpa" --data_path "${file_path}"
     done
+    # Loop over directories
+    for dir in "${external_directories[@]}"; do
+      # Loop over the files
+      for file in "${external_files[@]}"; do
+        # Run PPL computation
+        python ./ngram_perplexity.py --model "ngrams/${order}-gram.${corpus}.arpa" --data_path "${dir}/${file}"
+      done
   done
 done
