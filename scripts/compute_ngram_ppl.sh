@@ -77,5 +77,6 @@ for order in "${orders[@]}"; do
         # Run PPL computation
         python ./ngram_perplexity.py --model "ngrams/${order}-gram.${corpus}.arpa" --data_path "${dir}/${file}"
       done
+    done
   done
 done
