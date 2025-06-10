@@ -163,5 +163,5 @@ TBD
 - Luca Bancale: ([luca.bancale@mail.polimi.it](mailto:luca.bancale@mail.polimi.it))
 - Valeria de Gennaro: ([valeria.degennaro@mail.polimi.it](mailto:valeria.degennaro@mail.polimi.it))
 - Livia Lestingi: ([livia.lestingi@polimi.it](mailto:livia.lestingi@polimi.it))
-- Vincenzo Scotti: ([vincenzo.scotti@polimi.it](mailto:vincenzo.scotti@polimi.it))
+- Vincenzo Scotti: ([vincenzo.scotti@kit.edu](mailto:vincenzo.scotti@kit.edu))
 - Matteo Camilli: ([matteo.camilli@polimi.it](mailto:matteo.camilli@.polimi.it))
