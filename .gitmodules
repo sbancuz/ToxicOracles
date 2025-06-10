@@ -1,0 +1,3 @@
+[submodule "submodules/AutoDAN"]
+	path = submodules/AutoDAN
+	url = https://github.com/simo-corbo/AutoDAN.git
