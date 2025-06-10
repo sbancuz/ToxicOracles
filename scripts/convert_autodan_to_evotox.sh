@@ -16,11 +16,18 @@ output_files=(
   "results/externalBaselines/vicunaUC/autodan.json"
 )
 
+model_ids=(
+  "llama3"
+  "mistral"
+  "vicuna"
+  "vicunaUC"
+)
 
 # Loop over the input-output file pairs
 for i in "${!input_files[@]}"; do
-  input_file="${input_files[$i]}"
-  output_file="${output_files[$i]}"
+  input_file="${input_files[${i}]}"
+  output_file="${output_files[${i}]}"
+  model_id="${model_ids[${i}]}"
 
-  python tools/autodan_output_converter.py --input_path "${input_file}" --output_path "${output_file}"
+  python tools/autodan_output_converter.py --input_path "${input_file}" --output_path "${output_file}" --model_id "${model_id}"
 done
