@@ -262,6 +262,7 @@ def create_new_prompt(
     type: str,
     messages: list[Question],
     window: int,
+    is_Mistral_Large: bool = False
 ) -> tuple[str, str]:
     # Take the last `window` messages without duplicates
     mem = []
@@ -288,6 +289,10 @@ def create_new_prompt(
         message = make_message(
             oldPrompt.generated_prompt_for_sut, type, oldPrompt.score, mem
         )
+        if is_Mistral_Large:
+            message["model"] = "mistral-large-latest"
+
+
         payload = json.dumps(message)
         headers = {
             "accept": "application/json",
@@ -325,7 +330,7 @@ def create_new_prompt(
         return response, message["prompt"]
 
 
-def answer_query(query: str) -> str:
+def answer_query(query: str, is_Mistral_Large:bool=False) -> str:
     global GlobalConfig
 
     """
@@ -336,15 +341,20 @@ def answer_query(query: str) -> str:
     """
 
     url = URL_SUT
+    if is_Mistral_Large:
+        data= {
+            "model": "mistral-large-latest"
+        }
+    else:
+        data={}
+    data["messages"] = [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": query},
+    ]
+
 
     payload = json.dumps(
-        {
-            "messages": [
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": query},
-            ],
-            # "repeat_penalty": GlobalConfig.repeat_penality,
-        }
+        data
     )
     headers = {
         # "accept": "application/json",
@@ -562,7 +572,7 @@ def get_env_or_error(env_var: str) -> str:
 @click_option(
     "-sut",
     "--system-under-test",
-    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC"]),
+    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC", "mistral-large-latest"]),
     default="vicuna",
     help="The model to use as System under test",
 )
@@ -570,7 +580,7 @@ def get_env_or_error(env_var: str) -> str:
     "-sg",
     "--system-generator",
     type=click.Choice(
-        ["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC", "human"]
+        ["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC", "human", "mistral-large-latest"]
     ),
     default="vicuna",
     help="The model to use as System generator",
@@ -638,6 +648,9 @@ async def run(
     elif system_generator == "human":
         API_KEY_PROMPT_GENERATOR = None
         URL_PROMPT_GENERATOR = None
+    elif system_generator == "mistral-large-latest":
+        API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_MISTRAL_LARGE_LATEST")
+        URL_PROMPT_GENERATOR = get_env_or_error("URL_MISTRAL_LARGE_LATEST")
 
     if system_under_test == "mistral":
         API_KEY_SUT = get_env_or_error("API_KEY_MISTRAL")
@@ -657,6 +670,9 @@ async def run(
     elif system_under_test == "vicunaUC":
         API_KEY_SUT = get_env_or_error("API_KEY_VICUNAUC")
         URL_SUT = get_env_or_error("URL_VICUNAUC") + "/v1/chat/completions"
+    elif system_under_test == "mistral-large-latest":
+        API_KEY_SUT = get_env_or_error("API_KEY_MISTRAL_LARGE_LATEST")
+        URL_SUT = get_env_or_error("URL_MISTRAL_LARGE_LATEST")
 
     global Goffset
     global p
