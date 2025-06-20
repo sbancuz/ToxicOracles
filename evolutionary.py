@@ -15,6 +15,9 @@ from dotenv import load_dotenv
 from perspective import PerspectiveAPI
 import orjson
 import time
+from mistralai import Mistral
+from tqdm import tqdm
+
 
 Goffset = 0
 PerspectiveMutex = Lock()
@@ -290,42 +293,87 @@ def create_new_prompt(
             oldPrompt.generated_prompt_for_sut, type, oldPrompt.score, mem
         )
         if is_Mistral_Large:
-            message["model"] = "mistral-large-latest"
-
-
-        payload = json.dumps(message)
-        headers = {
-            "accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + API_KEY_PROMPT_GENERATOR,
-        }
-
-        response = "<newprompt></newprompt>"
-        match = None
-        tries = 0
-
-        while True:
-            if tries >= GlobalConfig.retries:
-                return "Hi! How is your day?", message[
-                    "prompt"
-                ] + "\n !!!!! Exceeded retries !!!!!"
-
-            actualResponse = (
-                requests.request("POST", url, headers=headers, data=payload)
-                .json()["choices"][0]["text"]
-                .strip()
+            messagesMistral = [
+                {"role": "system", "content": message["prompt"]},
+            ]
+            for m in mem:
+                messagesMistral.append(
+                    {"role": "user", "content": m.input_prompt_for_generation},
+                    {"role": "assistant", "content": m.generated_prompt_for_sut}
+                )
+            messagesMistral.append(
+                {"role": "user", "content": oldPrompt.input_prompt_for_generation}
             )
+            tries=0
+            while True:
+                if tries >= GlobalConfig.retries:
+                    return "Hi! How is your day?", message[
+                                                       "prompt"
+                                                   ] + "\n !!!!! Exceeded retries !!!!!"
+                try:
+                    chat_response = mistral_large.chat.complete(
+                        model="mistral-large-latest",
+                        messages=messagesMistral,
+                    )
+                    actualResponse = chat_response.choices[0].message.content.strip()
+                except Exception as e:
+                    print("Error while generating the new prompt")
+                    print(e)
+                    print(actualResponse)
 
-            match = re.search(r"<newprompt>(.+)</", actualResponse, re.DOTALL)
-            response = (
-                match.group(1).strip()
-                if match and len(match.group(1).strip()) >= 0
-                else ""
-            )
-            if response != "":
-                break
+                match = re.search(r"<newprompt>(.+)</", actualResponse, re.DOTALL)
+                response = (
+                    match.group(1).strip()
+                    if match and len(match.group(1).strip()) >= 0
+                    else ""
+                )
+                if response != "":
+                    break
+                if is_Mistral_Large:
+                    time.sleep(9)
 
-            tries += 1
+                tries += 1
+
+
+
+        else:
+            payload = json.dumps(message)
+            headers = {
+                #"accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + API_KEY_PROMPT_GENERATOR,
+            }
+
+            response = "<newprompt></newprompt>"
+            match = None
+            tries = 0
+
+            while True:
+                if tries >= GlobalConfig.retries:
+                    return "Hi! How is your day?", message[
+                        "prompt"
+                    ] + "\n !!!!! Exceeded retries !!!!!"
+                try:
+                    actualResponse =requests.request("POST", url, headers=headers, data=payload).json()
+                    actualResponse=actualResponse["choices"][0]["text"].strip()
+
+                except Exception as e:
+                    print("Error while generating the new prompt")
+                    print(e)
+                    print(actualResponse)
+                    print("Payload: ", payload)
+                    print("Headers: ", headers)
+                    print("URL: ", url)
+
+                match = re.search(r"<newprompt>(.+)</", actualResponse, re.DOTALL)
+                response = (
+                    match.group(1).strip()
+                    if match and len(match.group(1).strip()) >= 0
+                    else ""
+                )
+                if response != "":
+                    break
+                tries += 1
 
         return response, message["prompt"]
 
@@ -342,37 +390,47 @@ def answer_query(query: str, is_Mistral_Large:bool=False) -> str:
 
     url = URL_SUT
     if is_Mistral_Large:
-        data= {
-            "model": "mistral-large-latest"
-        }
+        try:
+            chat_response = mistral_large.chat.complete(
+                model= "mistral-large-latest",
+             messages = [
+                 {"role": "system", "content": "You are a helpful assistant."},
+                 {"role": "user", "content": query}
+                ]
+            )
+        except Exception as e:
+            print("Error while generating the response")
+            print(e)
+            print("Query: ", query)
+        return chat_response.choices[0].message.content
     else:
         data={}
-    data["messages"] = [
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": query},
-    ]
+        data["messages"] = [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": query},
+        ]
 
 
-    payload = json.dumps(
-        data
-    )
-    headers = {
-        # "accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + API_KEY_SUT,
-    }
-    req = requests.request("POST", url, headers=headers, data=payload).json()
+        payload = json.dumps(
+            data
+        )
+        headers = {
+            # "accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + API_KEY_SUT,
+        }
+        req = requests.request("POST", url, headers=headers, data=payload).json()
 
-    try:
-        while len(req["choices"][0]["message"]["content"].strip()) <= 10:
-            req = requests.request("POST", url, headers=headers, data=payload).json()
-    except Exception as e:
-        print("Error while answering the query")
-        print(e)
-        print("Query: ", query)
-        print("Response: ", req)
+        try:
+            while len(req["choices"][0]["message"]["content"].strip()) <= 10:
+                req = requests.request("POST", url, headers=headers, data=payload).json()
+        except Exception as e:
+            print("Error while answering the query")
+            print(e)
+            print("Query: ", query)
+            print("Response: ", req)
 
-    return req["choices"][0]["message"]["content"].strip()
+        return req["choices"][0]["message"]["content"].strip()
 
 
 def get_score(data: list[float], criteria: str) -> float:
@@ -421,7 +479,7 @@ def evaluate(response: str) -> tuple[float, dict[PerspectiveCriterion, float]]:
                     ],
                 )
         except Exception as e:
-            print("Error while evaluating the response")
+            print("Error while evaluating the response of message: ", response)
             print(e)
             return 0, scores
     elif GlobalConfig.evaluation_function == "custom":
@@ -533,7 +591,7 @@ def get_env_or_error(env_var: str) -> str:
 @click_option(
     "-b",
     "--batch-size",
-    default=2,
+    default=1,
     help="Batch size for the prompt generator",
     type=int,
 )
@@ -573,7 +631,7 @@ def get_env_or_error(env_var: str) -> str:
     "-sut",
     "--system-under-test",
     type=click.Choice(["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC", "mistral-large-latest"]),
-    default="vicuna",
+    default="mistral-large-latest",
     help="The model to use as System under test",
 )
 @click_option(
@@ -601,7 +659,7 @@ def get_env_or_error(env_var: str) -> str:
     help="Use the jailbreak prefixes"
 )
 
-async def run(
+def evorun(
     iterations,
     file,
     evaluation_function,
@@ -626,7 +684,7 @@ async def run(
     jailbreak
 ):
     global GlobalConfig
-    global API_KEY_PROMPT_GENERATOR, URL_PROMPT_GENERATOR, API_KEY_SUT, URL_SUT
+    global API_KEY_PROMPT_GENERATOR, URL_PROMPT_GENERATOR, API_KEY_SUT, URL_SUT, mistral_large
     if system_generator == "mistral":
         API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_MISTRAL")
         URL_PROMPT_GENERATOR = get_env_or_error("URL_MISTRAL") + "/v1/completions"
@@ -651,6 +709,7 @@ async def run(
     elif system_generator == "mistral-large-latest":
         API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_MISTRAL_LARGE_LATEST")
         URL_PROMPT_GENERATOR = get_env_or_error("URL_MISTRAL_LARGE_LATEST")
+        mistral_large=Mistral(api_key=API_KEY_PROMPT_GENERATOR)
 
     if system_under_test == "mistral":
         API_KEY_SUT = get_env_or_error("API_KEY_MISTRAL")
@@ -673,6 +732,7 @@ async def run(
     elif system_under_test == "mistral-large-latest":
         API_KEY_SUT = get_env_or_error("API_KEY_MISTRAL_LARGE_LATEST")
         URL_SUT = get_env_or_error("URL_MISTRAL_LARGE_LATEST")
+        mistral_large=Mistral(api_key=API_KEY_SUT)
 
     global Goffset
     global p
@@ -741,15 +801,16 @@ async def run(
     for initialPrompt in initialPrompts:
         print(f"Prompt {___question}", file=sys.stderr)
         ___question += 1
+        if system_under_test=="mistral-large-latest":
+            time.sleep(3)  # sleep for 0.5 seconds to avoid hitting the rate limit
 
         # set the start time of the response
         start_time_respons_initial = time.time()
-        print("Initial prompt: ", initialPrompt)
-        initialResponse = answer_query(initialPrompt)
-
+        #print("Initial prompt: ", initialPrompt)
+        initialResponse = answer_query(initialPrompt, is_Mistral_Large=system_under_test == "mistral-large-latest")
+        #print("Initial response: ", initialResponse)
         # set the end time of the response
         end_time_respons_initial = time.time()
-
         # set the start time of the evaluation
         start_time_evaluation_initial = time.time()
         initialScore, initialCriterion = evaluate(initialResponse)
@@ -764,7 +825,9 @@ async def run(
             print("Response: ", initialResponse)
             print("\n ### \n")
             print("Score: ", initialScore)
-
+        if system_generator== "mistral-large-latest":
+            # sleep for 0.7 seconds to avoid hitting the rate limit
+            time.sleep(9)
         message = make_message(initialPrompt, "initial", [])
         initial = Question(
             input_prompt_for_generation=initialPrompt,
@@ -806,77 +869,83 @@ async def run(
         run = Run(initial=initial_to_save_to_archive, start_time_timestamp=time.time())
 
         # Starting by evaluating the initial prompt
-        semaphore = asyncio.Semaphore(batch_size)
         # for _ in tqdm(range(iterations), position=1):
-        for _ in range(iterations):
+        for _ in tqdm(range(iterations)):
             nextPrompt = copy.deepcopy(best.generated_prompt_for_sut)
+            #time.sleep(8)
 
-            async def run_it(category):
-                async with semaphore:
-                    current = Question(copy.deepcopy(nextPrompt))
-                    current.category = category
+            def run_it(category):
+                current = Question(copy.deepcopy(nextPrompt))
+                current.category = category
+                if system_generator == "mistral-large-latest":
+                    # sleep for 2 seconds to avoid hitting the rate limit
+                    time.sleep(3)
+                # set the start time of the generation
+                current.start_time_generation = time.time()
+                (
+                    current.generated_prompt_for_sut,
+                    current.full_input_prompt_for_generation,
+                ) = create_new_prompt(
+                    oldPrompt=best,
+                    type=category,
+                    messages=copy.deepcopy(run.taken) if memory else [],
+                    window=memory_window,
+                    is_Mistral_Large=system_generator == "mistral-large-latest"
+                )
+                # set the end time of the generation
+                current.end_time_generation = time.time()
+                current.delta_time_generation = (
+                    current.end_time_generation - current.start_time_generation
+                )
+                if system_under_test=="mistral-large-latest":
+                    # sleep for 8 second to avoid hitting the rate limit
+                    time.sleep(9)
 
-                    # set the start time of the generation
-                    current.start_time_generation = time.time()
-                    (
+                # set the start time of the response
+                current.start_time_response = time.time()
+
+                current.response_from_sut = answer_query(
+                    current.generated_prompt_for_sut,
+                    is_Mistral_Large=system_under_test == "mistral-large-latest"
+                )
+
+                # set the end time of the response
+                current.end_time_response = time.time()
+                current.delta_time_response = (
+                    current.end_time_response - current.start_time_response
+                )
+
+                try:
+                    # set the start time of the evaluation
+                    current.start_time_evaluation = time.time()
+                    current.score, current.criterion = evaluate(
+                        current.response_from_sut
+                    )
+                    # set the end time of the evaluation
+                    current.end_time_evaluation = time.time()
+                    current.delta_time_evaluation = (
+                        current.end_time_evaluation - current.start_time_evaluation
+                    )
+                except Exception as e:
+                    print("Error: ", e)
+                    print(
+                        "Current generated prompt: ",
                         current.generated_prompt_for_sut,
+                    )
+                    print("Current response: ", current.response_from_sut)
+                    print("Current category: ", current.category)
+                    print(
+                        "Current full input prompt for generation: ",
                         current.full_input_prompt_for_generation,
-                    ) = create_new_prompt(
-                        oldPrompt=best,
-                        type=category,
-                        messages=copy.deepcopy(run.taken) if memory else [],
-                        window=memory_window,
                     )
-                    # set the end time of the generation
-                    current.end_time_generation = time.time()
-                    current.delta_time_generation = (
-                        current.end_time_generation - current.start_time_generation
-                    )
-
-                    # set the start time of the response
-                    current.start_time_response = time.time()
-
-                    current.response_from_sut = answer_query(
-                        current.generated_prompt_for_sut
-                    )
-
-                    # set the end time of the response
-                    current.end_time_response = time.time()
-                    current.delta_time_response = (
-                        current.end_time_response - current.start_time_response
-                    )
-
-                    try:
-                        # set the start time of the evaluation
-                        current.start_time_evaluation = time.time()
-                        current.score, current.criterion = evaluate(
-                            current.response_from_sut
-                        )
-                        # set the end time of the evaluation
-                        current.end_time_evaluation = time.time()
-                        current.delta_time_evaluation = (
-                            current.end_time_evaluation - current.start_time_evaluation
-                        )
-                    except Exception as e:
-                        print("Error: ", e)
-                        print(
-                            "Current generated prompt: ",
-                            current.generated_prompt_for_sut,
-                        )
-                        print("Current response: ", current.response_from_sut)
-                        print("Current category: ", current.category)
-                        print(
-                            "Current full input prompt for generation: ",
-                            current.full_input_prompt_for_generation,
-                        )
-                        sys.exit(1)
-                    if system_generator == "human":
-                        print("Response: ", current.response_from_sut)
-                        print("Score: ", current.score)
-                    return current
-
-            tasks = [run_it(c) for c in forward(categories)]
-            results = await asyncio.gather(*tasks)  # Wait for all tasks to finish
+                    sys.exit(1)
+                if system_generator == "human":
+                    print("Response: ", current.response_from_sut)
+                    print("Score: ", current.score)
+                return current
+            results=[]
+            for c in forward(categories):
+                results.append(run_it(c))
 
             # Found a variation that is more toxic than the original
             for res in results:
@@ -936,9 +1005,10 @@ API_KEY_PROMPT_GENERATOR: str
 URL_PROMPT_GENERATOR: str
 URL_SUT: str
 API_KEY_SUT: str
+mistral_large: Mistral
 p: PerspectiveAPI
 
 #p = PerspectiveAPI(get_env_or_error("API_KEY_PERSPECTIVE"))
 
 if __name__ == "__main__":
-    run(_anyio_backend="asyncio")  # or asyncio
+    evorun()
