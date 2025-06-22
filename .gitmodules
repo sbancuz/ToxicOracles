@@ -1,3 +1,6 @@
 [submodule "submodules/AutoDAN"]
 	path = submodules/AutoDAN
 	url = https://github.com/simo-corbo/AutoDAN.git
+[submodule "submodules/FastChat"]
+	path = submodules/FastChat
+	url = https://github.com/lm-sys/FastChat.git
