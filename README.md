@@ -183,10 +183,10 @@ pip install -r requirements.txt
 To repeat the comparison experiments, run the following command
 
 ```bash
-nohup bash ./script/run_autodan_tests.sh > autodan_outptu.txt &
+nohup bash ./scripts/run_autodan_tests.sh > autodan_output.txt &
 ```
 
-Results will be available at ``.
+Results will be available at `./submodules/AutoDAN/results/`.
 
 ### Convert results
 
