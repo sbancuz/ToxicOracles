@@ -3,4 +3,4 @@
 	url = https://github.com/simo-corbo/AutoDAN.git
 [submodule "submodules/FastChat"]
 	path = submodules/FastChat
-	url = https://github.com/lm-sys/FastChat.git
+	url = https://github.com/vincenzo-scotti/FastChat.git
