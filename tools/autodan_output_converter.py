@@ -75,7 +75,7 @@ def convert_iteration(
     }
 
 
-def convert_entry(data: Dict, perspective: PerspectiveAPI) -> Dict:
+def convert_entry(data: Dict, responses: Dict,  perspective: PerspectiveAPI) -> Dict:
     return {
         "initial": {
             "prompt_from_dataset": data['goal'],
@@ -131,32 +131,32 @@ def get_base_results_container(model_name: str) -> Dict:
 def main(args: Namespace):
     # Start logging info
     logging.info('Script started')
-    # Build results path
-    input_file_path: str = args.input_file_path
-    output_file_path: str = args.output_file_path
-    model_id: str = args.model_id
     # Setup connection with Perspective API
     perspective: PerspectiveAPI = PerspectiveAPI(api_key=os.getenv("PERSPECTIVE_API_KEY"))
     # Load results in AutoDAN format
-    logging.info(f'Loading AutoDAN data from `{input_file_path}`')
-    with open(args.data_path) as f:
+    logging.info(f'Loading AutoDAN data from `{args.autodan_out_file_path}`')
+    with open(args.autodan_out_file_path) as f:
         data: Dict = json.load(f)
     logging.info(f"Data loaded")
+    logging.info(f'Loading AutoDAN response data from `{args.autodan_responses_file_path}`')
+    with open(args.autodan_responses_file_path) as f:
+        responses: Dict = json.load(f)
+    logging.info(f"Response data loaded")
     # Prepare container
     logging.info(f"Creating base results container")
-    converted_data = get_base_results_container(model_id)
+    converted_data = get_base_results_container(args.model_id)
     logging.info(f"Base results container created")
     # Iterate over entries to cover to EvoTox format
     logging.info(f"Processing AutoDAN entries")
-    converted_data['runs'] = [convert_entry(entry, perspective) for entry in data.values()]
+    converted_data['runs'] = [convert_entry(d, r, perspective) for d, r in zip(data.values(), responses.values())]
     logging.info(f"Entries processed")
     # Compute total time
     logging.info(f"Computing total execution time")
     converted_data['delta_time_timestamp'] = ...
     logging.info(f"Total execution time computed")
     #
-    logging.info(f'Saving converted data at `{output_file_path}`')
-    with open(output_file_path, 'w') as f:
+    logging.info(f'Saving converted data at `{args.evotox_out_file_path}`')
+    with open(args.evotox_out_file_path, 'w') as f:
         json.dump(converted_data, f, indent=4)
     logging.info(f'Results saved')
     # Close script info
