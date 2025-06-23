@@ -15,7 +15,8 @@ from dotenv import load_dotenv
 from perspective import PerspectiveAPI
 import orjson
 import time
-from mistralai import Mistral
+from openai import OpenAI
+
 from tqdm import tqdm
 
 
@@ -265,7 +266,7 @@ def create_new_prompt(
     type: str,
     messages: list[Question],
     window: int,
-    is_Mistral_Large: bool = False
+    is_deepseek: bool = False
 ) -> tuple[str, str]:
     # Take the last `window` messages without duplicates
     mem = []
@@ -292,7 +293,7 @@ def create_new_prompt(
         message = make_message(
             oldPrompt.generated_prompt_for_sut, type, oldPrompt.score, mem
         )
-        if is_Mistral_Large:
+        if is_deepseek:
             messagesMistral = [
                 {"role": "system", "content": message["prompt"]},
             ]
@@ -311,9 +312,10 @@ def create_new_prompt(
                                                        "prompt"
                                                    ] + "\n !!!!! Exceeded retries !!!!!"
                 try:
-                    chat_response = mistral_large.chat.complete(
-                        model="mistral-large-latest",
+                    chat_response = deepseek.chat.completions.create(
+                        model="deepseek-chat",
                         messages=messagesMistral,
+                        stream=False
                     )
                     actualResponse = chat_response.choices[0].message.content.strip()
                 except Exception as e:
@@ -329,9 +331,6 @@ def create_new_prompt(
                 )
                 if response != "":
                     break
-                if is_Mistral_Large:
-                    time.sleep(9)
-
                 tries += 1
 
 
@@ -378,7 +377,7 @@ def create_new_prompt(
         return response, message["prompt"]
 
 
-def answer_query(query: str, is_Mistral_Large:bool=False) -> str:
+def answer_query(query: str, is_deepseek:bool=False) -> str:
     global GlobalConfig
 
     """
@@ -389,14 +388,16 @@ def answer_query(query: str, is_Mistral_Large:bool=False) -> str:
     """
 
     url = URL_SUT
-    if is_Mistral_Large:
+    if is_deepseek:
         try:
-            chat_response = mistral_large.chat.complete(
-                model= "mistral-large-latest",
-             messages = [
-                 {"role": "system", "content": "You are a helpful assistant."},
-                 {"role": "user", "content": query}
-                ]
+            chat_response = deepseek.chat.completions.create(
+                model= "deepseek-chat",
+                messages = [
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": query},
+                ],
+                stream=False
+
             )
         except Exception as e:
             print("Error while generating the response")
@@ -630,15 +631,15 @@ def get_env_or_error(env_var: str) -> str:
 @click_option(
     "-sut",
     "--system-under-test",
-    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC", "mistral-large-latest"]),
-    default="mistral-large-latest",
+    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC", "deepseek"]),
+    default="deepseek",
     help="The model to use as System under test",
 )
 @click_option(
     "-sg",
     "--system-generator",
     type=click.Choice(
-        ["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC", "human", "mistral-large-latest"]
+        ["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC", "human", "deepseek"]
     ),
     default="vicuna",
     help="The model to use as System generator",
@@ -656,7 +657,8 @@ def get_env_or_error(env_var: str) -> str:
     "--jailbreak",
     "-j",
     is_flag=True,
-    help="Use the jailbreak prefixes"
+    help="Use the jailbreak prefixes",
+    default=False
 )
 
 def evorun(
@@ -684,7 +686,7 @@ def evorun(
     jailbreak
 ):
     global GlobalConfig
-    global API_KEY_PROMPT_GENERATOR, URL_PROMPT_GENERATOR, API_KEY_SUT, URL_SUT, mistral_large
+    global API_KEY_PROMPT_GENERATOR, URL_PROMPT_GENERATOR, API_KEY_SUT, URL_SUT, deepseek
     if system_generator == "mistral":
         API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_MISTRAL")
         URL_PROMPT_GENERATOR = get_env_or_error("URL_MISTRAL") + "/v1/completions"
@@ -706,10 +708,11 @@ def evorun(
     elif system_generator == "human":
         API_KEY_PROMPT_GENERATOR = None
         URL_PROMPT_GENERATOR = None
-    elif system_generator == "mistral-large-latest":
-        API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_MISTRAL_LARGE_LATEST")
-        URL_PROMPT_GENERATOR = get_env_or_error("URL_MISTRAL_LARGE_LATEST")
-        mistral_large=Mistral(api_key=API_KEY_PROMPT_GENERATOR)
+    elif system_generator == "deepseek":
+        API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_DEEPSEEK")
+        URL_PROMPT_GENERATOR = get_env_or_error("URL_DEEPSEEK")
+        deepseek=OpenAI(api_key=API_KEY_PROMPT_GENERATOR, base_url=URL_PROMPT_GENERATOR)
+
 
     if system_under_test == "mistral":
         API_KEY_SUT = get_env_or_error("API_KEY_MISTRAL")
@@ -729,10 +732,10 @@ def evorun(
     elif system_under_test == "vicunaUC":
         API_KEY_SUT = get_env_or_error("API_KEY_VICUNAUC")
         URL_SUT = get_env_or_error("URL_VICUNAUC") + "/v1/chat/completions"
-    elif system_under_test == "mistral-large-latest":
-        API_KEY_SUT = get_env_or_error("API_KEY_MISTRAL_LARGE_LATEST")
-        URL_SUT = get_env_or_error("URL_MISTRAL_LARGE_LATEST")
-        mistral_large=Mistral(api_key=API_KEY_SUT)
+    elif system_under_test == "deepseek":
+        API_KEY_SUT = get_env_or_error("API_KEY_DEEPSEEK")
+        URL_SUT = get_env_or_error("URL_DEEPSEEK")
+        deepseek=OpenAI(api_key=API_KEY_SUT, base_url=URL_SUT)
 
     global Goffset
     global p
@@ -801,13 +804,11 @@ def evorun(
     for initialPrompt in initialPrompts:
         print(f"Prompt {___question}", file=sys.stderr)
         ___question += 1
-        if system_under_test=="mistral-large-latest":
-            time.sleep(3)  # sleep for 0.5 seconds to avoid hitting the rate limit
 
         # set the start time of the response
         start_time_respons_initial = time.time()
         #print("Initial prompt: ", initialPrompt)
-        initialResponse = answer_query(initialPrompt, is_Mistral_Large=system_under_test == "mistral-large-latest")
+        initialResponse = answer_query(initialPrompt, is_deepseek=system_under_test == "deepseek")
         #print("Initial response: ", initialResponse)
         # set the end time of the response
         end_time_respons_initial = time.time()
@@ -825,9 +826,6 @@ def evorun(
             print("Response: ", initialResponse)
             print("\n ### \n")
             print("Score: ", initialScore)
-        if system_generator== "mistral-large-latest":
-            # sleep for 0.7 seconds to avoid hitting the rate limit
-            time.sleep(9)
         message = make_message(initialPrompt, "initial", [])
         initial = Question(
             input_prompt_for_generation=initialPrompt,
@@ -877,9 +875,6 @@ def evorun(
             def run_it(category):
                 current = Question(copy.deepcopy(nextPrompt))
                 current.category = category
-                if system_generator == "mistral-large-latest":
-                    # sleep for 2 seconds to avoid hitting the rate limit
-                    time.sleep(3)
                 # set the start time of the generation
                 current.start_time_generation = time.time()
                 (
@@ -890,23 +885,20 @@ def evorun(
                     type=category,
                     messages=copy.deepcopy(run.taken) if memory else [],
                     window=memory_window,
-                    is_Mistral_Large=system_generator == "mistral-large-latest"
+                    is_deepseek=system_generator == "deepseek"
                 )
                 # set the end time of the generation
                 current.end_time_generation = time.time()
                 current.delta_time_generation = (
                     current.end_time_generation - current.start_time_generation
                 )
-                if system_under_test=="mistral-large-latest":
-                    # sleep for 8 second to avoid hitting the rate limit
-                    time.sleep(9)
 
                 # set the start time of the response
                 current.start_time_response = time.time()
 
                 current.response_from_sut = answer_query(
                     current.generated_prompt_for_sut,
-                    is_Mistral_Large=system_under_test == "mistral-large-latest"
+                    is_deepseek=system_under_test == "deepseek"
                 )
 
                 # set the end time of the response
@@ -1005,7 +997,7 @@ API_KEY_PROMPT_GENERATOR: str
 URL_PROMPT_GENERATOR: str
 URL_SUT: str
 API_KEY_SUT: str
-mistral_large: Mistral
+deepseek: OpenAI
 p: PerspectiveAPI
 
 #p = PerspectiveAPI(get_env_or_error("API_KEY_PERSPECTIVE"))
