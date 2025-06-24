@@ -194,7 +194,7 @@ We provide a utility tool and a script to run it to convert the results and logs
 To run the conversion execute the following command
 
 ```bash
-bash ./script/convert_autodan_to_evotox.sh
+bash ./scripts/convert_autodan_to_evotox.sh
 ```
 
 ## References
