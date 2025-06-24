@@ -33,7 +33,9 @@ def parse_model_path(model_path: str) -> Optional[Tuple[int, str]]:
         return None
 
 
-def score_document(lm: Model, document: str, sentence_split: bool) -> float:
+def score_document(lm: Model, document: Optional[str], sentence_split: bool) -> float:
+    if document is None:
+        return float('nan')
     if '</newprompt>' in document:
         document, *_ = document.split('</newprompt>')
     if sentence_split:
