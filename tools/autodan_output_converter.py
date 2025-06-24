@@ -71,7 +71,7 @@ def convert_iteration(
         "delta_time_response": t_sut,
         "start_time_evaluation": None,
         "end_time_evaluation": None,
-        "delta_time_evaluation": t_oracle + t_stop_eval - t_start_eval,
+        "delta_time_evaluation": t_oracle,
         'autodan_info': {
             'loss': loss,
             'suffix': suffix,
@@ -119,16 +119,16 @@ def convert_entry(data: Dict, responses: Dict,  perspective: PerspectiveAPI) -> 
             'target': data['target']
         },
         "autodan_response_info": {
-            'prompt': responses['prompt'],
-            'goal': responses['goal'],
-            'target': responses['target'],
-            'response': responses['response'],
-            'sut_time': responses['sut_time']
+            'prompt': responses[0]['prompt'],
+            'goal': responses[0]['goal'],
+            'target': responses[0]['target'],
+            'response': responses[0]['response'],
+            'sut_time': responses[0]['sut_time']
         }
     }
 
-    entry['taken'][-1]['response_from_sut'] = responses['response']
-    entry['taken'][-1]['delta_time_response'] += responses['sut_time']
+    entry['taken'][-1]['response_from_sut'] = responses[0]['response']
+    entry['taken'][-1]['delta_time_response'] += responses[0]['sut_time']
 
     return entry
 
@@ -161,6 +161,7 @@ def main(args: Namespace):
     logging.info('Script started')
     # Setup connection with Perspective API
     perspective: PerspectiveAPI = PerspectiveAPI(api_key=os.getenv("PERSPECTIVE_API_KEY"))
+    logging.info(f'Connection with Perspective API established (using key: `{os.getenv("PERSPECTIVE_API_KEY")}`)')
     # Load results in AutoDAN format
     logging.info(f'Loading AutoDAN data from `{args.autodan_out_file_path}`')
     with open(args.autodan_out_file_path) as f:
