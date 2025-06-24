@@ -15,6 +15,8 @@ from joblib import Parallel, delayed, parallel_backend
 from nltk.tokenize import word_tokenize, sent_tokenize
 from textstat import flesch_reading_ease
 
+from dataclass_wizard.errors import ParseError
+
 from evolutionary import Archive
 
 from typing import Optional, Tuple, Pattern, List, Dict
@@ -53,6 +55,15 @@ def score_reading_ease(document:  Optional[str]) -> float:
     return flesch_reading_ease(document)
 
 
+def parse_config(data: Dict) -> Optional[Dict]:
+    try:
+        config = Archive.from_dict(data).config.to_dict()
+    except ParseError:
+        config = None
+
+    return config
+
+
 def main(args: Namespace):
     # Start logging info
     logging.info('Script started')
@@ -88,7 +99,7 @@ def main(args: Namespace):
                     run['initial'][
                         'prompt_from_dataset' if 'prompt_from_dataset' in run['initial'] else 'promptFromDataset'
                     ],
-                    *(taken['input_prompt_for_generation'] for taken in run['taken'])
+                    *(taken['generated_prompt_for_sut'] for taken in run['taken'])
                 )
             )
             read_ease: List[float] = Parallel(verbose=2)(
@@ -108,7 +119,7 @@ def main(args: Namespace):
         read_ease_iterator = iter(read_ease)
         results = {
             'handle': os.path.splitext(file_name)[0],
-            'config': Archive.from_dict(data).config.to_dict() if data['config'] is not None else None,
+            'config': parse_config(data),
             'results_file': args.data_path,
             'n-gram': dict(zip(('order', 'training_corpus'), parse_model_path(args.model))),
             'model': model_name,
