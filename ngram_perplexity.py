@@ -108,7 +108,7 @@ def main(args: Namespace):
         read_ease_iterator = iter(read_ease)
         results = {
             'handle': os.path.splitext(file_name)[0],
-            'config': Archive.from_dict(data).config.to_dict(),
+            'config': Archive.from_dict(data).config.to_dict() if data['config'] is not None else None,
             'results_file': args.data_path,
             'n-gram': dict(zip(('order', 'training_corpus'), parse_model_path(args.model))),
             'model': model_name,
@@ -120,14 +120,14 @@ def main(args: Namespace):
                         ],
                         'ppl': next(ppl_iterator),
                         'reading_ease': next(read_ease_iterator),
-                        'score': run['initial']['score']
+                        'score': run['initial'].get('score')
                     },
                     'taken': [
                         {
                             'input_prompt_for_generation': taken['input_prompt_for_generation'],
                             'ppl': next(ppl_iterator),
                             'reading_ease': next(read_ease_iterator),
-                            'score': taken['score']
+                            'score': taken.get('score')
                         }
                         for taken in run['taken']
                     ]
