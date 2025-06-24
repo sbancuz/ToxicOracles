@@ -45,7 +45,9 @@ def score_document(lm: Model, document: Optional[str], sentence_split: bool) -> 
     else:
         return lm.perplexity(' '.join(word_tokenize(document)).lower())
 
-def score_reading_ease(document: str) -> float:
+def score_reading_ease(document:  Optional[str]) -> float:
+    if document is None:
+        return float('nan')
     if '</newprompt>' in document:
         document, *_ = document.split('</newprompt>')
     return flesch_reading_ease(document)
