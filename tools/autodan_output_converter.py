@@ -173,14 +173,10 @@ def main(args: Namespace):
     logging.info(f"Creating base results container")
     converted_data = get_base_results_container(args.model_id)
     logging.info(f"Base results container created")
-    # Iterate over entries to cover to EvoTox format
+    # Iterate over entries to convert to EvoTox format
     logging.info(f"Processing AutoDAN entries")
     converted_data['runs'] = [convert_entry(d, r, perspective) for d, r in zip(data.values(), responses.values())]
     logging.info(f"Entries processed")
-    # Compute total time
-    logging.info(f"Computing total execution time")
-    converted_data['delta_time_timestamp'] = ...
-    logging.info(f"Total execution time computed")
     #
     logging.info(f'Saving converted data at `{args.evotox_out_file_path}`')
     with open(args.evotox_out_file_path, 'w') as f:
