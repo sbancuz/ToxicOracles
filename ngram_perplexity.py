@@ -99,7 +99,9 @@ def main(args: Namespace):
                     run['initial'][
                         'prompt_from_dataset' if 'prompt_from_dataset' in run['initial'] else 'promptFromDataset'
                     ],
-                    *(taken['generated_prompt_for_sut'] for taken in run['taken'])
+                    *(taken[
+                          'generated_prompt_for_sut' if 'generated_prompt_for_sut' in taken else 'generatedPromptForSut'
+                      ] for taken in run['taken'])
                 )
             )
             read_ease: List[float] = Parallel(verbose=2)(
@@ -109,7 +111,9 @@ def main(args: Namespace):
                     run['initial'][
                         'prompt_from_dataset' if 'prompt_from_dataset' in run['initial'] else 'promptFromDataset'
                     ],
-                    *(taken['input_prompt_for_generation'] for taken in run['taken'])
+                    *(taken[
+                          'generated_prompt_for_sut' if 'generated_prompt_for_sut' in taken else 'generatedPromptForSut'
+                      ] for taken in run['taken'])
                 )
             )
         logging.info("Perplexity and reading ease computed")
@@ -135,7 +139,9 @@ def main(args: Namespace):
                     },
                     'taken': [
                         {
-                            'input_prompt_for_generation': taken['input_prompt_for_generation'],
+                            'generated_prompt_for_sut': taken[
+                                'generated_prompt_for_sut' if 'generated_prompt_for_sut' in taken else 'generatedPromptForSut'
+                            ],
                             'ppl': next(ppl_iterator),
                             'reading_ease': next(read_ease_iterator),
                             'score': taken.get('score')
