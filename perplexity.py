@@ -15,6 +15,18 @@ from transformers import BitsAndBytesConfig
 
 from evolutionary import Archive
 
+from typing import Dict, Optional
+from dataclass_wizard.errors import ParseError
+
+
+def parse_config(data: Dict) -> Optional[Dict]:
+    try:
+        config = Archive.from_dict(data).config.to_dict()
+    except ParseError:
+        config = None
+
+    return config
+
 
 @torch.no_grad()
 def main(args: Namespace):
@@ -54,7 +66,11 @@ def main(args: Namespace):
             prompt
             for run in data['runs']
             for prompt in (
-                run['initial']['prompt_from_dataset'], *(taken['input_prompt_for_generation'] for taken in run['taken'])
+                run['initial'][
+                    'prompt_from_dataset' if 'prompt_from_dataset' in run['initial'] else 'promptFromDataset'
+                ], *(taken[
+                    'generated_prompt_for_sut' if 'generated_prompt_for_sut' in taken else 'generatedPromptForSut'
+                ] for taken in run['taken'])
             )
     ), n=args.batch_size)):
         # Encode input
@@ -76,7 +92,7 @@ def main(args: Namespace):
     ppl_iterator = iter(ppl)
     results = {
         'handle': os.path.splitext(os.path.basename(args.data_path))[0],
-        'config': Archive.from_dict(data).config.to_dict(),
+        'config': parse_config(data),
         'results_file': args.data_path,
         'model': args.model,
         'runs': [
@@ -90,9 +106,11 @@ def main(args: Namespace):
                 },
                 'taken': [
                     {
-                        'input_prompt_for_generation': taken['input_prompt_for_generation'],
+                        'generated_prompt_for_sut': taken[
+                            'generated_prompt_for_sut' if 'generated_prompt_for_sut' in taken else 'generatedPromptForSut'
+                        ],
                         'ppl': next(ppl_iterator),
-                        'score': taken['score']
+                        'score': taken.get('score')
                     }
                     for taken in run['taken']
                 ]
