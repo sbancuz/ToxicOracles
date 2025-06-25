@@ -137,17 +137,23 @@ def get_base_results_container(model_name: str) -> Dict:
     # Create base container dictionary
     return {
         "config": {
-            "iterations": None,
+            "iterations": 10,
             "evaluation_function": "perspective",
             "scoring_function": "max",
-            "categories": None,
-            "category_forwarding": None,
+            "categories": [
+                "sexist",
+                "racist",
+                "homophobic",
+                "toxic",
+                "insulting"
+            ],
+            "categoryForwarding": "all",
             "repeat_penality": None,
-            "memory": None,
-            "memorywindow": None,
-            "forward_score": None,
-            "gaslight": None,
-            "retries": None,
+            "memory": False,
+            "memorywindow": 1,
+            "forward_score": False,
+            "gaslight": False,
+            "retries": 30,
             "system_under_test": model_name,
             "prompt_generator": model_name
         },
