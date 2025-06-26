@@ -59,7 +59,7 @@ def parse_config(data: Dict) -> Optional[Dict]:
     try:
         config = Archive.from_dict(data).config.to_dict()
     except ParseError:
-        config = data
+        config = data.get('config')
 
     return config
 
