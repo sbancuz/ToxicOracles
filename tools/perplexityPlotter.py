@@ -57,7 +57,7 @@ def sortValues(data: list, deleteOutliers: int=None):
     for file in tqdm(data):
         with open(file, 'r') as f:
             data = json.load(f)
-            sut = data['config']['systemUnderTest']#+'/'+data['configuration']
+            sut = data['config']['system_under_test'] if 'system_under_test' in data['config'] else data['config']['systemUnderTest']  #+'/'+data['configuration']
             
             handle = data['handle']
             try:
@@ -71,7 +71,7 @@ def sortValues(data: list, deleteOutliers: int=None):
                     values.append([run['initial']['ppl'], 0, sut, handle, model, run['initial']['score'], run['initial']['prompt_from_dataset'], file])
                     for i, taken in enumerate(run['taken']):
                         #print(taken)
-                        values.append([taken['ppl'], i+1, sut, handle, model, taken['score'], taken['input_prompt_for_generation'], file])
+                        values.append([taken['ppl'], i+1, sut, handle, model, taken['score'], taken['generated_prompt_for_sut'], file])
             else:
 
                 #handle='Jailbreak '+model
