@@ -301,7 +301,8 @@ def grouped(input, output, extension, verbose, groupby, criteria, type, fig, sav
         plt.savefig(output + f"rq1_summary_{type}_{criteria}_{groupby}.{extension}", bbox_inches = "tight")
     if verbose:
         plt.show()
-    
+
+
 def load_data(input, criteria, includeBaseline=False, max_samples=None):
     '''
     This function is used to load the data from the input folder and return a pandas dataframe with the data
@@ -311,34 +312,66 @@ def load_data(input, criteria, includeBaseline=False, max_samples=None):
 
     return: a pandas dataframe with the data, with columns: iteration, score, system_under_test, prompt_generator, category, delta_time_evaluation, delta_time_generation, delta_time_response, file, numberIterations
     '''
-    fileData=[]
+    fileData = []
 
     for folder in input:
-        files=get_files(folder, includeBaseline=includeBaseline)
-        
+        files = get_files(folder, includeBaseline=includeBaseline)
+
         for file in files:
-            #print(get_files(folder))
+            # print(get_files(folder))
             with open(file) as f:
-                counter=0
+                counter = 0
                 # file name without the extension
-                fileName= os.path.basename(file)
-                fileName=fileName[:fileName.rfind(".")]
+                fileName = os.path.basename(file)
+                fileName = fileName[:fileName.rfind(".")]
                 # discard the perplexity files
                 if fileName.startswith("ppl"):
                     continue
-                archive=Archive.from_dict(orjson.loads(f.read()))
-                isBaseline = archive.config.iterations == 0
-                for run in archive.runs:
-                    if max_samples is None or counter < max_samples:
-                        fileData.append([0, get_score(list(run.initial.criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, "initial", run.initial.delta_time_evaluation, 0, run.initial.delta_time_response, fileName, archive.config.iterations])
-                        if isBaseline:
-                            counter+=1
-                    for i in range(archive.config.iterations):
+
+                json_data = orjson.loads(f.read())
+
+                if fileName == "autodan":
+                    config = json_data.get("config", {})
+                    runs = json_data.get("runs", [])
+                    isBaseline = config.get("iterations", 0) == 0
+                    system_under_test = config.get("system_under_test", "unknown")
+                    prompt_generator = config.get("prompt_generator", "unknown")
+                    iterations = config.get("iterations", 0)
+
+                    for run in runs:
+                        taken_runs = run["taken"]
                         if max_samples is None or counter < max_samples:
-                            fileData.append([i+1, get_score(list(run.taken[i].criterion.values()), criteria), archive.config.system_under_test, archive.config.prompt_generator, run.taken[i].category, run.taken[i].delta_time_evaluation, run.taken[i].delta_time_generation, run.taken[i].delta_time_response, fileName, archive.config.iterations ])
+                            taken = taken_runs[-1]
+                            score = get_score(list(taken["criterion"].values()), criteria)
+                            fileData.append(
+                                [len(taken_runs), score, system_under_test, prompt_generator, taken.get("category", ""),
+                                 taken.get("delta_time_evaluation", 0), taken.get("delta_time_generation", 0),
+                                 taken.get("delta_time_response", 0), fileName, iterations])
                             if isBaseline:
-                                counter+=1
-    data=pd.DataFrame(fileData, columns=["iteration", "score", "system_under_test", "prompt_generator", "category","delta_time_evaluation", "delta_time_generation", "delta_time_response", "file", "numberIterations"])
+                                counter += 1
+                else:
+                    archive = Archive.from_dict(json_data)
+                    isBaseline = archive.config.iterations == 0
+                    for run in archive.runs:
+                        if max_samples is None or counter < max_samples:
+                            fileData.append([0, get_score(list(run.initial.criterion.values()), criteria),
+                                             archive.config.system_under_test, archive.config.prompt_generator,
+                                             "initial", run.initial.delta_time_evaluation, 0,
+                                             run.initial.delta_time_response, fileName, archive.config.iterations])
+                            if isBaseline:
+                                counter += 1
+                        for i in range(archive.config.iterations):
+                            if max_samples is None or counter < max_samples:
+                                fileData.append([i + 1, get_score(list(run.taken[i].criterion.values()), criteria),
+                                                 archive.config.system_under_test, archive.config.prompt_generator,
+                                                 run.taken[i].category, run.taken[i].delta_time_evaluation,
+                                                 run.taken[i].delta_time_generation, run.taken[i].delta_time_response,
+                                                 fileName, archive.config.iterations])
+                                if isBaseline:
+                                    counter += 1
+    data = pd.DataFrame(fileData, columns=["iteration", "score", "system_under_test", "prompt_generator", "category",
+                                           "delta_time_evaluation", "delta_time_generation", "delta_time_response",
+                                           "file", "numberIterations"])
     return data
 
 
