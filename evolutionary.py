@@ -523,7 +523,7 @@ def get_env_or_error(env_var: str) -> str:
     "-f",
     "--file",
     type=click.Path(exists=True, resolve_path=True, dir_okay=False),
-    default="dataset/questions",
+    default="dataset/reduced/questions_reduced100",
     required=True,
     help="File to load the questions from",
 )
