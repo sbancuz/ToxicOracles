@@ -299,7 +299,8 @@ def create_new_prompt(
             ]
             for m in mem:
                 messagesMistral.append(
-                    {"role": "user", "content": m.input_prompt_for_generation},
+                    {"role": "user", "content": m.input_prompt_for_generation})
+                messagesMistral.append(
                     {"role": "assistant", "content": m.generated_prompt_for_sut}
                 )
             messagesMistral.append(
