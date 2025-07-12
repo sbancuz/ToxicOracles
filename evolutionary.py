@@ -593,7 +593,7 @@ def get_env_or_error(env_var: str) -> str:
 @click_option(
     "-b",
     "--batch-size",
-    default=1,
+    default=2,
     help="Batch size for the prompt generator",
     type=int,
 )
@@ -662,7 +662,7 @@ def get_env_or_error(env_var: str) -> str:
     default=False
 )
 
-def evorun(
+async def evorun(
     iterations,
     file,
     evaluation_function,
@@ -868,77 +868,78 @@ def evorun(
         run = Run(initial=initial_to_save_to_archive, start_time_timestamp=time.time())
 
         # Starting by evaluating the initial prompt
+        semaphore = asyncio.Semaphore(batch_size)
+
         # for _ in tqdm(range(iterations), position=1):
         for _ in tqdm(range(iterations)):
             nextPrompt = copy.deepcopy(best.generated_prompt_for_sut)
-            #time.sleep(8)
 
-            def run_it(category):
-                current = Question(copy.deepcopy(nextPrompt))
-                current.category = category
-                # set the start time of the generation
-                current.start_time_generation = time.time()
-                (
-                    current.generated_prompt_for_sut,
-                    current.full_input_prompt_for_generation,
-                ) = create_new_prompt(
-                    oldPrompt=best,
-                    type=category,
-                    messages=copy.deepcopy(run.taken) if memory else [],
-                    window=memory_window,
-                    is_deepseek=system_generator == "deepseek"
-                )
-                # set the end time of the generation
-                current.end_time_generation = time.time()
-                current.delta_time_generation = (
-                    current.end_time_generation - current.start_time_generation
-                )
-
-                # set the start time of the response
-                current.start_time_response = time.time()
-
-                current.response_from_sut = answer_query(
-                    current.generated_prompt_for_sut,
-                    is_deepseek=system_under_test == "deepseek"
-                )
-
-                # set the end time of the response
-                current.end_time_response = time.time()
-                current.delta_time_response = (
-                    current.end_time_response - current.start_time_response
-                )
-
-                try:
-                    # set the start time of the evaluation
-                    current.start_time_evaluation = time.time()
-                    current.score, current.criterion = evaluate(
-                        current.response_from_sut
-                    )
-                    # set the end time of the evaluation
-                    current.end_time_evaluation = time.time()
-                    current.delta_time_evaluation = (
-                        current.end_time_evaluation - current.start_time_evaluation
-                    )
-                except Exception as e:
-                    print("Error: ", e)
-                    print(
-                        "Current generated prompt: ",
+            async def run_it(category):
+                async with semaphore:
+                    current = Question(copy.deepcopy(nextPrompt))
+                    current.category = category
+                    # set the start time of the generation
+                    current.start_time_generation = time.time()
+                    (
                         current.generated_prompt_for_sut,
-                    )
-                    print("Current response: ", current.response_from_sut)
-                    print("Current category: ", current.category)
-                    print(
-                        "Current full input prompt for generation: ",
                         current.full_input_prompt_for_generation,
+                    ) = create_new_prompt(
+                        oldPrompt=best,
+                        type=category,
+                        messages=copy.deepcopy(run.taken) if memory else [],
+                        window=memory_window,
+                        is_deepseek=system_generator == "deepseek"
                     )
-                    sys.exit(1)
-                if system_generator == "human":
-                    print("Response: ", current.response_from_sut)
-                    print("Score: ", current.score)
-                return current
-            results=[]
-            for c in forward(categories):
-                results.append(run_it(c))
+                    # set the end time of the generation
+                    current.end_time_generation = time.time()
+                    current.delta_time_generation = (
+                        current.end_time_generation - current.start_time_generation
+                    )
+
+                    # set the start time of the response
+                    current.start_time_response = time.time()
+
+                    current.response_from_sut = answer_query(
+                        current.generated_prompt_for_sut,
+                        is_deepseek=system_under_test == "deepseek"
+                    )
+
+                    # set the end time of the response
+                    current.end_time_response = time.time()
+                    current.delta_time_response = (
+                        current.end_time_response - current.start_time_response
+                    )
+
+                    try:
+                        # set the start time of the evaluation
+                        current.start_time_evaluation = time.time()
+                        current.score, current.criterion = evaluate(
+                            current.response_from_sut
+                        )
+                        # set the end time of the evaluation
+                        current.end_time_evaluation = time.time()
+                        current.delta_time_evaluation = (
+                            current.end_time_evaluation - current.start_time_evaluation
+                        )
+                    except Exception as e:
+                        print("Error: ", e)
+                        print(
+                            "Current generated prompt: ",
+                            current.generated_prompt_for_sut,
+                        )
+                        print("Current response: ", current.response_from_sut)
+                        print("Current category: ", current.category)
+                        print(
+                            "Current full input prompt for generation: ",
+                            current.full_input_prompt_for_generation,
+                        )
+                        sys.exit(1)
+                    if system_generator == "human":
+                        print("Response: ", current.response_from_sut)
+                        print("Score: ", current.score)
+                    return current
+            tasks=[run_it(category) for category in forward(categories)]
+            results = await asyncio.gather(*tasks)
 
             # Found a variation that is more toxic than the original
             for res in results:
@@ -1004,4 +1005,4 @@ p: PerspectiveAPI
 #p = PerspectiveAPI(get_env_or_error("API_KEY_PERSPECTIVE"))
 
 if __name__ == "__main__":
-    evorun()
+    evorun(_anyio_backend="asyncio")
