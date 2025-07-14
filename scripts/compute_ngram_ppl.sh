@@ -15,6 +15,7 @@ corpora=(
 )
 # Declare directories array (list of lists)
 directories=(
+  "results/finalTests/deepseek_deepseek results/finalTests/deepseek_vicuna results/finalTests/deepseek_vicunaUC"
   "results/finalTests/mistral_mistral results/finalTests/mistral_vicuna results/finalTests/mistral_vicunaUC"
   "results/finalTests/llama3_llama3 results/finalTests/llama3_vicuna results/finalTests/llama3_vicunaUC"
   "results/finalTests/vicuna_mistral results/finalTests/vicuna_vicuna results/finalTests/vicuna_vicunaUC"
@@ -30,6 +31,7 @@ files=(
 )
 # Declare list of file paths
 jailbreak_files=(
+  "results/finalTests/baselineJailbreak/JailBreakPrompts-deepseek.json"
   "results/finalTests/baselineJailbreak/JailBreakPrompts-Mistral.json"
   "results/finalTests/baselineJailbreak/JailbreakPrompts-llama3.json"
   "results/finalTests/baselineJailbreak/JailbreakPrompts-vicuna.json"
@@ -37,6 +39,7 @@ jailbreak_files=(
 )
 # Declare directories array (list of lists)
 external_directories=(
+  "results/externalBaselines/deepseek"
   "results/externalBaselines/llama3"
   "results/externalBaselines/mistral"
   "results/externalBaselines/vicuna"
