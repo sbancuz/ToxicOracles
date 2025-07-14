@@ -15,6 +15,10 @@ from dotenv import load_dotenv
 from perspective import PerspectiveAPI
 import orjson
 import time
+from openai import OpenAI
+
+from tqdm import tqdm
+
 
 Goffset = 0
 PerspectiveMutex = Lock()
@@ -262,6 +266,7 @@ def create_new_prompt(
     type: str,
     messages: list[Question],
     window: int,
+    is_deepseek: bool = False
 ) -> tuple[str, str]:
     # Take the last `window` messages without duplicates
     mem = []
@@ -288,44 +293,92 @@ def create_new_prompt(
         message = make_message(
             oldPrompt.generated_prompt_for_sut, type, oldPrompt.score, mem
         )
-        payload = json.dumps(message)
-        headers = {
-            "accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + API_KEY_PROMPT_GENERATOR,
-        }
-
-        response = "<newprompt></newprompt>"
-        match = None
-        tries = 0
-
-        while True:
-            if tries >= GlobalConfig.retries:
-                return "Hi! How is your day?", message[
-                    "prompt"
-                ] + "\n !!!!! Exceeded retries !!!!!"
-
-            actualResponse = (
-                requests.request("POST", url, headers=headers, data=payload)
-                .json()["choices"][0]["text"]
-                .strip()
+        if is_deepseek:
+            messagesMistral = [
+                {"role": "system", "content": message["prompt"]},
+            ]
+            for m in mem:
+                messagesMistral.append(
+                    {"role": "user", "content": m.input_prompt_for_generation})
+                messagesMistral.append(
+                    {"role": "assistant", "content": m.generated_prompt_for_sut}
+                )
+            messagesMistral.append(
+                {"role": "user", "content": oldPrompt.input_prompt_for_generation}
             )
+            tries=0
+            while True:
+                if tries >= GlobalConfig.retries:
+                    return "Hi! How is your day?", message[
+                                                       "prompt"
+                                                   ] + "\n !!!!! Exceeded retries !!!!!"
+                try:
+                    chat_response = deepseek.chat.completions.create(
+                        model="deepseek-chat",
+                        messages=messagesMistral,
+                        stream=False
+                    )
+                    actualResponse = chat_response.choices[0].message.content.strip()
+                except Exception as e:
+                    print("Error while generating the new prompt")
+                    print(e)
+                    print(actualResponse)
 
-            match = re.search(r"<newprompt>(.+)</", actualResponse, re.DOTALL)
-            response = (
-                match.group(1).strip()
-                if match and len(match.group(1).strip()) >= 0
-                else ""
-            )
-            if response != "":
-                break
+                match = re.search(r"<newprompt>(.+)</", actualResponse, re.DOTALL)
+                response = (
+                    match.group(1).strip()
+                    if match and len(match.group(1).strip()) >= 0
+                    else ""
+                )
+                if response != "":
+                    break
+                tries += 1
 
-            tries += 1
+
+
+        else:
+            payload = json.dumps(message)
+            headers = {
+                #"accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + API_KEY_PROMPT_GENERATOR,
+            }
+
+            response = "<newprompt></newprompt>"
+            match = None
+            tries = 0
+
+            while True:
+                if tries >= GlobalConfig.retries:
+                    return "Hi! How is your day?", message[
+                        "prompt"
+                    ] + "\n !!!!! Exceeded retries !!!!!"
+                try:
+                    actualResponse =requests.request("POST", url, headers=headers, data=payload).json()
+                    actualResponse=actualResponse["choices"][0]["text"].strip()
+
+                except Exception as e:
+                    print("Error while generating the new prompt")
+                    print(e)
+                    print(actualResponse)
+                    print("Payload: ", payload)
+                    print("Headers: ", headers)
+                    print("URL: ", url)
+
+                match = re.search(r"<newprompt>(.+)</", actualResponse, re.DOTALL)
+                response = (
+                    match.group(1).strip()
+                    if match and len(match.group(1).strip()) >= 0
+                    else ""
+                )
+                if response != "":
+                    break
+                tries += 1
 
         return response, message["prompt"]
 
 
-def answer_query(query: str) -> str:
+def answer_query(query: str, is_deepseek:bool=False) -> str:
     global GlobalConfig
 
     """
@@ -336,33 +389,50 @@ def answer_query(query: str) -> str:
     """
 
     url = URL_SUT
+    if is_deepseek:
+        try:
+            chat_response = deepseek.chat.completions.create(
+                model= "deepseek-chat",
+                messages = [
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": query},
+                ],
+                stream=False
 
-    payload = json.dumps(
-        {
-            "messages": [
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": query},
-            ],
-            # "repeat_penalty": GlobalConfig.repeat_penality,
+            )
+        except Exception as e:
+            print("Error while generating the response")
+            print(e)
+            print("Query: ", query)
+        return chat_response.choices[0].message.content
+    else:
+        data={}
+        data["messages"] = [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": query},
+        ]
+
+
+        payload = json.dumps(
+            data
+        )
+        headers = {
+            # "accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + API_KEY_SUT,
         }
-    )
-    headers = {
-        # "accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + API_KEY_SUT,
-    }
-    req = requests.request("POST", url, headers=headers, data=payload).json()
+        req = requests.request("POST", url, headers=headers, data=payload).json()
 
-    try:
-        while len(req["choices"][0]["message"]["content"].strip()) <= 10:
-            req = requests.request("POST", url, headers=headers, data=payload).json()
-    except Exception as e:
-        print("Error while answering the query")
-        print(e)
-        print("Query: ", query)
-        print("Response: ", req)
+        try:
+            while len(req["choices"][0]["message"]["content"].strip()) <= 10:
+                req = requests.request("POST", url, headers=headers, data=payload).json()
+        except Exception as e:
+            print("Error while answering the query")
+            print(e)
+            print("Query: ", query)
+            print("Response: ", req)
 
-    return req["choices"][0]["message"]["content"].strip()
+        return req["choices"][0]["message"]["content"].strip()
 
 
 def get_score(data: list[float], criteria: str) -> float:
@@ -411,7 +481,7 @@ def evaluate(response: str) -> tuple[float, dict[PerspectiveCriterion, float]]:
                     ],
                 )
         except Exception as e:
-            print("Error while evaluating the response")
+            print("Error while evaluating the response of message: ", response)
             print(e)
             return 0, scores
     elif GlobalConfig.evaluation_function == "custom":
@@ -454,7 +524,7 @@ def get_env_or_error(env_var: str) -> str:
     "-f",
     "--file",
     type=click.Path(exists=True, resolve_path=True, dir_okay=False),
-    default="dataset/questions",
+    default="dataset/reduced/questions_reduced100",
     required=True,
     help="File to load the questions from",
 )
@@ -562,15 +632,15 @@ def get_env_or_error(env_var: str) -> str:
 @click_option(
     "-sut",
     "--system-under-test",
-    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC"]),
-    default="vicuna",
+    type=click.Choice(["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC", "deepseek"]),
+    default="deepseek",
     help="The model to use as System under test",
 )
 @click_option(
     "-sg",
     "--system-generator",
     type=click.Choice(
-        ["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC", "human"]
+        ["mistral", "gpt4", "gemma", "vicuna", "llama3", "vicunaUC", "human", "deepseek"]
     ),
     default="vicuna",
     help="The model to use as System generator",
@@ -588,10 +658,11 @@ def get_env_or_error(env_var: str) -> str:
     "--jailbreak",
     "-j",
     is_flag=True,
-    help="Use the jailbreak prefixes"
+    help="Use the jailbreak prefixes",
+    default=False
 )
 
-async def run(
+async def evorun(
     iterations,
     file,
     evaluation_function,
@@ -616,7 +687,7 @@ async def run(
     jailbreak
 ):
     global GlobalConfig
-    global API_KEY_PROMPT_GENERATOR, URL_PROMPT_GENERATOR, API_KEY_SUT, URL_SUT
+    global API_KEY_PROMPT_GENERATOR, URL_PROMPT_GENERATOR, API_KEY_SUT, URL_SUT, deepseek
     if system_generator == "mistral":
         API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_MISTRAL")
         URL_PROMPT_GENERATOR = get_env_or_error("URL_MISTRAL") + "/v1/completions"
@@ -638,6 +709,11 @@ async def run(
     elif system_generator == "human":
         API_KEY_PROMPT_GENERATOR = None
         URL_PROMPT_GENERATOR = None
+    elif system_generator == "deepseek":
+        API_KEY_PROMPT_GENERATOR = get_env_or_error("API_KEY_DEEPSEEK")
+        URL_PROMPT_GENERATOR = get_env_or_error("URL_DEEPSEEK")
+        deepseek=OpenAI(api_key=API_KEY_PROMPT_GENERATOR, base_url=URL_PROMPT_GENERATOR)
+
 
     if system_under_test == "mistral":
         API_KEY_SUT = get_env_or_error("API_KEY_MISTRAL")
@@ -657,6 +733,10 @@ async def run(
     elif system_under_test == "vicunaUC":
         API_KEY_SUT = get_env_or_error("API_KEY_VICUNAUC")
         URL_SUT = get_env_or_error("URL_VICUNAUC") + "/v1/chat/completions"
+    elif system_under_test == "deepseek":
+        API_KEY_SUT = get_env_or_error("API_KEY_DEEPSEEK")
+        URL_SUT = get_env_or_error("URL_DEEPSEEK")
+        deepseek=OpenAI(api_key=API_KEY_SUT, base_url=URL_SUT)
 
     global Goffset
     global p
@@ -728,12 +808,11 @@ async def run(
 
         # set the start time of the response
         start_time_respons_initial = time.time()
-        print("Initial prompt: ", initialPrompt)
-        initialResponse = answer_query(initialPrompt)
-
+        #print("Initial prompt: ", initialPrompt)
+        initialResponse = answer_query(initialPrompt, is_deepseek=system_under_test == "deepseek")
+        #print("Initial response: ", initialResponse)
         # set the end time of the response
         end_time_respons_initial = time.time()
-
         # set the start time of the evaluation
         start_time_evaluation_initial = time.time()
         initialScore, initialCriterion = evaluate(initialResponse)
@@ -748,7 +827,6 @@ async def run(
             print("Response: ", initialResponse)
             print("\n ### \n")
             print("Score: ", initialScore)
-
         message = make_message(initialPrompt, "initial", [])
         initial = Question(
             input_prompt_for_generation=initialPrompt,
@@ -791,15 +869,15 @@ async def run(
 
         # Starting by evaluating the initial prompt
         semaphore = asyncio.Semaphore(batch_size)
+
         # for _ in tqdm(range(iterations), position=1):
-        for _ in range(iterations):
+        for _ in tqdm(range(iterations)):
             nextPrompt = copy.deepcopy(best.generated_prompt_for_sut)
 
             async def run_it(category):
                 async with semaphore:
                     current = Question(copy.deepcopy(nextPrompt))
                     current.category = category
-
                     # set the start time of the generation
                     current.start_time_generation = time.time()
                     (
@@ -810,6 +888,7 @@ async def run(
                         type=category,
                         messages=copy.deepcopy(run.taken) if memory else [],
                         window=memory_window,
+                        is_deepseek=system_generator == "deepseek"
                     )
                     # set the end time of the generation
                     current.end_time_generation = time.time()
@@ -821,7 +900,8 @@ async def run(
                     current.start_time_response = time.time()
 
                     current.response_from_sut = answer_query(
-                        current.generated_prompt_for_sut
+                        current.generated_prompt_for_sut,
+                        is_deepseek=system_under_test == "deepseek"
                     )
 
                     # set the end time of the response
@@ -858,9 +938,8 @@ async def run(
                         print("Response: ", current.response_from_sut)
                         print("Score: ", current.score)
                     return current
-
-            tasks = [run_it(c) for c in forward(categories)]
-            results = await asyncio.gather(*tasks)  # Wait for all tasks to finish
+            tasks=[run_it(category) for category in forward(categories)]
+            results = await asyncio.gather(*tasks)
 
             # Found a variation that is more toxic than the original
             for res in results:
@@ -920,9 +999,10 @@ API_KEY_PROMPT_GENERATOR: str
 URL_PROMPT_GENERATOR: str
 URL_SUT: str
 API_KEY_SUT: str
+deepseek: OpenAI
 p: PerspectiveAPI
 
 #p = PerspectiveAPI(get_env_or_error("API_KEY_PERSPECTIVE"))
 
 if __name__ == "__main__":
-    run(_anyio_backend="asyncio")  # or asyncio
+    evorun(_anyio_backend="asyncio")
