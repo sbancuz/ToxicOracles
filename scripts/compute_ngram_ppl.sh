@@ -31,7 +31,7 @@ files=(
 )
 # Declare list of file paths
 jailbreak_files=(
-  "results/finalTests/baselineJailbreak/JailBreakPrompts-deepseek.json"
+  "results/finalTests/baselineJailbreak/JailbreakPrompts-deepseek.json"
   "results/finalTests/baselineJailbreak/JailBreakPrompts-Mistral.json"
   "results/finalTests/baselineJailbreak/JailbreakPrompts-llama3.json"
   "results/finalTests/baselineJailbreak/JailbreakPrompts-vicuna.json"
