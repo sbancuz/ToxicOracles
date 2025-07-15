@@ -16,33 +16,33 @@ corpora=(
 # Declare directories array (list of lists)
 directories=(
   "results/finalTests/deepseek_deepseek results/finalTests/deepseek_vicuna results/finalTests/deepseek_vicunaUC"
-  "results/finalTests/mistral_mistral results/finalTests/mistral_vicuna results/finalTests/mistral_vicunaUC"
-  "results/finalTests/llama3_llama3 results/finalTests/llama3_vicuna results/finalTests/llama3_vicunaUC"
-  "results/finalTests/vicuna_mistral results/finalTests/vicuna_vicuna results/finalTests/vicuna_vicunaUC"
-  "results/finalTests/vicunaUC_vicunaUC"
+  # "results/finalTests/mistral_mistral results/finalTests/mistral_vicuna results/finalTests/mistral_vicunaUC"
+  # "results/finalTests/llama3_llama3 results/finalTests/llama3_vicuna results/finalTests/llama3_vicunaUC"
+  # "results/finalTests/vicuna_mistral results/finalTests/vicuna_vicuna results/finalTests/vicuna_vicunaUC"
+  # "results/finalTests/vicunaUC_vicunaUC"
 )
 # Declare files array
 files=(
   "baseline.json"
-  "max.json"
-  "max_fs.json"
-  "max_fs_glit.json"
-  "max_mem_5_fs_glit.json"
+  # "max.json"
+  # "max_fs.json"
+  # "max_fs_glit.json"
+  # "max_mem_5_fs_glit.json"
 )
 # Declare list of file paths
 jailbreak_files=(
   "results/finalTests/baselineJailbreak/JailbreakPrompts-deepseek.json"
-  "results/finalTests/baselineJailbreak/JailBreakPrompts-Mistral.json"
-  "results/finalTests/baselineJailbreak/JailbreakPrompts-llama3.json"
-  "results/finalTests/baselineJailbreak/JailbreakPrompts-vicuna.json"
-  "results/finalTests/baselineJailbreak/JailbreakPrompts-vicunaUC.json"
+  # "results/finalTests/baselineJailbreak/JailBreakPrompts-Mistral.json"
+  # "results/finalTests/baselineJailbreak/JailbreakPrompts-llama3.json"
+  # "results/finalTests/baselineJailbreak/JailbreakPrompts-vicuna.json"
+  # "results/finalTests/baselineJailbreak/JailbreakPrompts-vicunaUC.json"
 )
 # Declare directories array (list of lists)
 external_directories=(
   "results/externalBaselines/deepseek"
-  "results/externalBaselines/llama3"
-  "results/externalBaselines/mistral"
-  "results/externalBaselines/vicuna"
+  # "results/externalBaselines/llama3"
+  # "results/externalBaselines/mistral"
+  # "results/externalBaselines/vicuna"
 )
 # Declare files array
 external_files=(
@@ -78,8 +78,10 @@ for order in "${orders[@]}"; do
       # Loop over the files
       for file in "${external_files[@]}"; do
         # Run PPL computation
-        python ./ngram_perplexity.py --model "ngrams/${order}-gram.${corpus}.arpa" --data_path "${dir}/${file}"
+        # python ./ngram_perplexity.py --model "ngrams/${order}-gram.${corpus}.arpa" --data_path "${dir}/${file}"
+        echo "skipping..."
       done
     done
+    python ./ngram_perplexity.py --model "ngrams/${order}-gram.${corpus}.arpa" --data_path "results/finalTests/deepseek_vicuna/max.json"
   done
 done
