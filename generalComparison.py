@@ -217,11 +217,19 @@ def grouped(input, output, extension, verbose, groupby, criteria, type, fig, sav
     type: the type of plot (line, boxplot, violinplot) [line creates a single plot, boxplot/violin create a plot for each iteration]
     save: whether to save the plot or not
     # ''' 
-    data = load_data(input=input, criteria=criteria, includeBaseline=False).pivot_table(
+    data = load_data(input=input, criteria=criteria, includeBaseline=False, max_samples=100)
+    data["file"] = data["file"].replace({"max": "EvoTox Vanilla", "max_fs": "EvoTox IE", "max_fs_glit": "EvoTox IE+GL",
+                                     "max_mem_5_fs_glit": "EvoTox IE+SE+GL", "baseline": "RS", "autodan": "AutoDAN",
+                                     "JailBreakPrompts-Mistral": "Jailbreak", "JailbreakPrompts-vicunaUC": "Jailbreak",
+                                     "JailbreakPrompts-vicuna": "Jailbreak", "JailbreakPrompts-llama3": "Jailbreak",
+                                     "JailbreakPrompts-deepseek": "Jailbreak"})
+    data = data[data["file"].isin(['EvoTox Vanilla', 'EvoTox IE', 'EvoTox IE+GL', 'EvoTox IE+SE+GL'])]
+
+    data = (data.pivot_table(
         index=['system_under_test', 'prompt_generator'],
         columns='iteration',
         values='score'
-    )
+    ))
         # Reset the index to flatten the DataFrame
     data = data.reset_index()
 
@@ -248,7 +256,7 @@ def grouped(input, output, extension, verbose, groupby, criteria, type, fig, sav
         
         data.plot(color=sns.color_palette())  # color=['#44729d', '#d48640', '#539045', '#b14743'])
         # plt.legend(title=groupby.replace("_", " "))
-        plt.legend(title='Prompt generator')
+        plt.legend(title='Prompt generator', ncol=2)
         plt.ylim([0, 10])
         plt.ylim([0, 0.5])
         
@@ -359,13 +367,13 @@ def load_refusal_data(input, no_iterative_methods=[], iterative_methods=[], incl
                 prompt_generator = config.get("prompt_generator", "unknown")
 
                 if fileName in no_iterative_methods:
-                    if fileName == "baseline":
+                    if system_under_test == "unknown":
                         system_under_test = config.get("systemUnderTest", "unknown")
                         prompt_generator = config.get("promptGenerator", "unknown")
                     count = 0
                     for run in runs:
                         response = run.get("initial", {}).get("response_from_sut", "")
-                        if fileName == "baseline":
+                        if response == "":
                             response = run.get("initial", {}).get("responseFromSut", "")
                         if any(pattern in response for pattern in refusal_patterns):
                             count += 1
